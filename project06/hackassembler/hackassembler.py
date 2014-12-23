@@ -9,11 +9,18 @@ import sys
 import string
 import os
 import glob
+import argparse
 
 def main():
     '''Main entry point for the script.'''
 
-    # get filenames to perform translation on
+	# parse command line arguments to get filename
+	parser = argparse.ArgumentParser()
+	parser.add_argument('filename')
+	args = parser.parse_args()
+	with open(args.filename) as file:
+	
+'''    # get filenames to perform translation on
     # for now:
     directory = os.path.dirname(os.path.abspath(__file__))
     os.chdir(directory)
@@ -21,7 +28,7 @@ def main():
     
     # for each filename do the following:
     for file in filenames:
-        
+'''       
         symbol_table = {'SP':'0', 'LCL':'1', 'ARG':'2', 'THIS':'3',
                         'THAT':'4', 'SCREEN':'16384', 'KBD':'24576'}
         for i in range(16):
