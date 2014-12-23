@@ -14,52 +14,45 @@ import argparse
 def main():
     '''Main entry point for the script.'''
 
-	# parse command line arguments to get filename
-	parser = argparse.ArgumentParser()
-	parser.add_argument('filename')
-	args = parser.parse_args()
-	with open(args.filename) as file:
-	
-'''    # get filenames to perform translation on
-    # for now:
-    directory = os.path.dirname(os.path.abspath(__file__))
-    os.chdir(directory)
-    filenames = glob.glob('*.asm')
+    # parse command line arguments to get filename
+    parser = argparse.ArgumentParser()
+    parser.add_argument('filename')
+    args = parser.parse_args()
+    file = os.path.abspath(args.filename)
     
-    # for each filename do the following:
-    for file in filenames:
-'''       
-        symbol_table = {'SP':'0', 'LCL':'1', 'ARG':'2', 'THIS':'3',
-                        'THAT':'4', 'SCREEN':'16384', 'KBD':'24576'}
-        for i in range(16):
-            symbol_table['R'+str(i)] = str(i)
-        symbol_table['variable_pointer'] = 16
+    # for file, do the following:
+           
+    symbol_table = {'SP':'0', 'LCL':'1', 'ARG':'2', 'THIS':'3',
+                    'THAT':'4', 'SCREEN':'16384', 'KBD':'24576'}
+    for i in range(16):
+        symbol_table['R'+str(i)] = str(i)
+    symbol_table['variable_pointer'] = 16
 
-        with open(file.split('.')[0] + '.hack', 'w') as output:
+    with open(file.split('.')[0] + '.hack', 'w') as output:
 
-            ### first pass - fill symbol_table with labels and ROM addresses
-            with open(file, 'r') as asm:
-                program_counter = 0
-                for line in asm:
-                    line = clean_line(line, ['//'])
-                    ct = get_command_type(line)
-                    if ct in ['A_COMMAND', 'C_COMMAND']:
-                        program_counter += 1
-                    elif ct in ['L_COMMAND']:
-                        symbol_table[line.strip('()')] = str(program_counter)
+        ### first pass - fill symbol_table with labels and ROM addresses
+        with open(file, 'r') as asm:
+            program_counter = 0
+            for line in asm:
+                line = clean_line(line, ['//'])
+                ct = get_command_type(line)
+                if ct in ['A_COMMAND', 'C_COMMAND']:
+                    program_counter += 1
+                elif ct in ['L_COMMAND']:
+                    symbol_table[line.strip('()')] = str(program_counter)
 
-            ### second pass
-            with open(file, 'r') as asm:
-                for line in asm:
-                    line = clean_line(line, ['//','('])
-                    ct = get_command_type(line)
-                    if ct in ['A_COMMAND']:
-                        oline = translate_a_command(line, symbol_table) + '\n'
-                    elif ct in ['C_COMMAND']:
-                        oline = translate_c_command(line) + '\n'
-                    else:
-                        oline = ''
-                    output.write(oline)
+        ### second pass
+        with open(file, 'r') as asm:
+            for line in asm:
+                line = clean_line(line, ['//','('])
+                ct = get_command_type(line)
+                if ct in ['A_COMMAND']:
+                    oline = translate_a_command(line, symbol_table) + '\n'
+                elif ct in ['C_COMMAND']:
+                    oline = translate_c_command(line) + '\n'
+                else:
+                    oline = ''
+                output.write(oline)
 
 def clean_line(line, sep):
     '''Remove - a. comments and b. whitespace (outer) - from line

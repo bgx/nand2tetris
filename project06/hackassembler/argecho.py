@@ -6,4 +6,4 @@ Command-line arguments are separated by spaces, and each shows up as a separate 
 import sys
 
 for arg in sys.argv:
-	print(arg)
+    print(arg)
