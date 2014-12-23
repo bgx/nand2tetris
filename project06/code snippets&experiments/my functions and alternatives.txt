@@ -1,0 +1,67 @@
+1.
+I wrote the following--
+
+def stripcomments(asmline):
+    '''Strip away // comments from line'''
+    slash = 0 # state variable (3 states: no slash, one slash, double slash)
+    cstart = 0 # to store index of first slash of comment (use list next time?)
+    for x in range(0, len(asmline)):
+        if slash == 0 and asmline[x] == '/': # state no slash and slash read
+            slash = slash + 1
+            cstart = x
+        elif slash == 1 and asmline[x] != '/': # state one slash and no slash read
+            slash = 0
+        elif slash == 1 and asmline[x] == '/': # state one slash and slash read
+            slash = slash + 1
+    if slash == 2:
+        stripped = asmline[:cstart] + '\n'
+    else:
+        stripped = asmline
+    return stripped
+	
+I'm instead going to use the following--
+sep should be ['//'] if you're looking for double slashes
+
+def remove_comments(line, sep):
+    for s in sep:
+        line = line.split(s)[0]
+    return line.strip() + '\n'
+	
+2.
+At first I wrote:
+
+comp = lookup_comp(line.split(';')[0].strip())
+jmp = lookup_jmp(line.split(';')[1].strip())
+word = '111' + comp + '000' + jmp
+		
+But now I think this is easier to read:
+
+comp,jmp = line.split(';')
+comp,jmp = comp.strip(),jmp.strip()
+word = '111' + lookup_comp(comp) + '000' + lookup_jmp(jmp)
+
+3.
+This is bad bad bad:
+if ct == 'A_COMMAND' or 'C_COMMAND':
+
+examples
+
+ct = ''
+
+if ct == 'A_COMMAND'
+# OK - returns False
+if ct == 'A_COMMAND' or 'C_COMMAND'
+# WRONG - returns 'C_COMMAND'
+if ct == ('A_COMMAND' or 'C_COMMAND')
+# OK - returns False
+ct in 'A_COMMAND'
+# WRONG - returns True
+ct in ['A_COMMAND']
+# OK - returns False
+if ct in ['A_COMMAND', 'C_COMMAND']
+# OK - returns False
+
+Just be careful when using strings/characters in conditionals
+Use the shell to test your formatting!!!!
+
+

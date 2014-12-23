@@ -16,9 +16,22 @@ def main():
 
     # parse command line arguments to get filename
     parser = argparse.ArgumentParser()
-    parser.add_argument('filename')
+    parser.add_argument('filename', nargs='?')
     args = parser.parse_args()
+    
+    if(args.filename is None):
+        print('hackassembler.py must have a filename argument.  Type an .asm filename path as an argument.')
+        return
+        
     file = os.path.abspath(args.filename)
+
+    if(not os.path.isfile(file)):
+        print("The file to assemble does not exist.  Try another filename path.")
+        return
+        
+    if(file.split('.')[1] != 'asm'):
+        print("Hackassembler.py only works on .asm files.  Try another filename path.")
+        return
     
     # for file, do the following:
            
