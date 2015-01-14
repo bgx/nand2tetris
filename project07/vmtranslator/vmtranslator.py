@@ -34,12 +34,13 @@ def main():
     if(not os.path.exists(path)):
         print("The directory or file to translate does not exist.  Try another directory or file path.")
         return
-        
+    
+    # create a list of filenames to move through
     li = []
     if(os.path.isdir(path)):
         for file in os.listdir(path):
             if file.endswith(".vm"):
-                li.append(file)
+                li.append(os.path.join(path, file))
         if not li:
             print("If a directory is used as an argument it must contain at least one .vm file.  Try another directory or file path.")
             return
@@ -49,19 +50,28 @@ def main():
             return
         else:
             li.append(path)
-        
-    print(li)
-        
-"""        
-    if(file.split('.')[1] != 'vm'):
-        print("vmtranslator.py only works on .vm files.  Try another filename path.")
-        return
-        """
     
-    # for file, do the following:
+    asm_file_name = os.path.dirname(li[0]) + '\\' + os.path.split(os.path.dirname(li[0]))[1] + '.asm'
+    
+    with open(asm_file_name, 'w') as output:
+        
+        for file in li:
+        
+            with open(file, 'r') as vm:
+                for line in vm:
+                    line = clean_line(line, ['//'])
+                    #ct = get_command_type(line)
+                    #args = get_arguments (line, ct)
+                    # oline = translate_command (ct, args) + '\n'
+                    if not line:
+                        oline = line
+                    else:
+                        oline = line + '\n'
+                    output.write(oline)
+                    
+                    
+    
 """
-    with open(file.split('.')[0] + '.asm', 'w') as output:
-
         ### first pass - fill symbol_table with labels and ROM addresses
         with open(file, 'r') as asm:
             program_counter = 0
@@ -98,14 +108,49 @@ def clean_line(line, sep):
             
 def get_command_type(line):
     '''Returns the command type of the line'''
-    if line in ['']:
+    line3 = line[0:3]
+    if line3 in ['']:
         return ''
-    elif line[0] in ['@']:
-        return 'A_COMMAND'
-    elif line[0] in ['(']:
-        return 'L_COMMAND'
+    elif line3 in ['pus']:
+        return 'C_PUSH'
+    elif line3 in ['pop']:
+        return 'C_POP'        
+    elif line3 in ['lab']:
+        return 'C_LABEL'
+    elif line3 in ['got']:
+        return 'C_GOTO'
+    elif line3 in ['if-']:
+        return 'C_IF'
+    elif line3 in ['fun']:
+        return 'C_FUNCTION'
+    elif line3 in ['cal']:
+        return 'C_CALL'
+    elif line3 in ['ret']:
+        return 'C_RETURN'
     else:
-        return 'C_COMMAND'
+        return 'C_ARITHMETIC'
+        
+def get_arguments(line, ct):
+    '''Returns the arguments of the line's command'''
+    
+    #if ct is c_return
+    
+    #elif ct is c_arithmetic
+    #elif ct is c_label
+    #elif ct is c_goto
+    #elif ct is c_if
+    
+    #elif ct is c_push
+    #elif ct is c_pop
+    #elif ct is c_function
+    #elif ct is c_call
+    
+def translate_command(ct, args):
+    '''Translates vm command to assembly code'''
+    # if else tree for each type of command
+        # 
+    
+    
 
 """
 def translate_a_command(line,symbol_table):
