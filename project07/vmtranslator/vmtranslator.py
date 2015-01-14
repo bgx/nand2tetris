@@ -60,13 +60,13 @@ def main():
             with open(file, 'r') as vm:
                 for line in vm:
                     line = clean_line(line, ['//'])
-                    #ct = get_command_type(line)
-                    #args = get_arguments (line, ct)
+                    ct = get_command_type(line)
+                    args = get_arguments(line, ct)
                     # oline = translate_command (ct, args) + '\n'
                     if not line:
                         oline = line
                     else:
-                        oline = line + '\n'
+                        oline = ct + ' ' + str(args) + '\n'
                     output.write(oline)
                     
                     
@@ -133,22 +133,55 @@ def get_command_type(line):
 def get_arguments(line, ct):
     '''Returns the arguments of the line's command'''
     
-    #if ct is c_return
-    
-    #elif ct is c_arithmetic
+    if ct == 'C_RETURN':
+        return ['']
+    elif ct == 'C_ARITHMETIC':
+        return [line]
     #elif ct is c_label
+        # arg1 is after label
     #elif ct is c_goto
+        # arg1 is after goto
     #elif ct is c_if
+        # arg1 is after if-goto
     
-    #elif ct is c_push
-    #elif ct is c_pop
+    elif ct=='C_PUSH' or ct=='C_POP':
+        return line.split()[1:3]
     #elif ct is c_function
+        # function arg1 arg2
     #elif ct is c_call
+        # call arg1 arg2
     
 def translate_command(ct, args):
     '''Translates vm command to assembly code'''
-    # if else tree for each type of command
-        # 
+    
+    #if ct is c_return
+        # ??
+        
+    #elif ct is c_arithmetic
+        # if add
+        #sub
+        #neg
+        #eq
+        #gt
+        #lt
+        #and
+        #or
+        #not
+    #elif ct is c_label
+        # ??
+    #elif ct is c_goto
+        # ??
+    #elif ct is c_if
+        # ??
+    
+    #elif ct is c_push
+        # put segment[index] onto stack
+    #elif ct is c_pop
+        # pull from stack and store in segment[index]
+    #elif ct is c_function
+        # ??
+    #elif ct is c_call
+        # ?? 
     
     
 
