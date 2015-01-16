@@ -166,10 +166,20 @@ def translate_command(ct, args):
                    'D=M'   + '\n' + # set D to the contents of the address that SP points to
                    'A=A-1' + '\n' + # set A to the address of the second addend
                    'M=D+M')         # add the first and second addends
-        #elif args[0] == 'sub':
-            #
-        #elif args[0] == 'neg':
-            #
+        elif args[0] == 'sub':
+            asm = ('@SP'   + '\n' + # set A to the address of the stack pointer register (SP)
+                   'M=M-1' + '\n' + # decrement contents of SP
+                   'A=M'   + '\n' + # set A to the contents of SP (an address being pointed to)
+                   'D=M'   + '\n' + # set D to the contents of the address that SP points to
+                   'A=A-1' + '\n' + # set A to the address of the second addend
+                   'M=M-D')         # subtract
+        elif args[0] == 'neg':
+            asm = ('@SP'   + '\n' + # set A to the address of the stack pointer register (SP)
+                   'M=M-1' + '\n' + # decrement contents of SP
+                   'A=M'   + '\n' + # set A to the contents of SP (an address being pointed to)
+                   'M=-M'  + '\n' + # negate the contents of the address that SP points to
+                   '@SP' + '\n' +         # increment contents of SP
+                   'M=M+1')
         #elif args[0] == 'eq':
             #
         #elif args[0] == 'gt':
@@ -180,7 +190,6 @@ def translate_command(ct, args):
             #
         #elif args[0] == 'or':
             #
-        #else:
         #elif args[0] == 'not':
             #
     #elif ct is c_label
@@ -201,7 +210,7 @@ def translate_command(ct, args):
                    'M=M+1')
     elif ct == 'C_POP':
         # pull from stack and store in segment[index]
-        asm = ''
+        if args[0] == 'constant':
     #elif ct is c_function
         # ??
     #elif ct is c_call
