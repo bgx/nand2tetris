@@ -1,3 +1,20 @@
-C_PUSH ['constant', '7']
-C_PUSH ['constant', '8']
-C_ARITHMETIC ['add']
+@7
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@8
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@SP
+M=M-1
+A=M
+D=M
+A=A-1
+M=D+M

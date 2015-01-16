@@ -62,11 +62,11 @@ def main():
                     line = clean_line(line, ['//'])
                     ct = get_command_type(line)
                     args = get_arguments(line, ct)
-                    # oline = translate_command (ct, args) + '\n'
+                    asm = translate_command(ct, args)
                     if not line:
                         oline = line
                     else:
-                        oline = ct + ' ' + str(args) + '\n'
+                        oline = asm + '\n'
                     output.write(oline)
                     
                     
@@ -154,36 +154,59 @@ def get_arguments(line, ct):
 def translate_command(ct, args):
     '''Translates vm command to assembly code'''
     
-    #if ct is c_return
+    if ct == '':
+        asm = ''
+    #if ct == 'C_RETURN':
         # ??
-        
-    #elif ct is c_arithmetic
-        # if add
-        #sub
-        #neg
-        #eq
-        #gt
-        #lt
-        #and
-        #or
-        #not
+    elif ct == 'C_ARITHMETIC':
+        if args[0] == 'add':
+            asm = ('@SP'   + '\n' + # set A to the address of the stack pointer register (SP)
+                   'M=M-1' + '\n' + # decrement contents of SP
+                   'A=M'   + '\n' + # set A to the contents of SP (an address being pointed to)
+                   'D=M'   + '\n' + # set D to the contents of the address that SP points to
+                   'A=A-1' + '\n' + # set A to the address of the second addend
+                   'M=D+M')         # add the first and second addends
+        #elif args[0] == 'sub':
+            #
+        #elif args[0] == 'neg':
+            #
+        #elif args[0] == 'eq':
+            #
+        #elif args[0] == 'gt':
+            #
+        #elif args[0] == 'lt':
+            #
+        #elif args[0] == 'and':
+            #
+        #elif args[0] == 'or':
+            #
+        #else:
+        #elif args[0] == 'not':
+            #
     #elif ct is c_label
         # ??
     #elif ct is c_goto
         # ??
     #elif ct is c_if
         # ??
-    
-    #elif ct is c_push
+    elif ct == 'C_PUSH':
         # put segment[index] onto stack
-    #elif ct is c_pop
+        if args[0] == 'constant':
+            asm = ('@' + args[1] + '\n' + # set A to constant value
+                   'D=A' + '\n' +         # D contains constant value
+                   '@SP' + '\n' +         # set A to the address of the stack pointer register (SP)
+                   'A=M' + '\n' +         # set A to the contents of SP (an address being pointed to)
+                   'M=D' + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
+                   '@SP' + '\n' +         # increment contents of SP
+                   'M=M+1')
+    elif ct == 'C_POP':
         # pull from stack and store in segment[index]
+        asm = ''
     #elif ct is c_function
         # ??
     #elif ct is c_call
-        # ?? 
-    
-    
+        # ??
+    return asm
 
 """
 def translate_a_command(line,symbol_table):
