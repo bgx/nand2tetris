@@ -17,6 +17,9 @@ import os
 #import glob
 import argparse
 
+
+
+
 def main():
     '''Main entry point for the script.'''
 
@@ -54,6 +57,9 @@ def main():
     asm_file_name = os.path.dirname(li[0]) + '\\' + os.path.split(os.path.dirname(li[0]))[1] + '.asm'
     
     with open(asm_file_name, 'w') as output:
+    
+        #used to assign unique label to memory location for each translation of eq,gt, or lt
+        label_ctr = [0,0,0]
         
         for file in li:
         
@@ -62,7 +68,7 @@ def main():
                     line = clean_line(line, ['//'])
                     ct = get_command_type(line)
                     args = get_arguments(line, ct)
-                    asm = translate_command(ct, args)
+                    asm = translate_command(ct, args, label_ctr)
                     if not line:
                         oline = line
                     else:
@@ -151,9 +157,9 @@ def get_arguments(line, ct):
     #elif ct is c_call
         # call arg1 arg2
     
-def translate_command(ct, args):
+def translate_command(ct, args, label_ctr):
     '''Translates vm command to assembly code'''
-    
+        
     if ct == '':
         asm = ''
     #if ct == 'C_RETURN':
@@ -178,20 +184,76 @@ def translate_command(ct, args):
                    'M=M-1' + '\n' + # decrement contents of SP
                    'A=M'   + '\n' + # set A to the contents of SP (an address being pointed to)
                    'M=-M'  + '\n' + # negate the contents of the address that SP points to
-                   '@SP' + '\n' +         # increment contents of SP
+                   '@SP'   + '\n' + # increment contents of SP
                    'M=M+1')
-        #elif args[0] == 'eq':
-            #
-        #elif args[0] == 'gt':
-            #
-        #elif args[0] == 'lt':
-            #
-        #elif args[0] == 'and':
-            #
-        #elif args[0] == 'or':
-            #
-        #elif args[0] == 'not':
-            #
+        elif args[0] == 'eq':
+            asm = ('@SP'      + '\n' + # set A to the address of the stack pointer register (SP)
+                   'M=M-1'    + '\n' + # decrement contents of SP
+                   'A=M'      + '\n' + # set A to the contents of SP (an address being pointed to)
+                   'D=M'      + '\n' + # set D to the contents of the address that SP points to
+                   'A=A-1'    + '\n' + # set A to the address of the second number
+                   'D=M-D'    + '\n' + # subtract
+                   '@EQTRUE'  + str(label_ctr[0]) + '\n' + # jump to (EQTRUE) if zero
+                   'D;JEQ'    + '\n' +
+                   '@SP'      + '\n' + # set the contents of the stack address to 0 (false)
+                   'A=M-1'      + '\n' +
+                   'M=0'      + '\n' +
+                   '@EQEND'   + str(label_ctr[0]) + '\n' + # jump to (EQEND)
+                   '0;JMP'    + '\n' +
+                   '(EQTRUE'  + str(label_ctr[0]) + ')' + '\n' + 
+                   '@SP'      + '\n' + # set the contents of the stack address to -1 (true)
+                   'A=M-1'      + '\n' + 
+                   'M=-1'     + '\n' + 
+                   '(EQEND'   + str(label_ctr[0]) + ')')
+            label_ctr[0] = label_ctr[0] + 1
+        elif args[0] == 'gt':
+            asm = ('@SP'      + '\n' + # set A to the address of the stack pointer register (SP)
+                   'M=M-1'    + '\n' + # decrement contents of SP
+                   'A=M'      + '\n' + # set A to the contents of SP (an address being pointed to)
+                   'D=M'      + '\n' + # set D to the contents of the address that SP points to
+                   'A=A-1'    + '\n' + # set A to the address of the second number
+                   'D=M-D'    + '\n' + # subtract
+                   '@GTTRUE'  + str(label_ctr[1]) + '\n' + # jump to (GTTRUE) if zero
+                   'D;JGT'    + '\n' +
+                   '@SP'      + '\n' + # set the contents of the stack address to 0 (false)
+                   'A=M-1'    + '\n' +
+                   'M=0'      + '\n' +
+                   '@GTEND'   + str(label_ctr[1]) + '\n' + # jump to (GTEND)
+                   '0;JMP'    + '\n' +
+                   '(GTTRUE'  + str(label_ctr[1]) + ')' + '\n' + 
+                   '@SP'      + '\n' + # set the contents of the stack address to -1 (true)
+                   'A=M-1'      + '\n' + 
+                   'M=-1'     + '\n' + 
+                   '(GTEND'   + str(label_ctr[1]) + ')')
+            label_ctr[1] = label_ctr[1] + 1
+            
+        elif args[0] == 'lt':
+            asm = ('@SP'      + '\n' + # set A to the address of the stack pointer register (SP)
+                   'M=M-1'    + '\n' + # decrement contents of SP
+                   'A=M'      + '\n' + # set A to the contents of SP (an address being pointed to)
+                   'D=M'      + '\n' + # set D to the contents of the address that SP points to
+                   'A=A-1'    + '\n' + # set A to the address of the second number
+                   'D=M-D'    + '\n' + # subtract
+                   '@LTTRUE'  + str(label_ctr[2]) + '\n' + # jump to (EQTRUE) if zero
+                   'D;JLT'    + '\n' +
+                   '@SP'      + '\n' + # set the contents of the stack address to 0 (false)
+                   'A=M-1'      + '\n' +
+                   'M=0'      + '\n' +
+                   '@LTEND'   + str(label_ctr[2]) + '\n' + # jump to (EQEND)
+                   '0;JMP'    + '\n' +
+                   '(LTTRUE'  + str(label_ctr[2]) + ')' + '\n' + 
+                   '@SP'      + '\n' + # set the contents of the stack address to -1 (true)
+                   'A=M-1'      + '\n' + 
+                   'M=-1'     + '\n' + 
+                   '(LTEND'   + str(label_ctr[2]) + ')' )
+            label_ctr[2] = label_ctr[2] + 1
+            
+        elif args[0] == 'and':
+            asm = ''
+        elif args[0] == 'or':
+            asm = ''
+        elif args[0] == 'not':
+            asm = ''
     #elif ct is c_label
         # ??
     #elif ct is c_goto
@@ -208,9 +270,16 @@ def translate_command(ct, args):
                    'M=D' + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
                    '@SP' + '\n' +         # increment contents of SP
                    'M=M+1')
-    elif ct == 'C_POP':
+    """elif ct == 'C_POP':
         # pull from stack and store in segment[index]
         if args[0] == 'constant':
+            asm = ('@' + args[1] + '\n' + # set A to constant value
+                   'D=A' + '\n' +         # D contains constant value
+                   '@SP' + '\n' +         # set A to the address of the stack pointer register (SP)
+                   'A=M' + '\n' +         # set A to the contents of SP (an address being pointed to)
+                   'M=D' + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
+                   '@SP' + '\n' +         # increment contents of SP
+                   'M=M+1')"""
     #elif ct is c_function
         # ??
     #elif ct is c_call
