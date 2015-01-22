@@ -249,11 +249,26 @@ def translate_command(ct, args, label_ctr):
             label_ctr[2] = label_ctr[2] + 1
             
         elif args[0] == 'and':
-            asm = ''
+            asm = ('@SP'   + '\n' + # set A to the address of the stack pointer register (SP)
+                   'M=M-1' + '\n' + # decrement contents of SP
+                   'A=M'   + '\n' + # set A to the contents of SP (an address being pointed to)
+                   'D=M'   + '\n' + # set D to the contents of the address that SP points to
+                   'A=A-1' + '\n' + # set A to the address of the second addend
+                   'M=D&M')         # bit-wise and
         elif args[0] == 'or':
-            asm = ''
+            asm = ('@SP'   + '\n' + # set A to the address of the stack pointer register (SP)
+                   'M=M-1' + '\n' + # decrement contents of SP
+                   'A=M'   + '\n' + # set A to the contents of SP (an address being pointed to)
+                   'D=M'   + '\n' + # set D to the contents of the address that SP points to
+                   'A=A-1' + '\n' + # set A to the address of the second addend
+                   'M=D|M')         # bit-wise or
         elif args[0] == 'not':
-            asm = ''
+            asm = ('@SP'   + '\n' + # set A to the address of the stack pointer register (SP)
+                   'M=M-1' + '\n' + # decrement contents of SP
+                   'A=M'   + '\n' + # set A to the contents of SP (an address being pointed to)
+                   'M=!M'  + '\n' + # bit-wise not the contents of the address that SP points to
+                   '@SP'   + '\n' + # increment contents of SP
+                   'M=M+1')
     #elif ct is c_label
         # ??
     #elif ct is c_goto
