@@ -285,16 +285,111 @@ def translate_command(ct, args, label_ctr):
                    'M=D' + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
                    '@SP' + '\n' +         # increment contents of SP
                    'M=M+1')
-    """elif ct == 'C_POP':
+        elif args[0] == 'local':
+            asm = ('@LCL'  + '\n' +           # store the contents of the memory location local+index in D
+                   'D=M'   + '\n' +
+                   '@'     + args[1] + '\n' +
+                   'A=D+A' + '\n' +
+                   'D=M'   + '\n' +
+                   '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
+                   'A=M'   + '\n' + 
+                   'M=D'   + '\n' +
+                   '@SP'   + '\n' +         # increment contents of SP
+                   'M=M+1')
+        elif args[0] == 'argument':
+            asm = ('@ARG'  + '\n' +           # store the contents of the memory location argument+index in D
+                   'D=M'   + '\n' +
+                   '@'     + args[1] + '\n' +
+                   'A=D+A' + '\n' +
+                   'D=M'   + '\n' +
+                   '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
+                   'A=M'   + '\n' + 
+                   'M=D'   + '\n' +
+                   '@SP'   + '\n' +         # increment contents of SP
+                   'M=M+1')
+        elif args[0] == 'this':
+            asm = ('@THIS'  + '\n' +           # store the contents of the memory location this+index in D
+                   'D=M'   + '\n' +
+                   '@'     + args[1] + '\n' +
+                   'A=D+A' + '\n' +
+                   'D=M'   + '\n' +
+                   '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
+                   'A=M'   + '\n' + 
+                   'M=D'   + '\n' +
+                   '@SP'   + '\n' +         # increment contents of SP
+                   'M=M+1')
+        elif args[0] == 'that':
+            asm = ('@THAT'  + '\n' +           # store the contents of the memory location that+index in D
+                   'D=M'   + '\n' +
+                   '@'     + args[1] + '\n' +
+                   'A=D+A' + '\n' +
+                   'D=M'   + '\n' +
+                   '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
+                   'A=M'   + '\n' + 
+                   'M=D'   + '\n' +
+                   '@SP'   + '\n' +         # increment contents of SP
+                   'M=M+1')
+    elif ct == 'C_POP':
         # pull from stack and store in segment[index]
         if args[0] == 'constant':
-            asm = ('@' + args[1] + '\n' + # set A to constant value
-                   'D=A' + '\n' +         # D contains constant value
-                   '@SP' + '\n' +         # set A to the address of the stack pointer register (SP)
-                   'A=M' + '\n' +         # set A to the contents of SP (an address being pointed to)
-                   'M=D' + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
-                   '@SP' + '\n' +         # increment contents of SP
-                   'M=M+1')"""
+            asm = ('@SP' + '\n' +         # decrement contents of SP
+                   'M=M-1')
+        elif args[0] == 'local':
+            asm = ('@LCL'  + '\n' +           # store the address local+index in R13
+                   'D=M'   + '\n' +
+                   '@'     + args[1] + '\n' +
+                   'D=D+A' + '\n' +
+                   '@R13'  + '\n' +
+                   'M=D'   + '\n' +
+                   '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+                   'M=M-1' + '\n' + 
+                   'A=M'   + '\n' + 
+                   'D=M'   + '\n' + 
+                   '@R13'  + '\n' +           # store the contents of D in the memory location local+index
+                   'A=M'   + '\n' + 
+                   'M=D')
+        elif args[0] == 'argument':
+            asm = ('@ARG'  + '\n' +           # store the address argument+index in R13
+                   'D=M'   + '\n' +
+                   '@'     + args[1] + '\n' +
+                   'D=D+A' + '\n' +
+                   '@R13'  + '\n' +
+                   'M=D'   + '\n' +
+                   '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+                   'M=M-1' + '\n' + 
+                   'A=M'   + '\n' + 
+                   'D=M'   + '\n' + 
+                   '@R13'  + '\n' +           # store the contents of D in the memory location argument+index
+                   'A=M'   + '\n' + 
+                   'M=D')
+        elif args[0] == 'this':
+            asm = ('@THIS'  + '\n' +           # store the address this+index in R13
+                   'D=M'   + '\n' +
+                   '@'     + args[1] + '\n' +
+                   'D=D+A' + '\n' +
+                   '@R13'  + '\n' +
+                   'M=D'   + '\n' +
+                   '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+                   'M=M-1' + '\n' + 
+                   'A=M'   + '\n' + 
+                   'D=M'   + '\n' + 
+                   '@R13'  + '\n' +           # store the contents of D in the memory location this+index
+                   'A=M'   + '\n' + 
+                   'M=D')
+        elif args[0] == 'that':
+            asm = ('@THAT'  + '\n' +           # store the address that+index in R13
+                   'D=M'   + '\n' +
+                   '@'     + args[1] + '\n' +
+                   'D=D+A' + '\n' +
+                   '@R13'  + '\n' +
+                   'M=D'   + '\n' +
+                   '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+                   'M=M-1' + '\n' + 
+                   'A=M'   + '\n' + 
+                   'D=M'   + '\n' + 
+                   '@R13'  + '\n' +           # store the contents of D in the memory location that+index
+                   'A=M'   + '\n' + 
+                   'M=D')          
     #elif ct is c_function
         # ??
     #elif ct is c_call
