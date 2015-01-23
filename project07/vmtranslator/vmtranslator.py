@@ -10,14 +10,13 @@ The objective of Project 07 is to build a VM translator that implements 1. and 2
 
 Brian Grady
 
-Passed all project07 tests on 2015.1.2x
+Passed all project07 tests on 2015.1.23
 '''
 
 import sys
 import string
 import os
 import argparse
-
 
 def main():
     '''Main entry point for the script.'''
