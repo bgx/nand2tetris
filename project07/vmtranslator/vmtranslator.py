@@ -9,51 +9,26 @@ Writing of transator broken into 4 stages:
 The objective of Project 07 is to build a VM translator that implements 1. and 2.
 
 Brian Grady
+
+Passed all project07 tests on 2015.1.2x
 '''
 
 import sys
 import string
 import os
-#import glob
 import argparse
-
-
 
 
 def main():
     '''Main entry point for the script.'''
 
-    # parse command line arguments to get directory name or file name
-    parser = argparse.ArgumentParser()
-    parser.add_argument('inputargument', nargs='?')
-    args = parser.parse_args()
+    path = get_path()
     
-    if(args.inputargument is None):
-        print('vmtranslator.py must have a directory name or file name argument.  Type a directory path or .vm file name path as an argument.')
+    if path == 'exit':
         return
         
-    path = os.path.abspath(args.inputargument)
-
-    if(not os.path.exists(path)):
-        print("The directory or file to translate does not exist.  Try another directory or file path.")
-        return
-    
-    # create a list of filenames to move through
-    li = []
-    if(os.path.isdir(path)):
-        for file in os.listdir(path):
-            if file.endswith(".vm"):
-                li.append(os.path.join(path, file))
-        if not li:
-            print("If a directory is used as an argument it must contain at least one .vm file.  Try another directory or file path.")
-            return
-    else:
-        if not path.endswith(".vm"):
-            print("vmtranslator.py only works on .vm files.  Try another path argument.")
-            return
-        else:
-            li.append(path)
-    
+    li = get_vm_filenames(path)
+        
     asm_file_name = os.path.dirname(li[0]) + '\\' + os.path.split(os.path.dirname(li[0]))[1] + '.asm'
     
     with open(asm_file_name, 'w') as output:
@@ -71,39 +46,50 @@ def main():
                     args = get_arguments(line, ct)
                     asm = translate_command(ct, args, label_ctr, static_base)
                     if not line:
-                        oline = line
+                        oline = ''
                     else:
                         oline = asm + '\n'
                     output.write(oline)
-                    
-                    
+
+
+
+def get_path():
+    '''parse command line arguments to get directory name or file name'''
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('inputargument', nargs='?')
+    args = parser.parse_args()
     
-"""
-        ### first pass - fill symbol_table with labels and ROM addresses
-        with open(file, 'r') as asm:
-            program_counter = 0
-            for line in asm:
-                line = clean_line(line, ['//'])
-                ct = get_command_type(line)
-                if ct in ['A_COMMAND', 'C_COMMAND']:
-                    program_counter += 1
-                elif ct in ['L_COMMAND']:
-                    symbol_table[line.strip('()')] = str(program_counter)
+    if(args.inputargument is None):
+        print('vmtranslator.py must have a directory name or file name argument.  Type a directory path or .vm file name path as an argument.')
+        return 'exit'
+        
+    path = os.path.abspath(args.inputargument)
 
-        ### second pass
-        with open(file, 'r') as asm:
-            for line in asm:
-                line = clean_line(line, ['//','('])
-                ct = get_command_type(line)
-                if ct in ['A_COMMAND']:
-                    oline = translate_a_command(line, symbol_table) + '\n'
-                elif ct in ['C_COMMAND']:
-                    oline = translate_c_command(line) + '\n'
-                else:
-                    oline = ''
-                output.write(oline)
-                """
-
+    if(not os.path.exists(path)):
+        print("The directory or file to translate does not exist.  Try another directory or file path.")
+        return 'exit'
+        
+    return path
+    
+def get_vm_filenames(path):
+    '''create a list of filenames to move through'''
+    li = []
+    if(os.path.isdir(path)):
+        for file in os.listdir(path):
+            if file.endswith(".vm"):
+                li.append(os.path.join(path, file))
+        if not li:
+            print("If a directory is used as an argument it must contain at least one .vm file.  Try another directory or file path.")
+            return
+    else:
+        if not path.endswith(".vm"):
+            print("vmtranslator.py only works on .vm files.  Try another path argument.")
+            return
+        else:
+            li.append(path)
+    return li
+                    
 def clean_line(line, sep):
     '''Remove - a. comments and b. whitespace (outer) - from line
 
@@ -167,124 +153,116 @@ def translate_command(ct, args, label_ctr, static_base):
         # ??
     elif ct == 'C_ARITHMETIC':
         if args[0] == 'add':
-            asm = ('@SP'   + '\n' + # set A to the address of the stack pointer register (SP)
-                   'M=M-1' + '\n' + # decrement contents of SP
-                   'A=M'   + '\n' + # set A to the contents of SP (an address being pointed to)
-                   'D=M'   + '\n' + # set D to the contents of the address that SP points to
-                   'A=A-1' + '\n' + # set A to the address of the second addend
-                   'M=D+M')         # add the first and second addends
+            asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
+                   'M=M-1' + '\n' +
+                   'A=M'   + '\n' +
+                   'D=M'   + '\n' +
+                   'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
+                   'M=D+M')         # add the first and second operands
         elif args[0] == 'sub':
-            asm = ('@SP'   + '\n' + # set A to the address of the stack pointer register (SP)
-                   'M=M-1' + '\n' + # decrement contents of SP
-                   'A=M'   + '\n' + # set A to the contents of SP (an address being pointed to)
-                   'D=M'   + '\n' + # set D to the contents of the address that SP points to
-                   'A=A-1' + '\n' + # set A to the address of the second addend
-                   'M=M-D')         # subtract
+            asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
+                   'M=M-1' + '\n' +
+                   'A=M'   + '\n' +
+                   'D=M'   + '\n' +
+                   'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
+                   'M=M-D')         # subtract first operand from second operand
         elif args[0] == 'neg':
-            asm = ('@SP'   + '\n' + # set A to the address of the stack pointer register (SP)
-                   'M=M-1' + '\n' + # decrement contents of SP
-                   'A=M'   + '\n' + # set A to the contents of SP (an address being pointed to)
-                   'M=-M'  + '\n' + # negate the contents of the address that SP points to
-                   '@SP'   + '\n' + # increment contents of SP
+            asm = ('@SP'   + '\n' +
+                   'M=M-1' + '\n' +
+                   'A=M'   + '\n' +
+                   'M=-M'  + '\n' + # arithmetically negate the contents of the address that SP points to
+                   '@SP'   + '\n' +
                    'M=M+1')
         elif args[0] == 'eq':
-            asm = ('@SP'      + '\n' + # set A to the address of the stack pointer register (SP)
-                   'M=M-1'    + '\n' + # decrement contents of SP
-                   'A=M'      + '\n' + # set A to the contents of SP (an address being pointed to)
-                   'D=M'      + '\n' + # set D to the contents of the address that SP points to
-                   'A=A-1'    + '\n' + # set A to the address of the second number
-                   'D=M-D'    + '\n' + # subtract
-                   '@EQTRUE'  + str(label_ctr[0]) + '\n' + # jump to (EQTRUE) if zero
+            asm = ('@SP'      + '\n' +                              # pull first operand from stack and place in D register
+                   'M=M-1'    + '\n' +
+                   'A=M'      + '\n' +
+                   'D=M'      + '\n' +
+                   'A=A-1'    + '\n' +                              # set A to the address of the second operand, leaving SP where it needs to be
+                   'D=M-D'    + '\n' +                              # subtract first operand from second operand
+                   '@EQTRUE'  + str(label_ctr[0]) + '\n' +          # jump to (EQTRUE#) if result is zero
                    'D;JEQ'    + '\n' +
-                   '@SP'      + '\n' + # set the contents of the stack address to 0 (false)
-                   'A=M-1'      + '\n' +
+                   '@SP'      + '\n' +                              # result is not zero(not equal): place 0 (false) on the stack 
+                   'A=M-1'    + '\n' +
                    'M=0'      + '\n' +
-                   '@EQEND'   + str(label_ctr[0]) + '\n' + # jump to (EQEND)
+                   '@EQEND'   + str(label_ctr[0]) + '\n' + 
                    '0;JMP'    + '\n' +
                    '(EQTRUE'  + str(label_ctr[0]) + ')' + '\n' + 
-                   '@SP'      + '\n' + # set the contents of the stack address to -1 (true)
-                   'A=M-1'      + '\n' + 
+                   '@SP'      + '\n' +                              # result is zero(equal): place -1 (true) on the stack
+                   'A=M-1'    + '\n' + 
                    'M=-1'     + '\n' + 
                    '(EQEND'   + str(label_ctr[0]) + ')')
             label_ctr[0] = label_ctr[0] + 1
         elif args[0] == 'gt':
-            asm = ('@SP'      + '\n' + # set A to the address of the stack pointer register (SP)
-                   'M=M-1'    + '\n' + # decrement contents of SP
-                   'A=M'      + '\n' + # set A to the contents of SP (an address being pointed to)
-                   'D=M'      + '\n' + # set D to the contents of the address that SP points to
-                   'A=A-1'    + '\n' + # set A to the address of the second number
-                   'D=M-D'    + '\n' + # subtract
-                   '@GTTRUE'  + str(label_ctr[1]) + '\n' + # jump to (GTTRUE) if zero
+            asm = ('@SP'      + '\n' +                              # pull first operand from stack and place in D register
+                   'M=M-1'    + '\n' +
+                   'A=M'      + '\n' +
+                   'D=M'      + '\n' +
+                   'A=A-1'    + '\n' +                              # set A to the address of the second operand, leaving SP where it needs to be
+                   'D=M-D'    + '\n' +                              # subtract first operand from second operand
+                   '@GTTRUE'  + str(label_ctr[1]) + '\n' +          # jump to (GTTRUE#) if result is positive
                    'D;JGT'    + '\n' +
-                   '@SP'      + '\n' + # set the contents of the stack address to 0 (false)
+                   '@SP'      + '\n' +                              # result is zero or negative(not gt): place 0 (false) on the stack
                    'A=M-1'    + '\n' +
                    'M=0'      + '\n' +
-                   '@GTEND'   + str(label_ctr[1]) + '\n' + # jump to (GTEND)
+                   '@GTEND'   + str(label_ctr[1]) + '\n' +
                    '0;JMP'    + '\n' +
                    '(GTTRUE'  + str(label_ctr[1]) + ')' + '\n' + 
-                   '@SP'      + '\n' + # set the contents of the stack address to -1 (true)
-                   'A=M-1'      + '\n' + 
+                   '@SP'      + '\n' +                              # result is positive(gt): place -1 (true) on the stack
+                   'A=M-1'    + '\n' + 
                    'M=-1'     + '\n' + 
                    '(GTEND'   + str(label_ctr[1]) + ')')
             label_ctr[1] = label_ctr[1] + 1
-            
         elif args[0] == 'lt':
-            asm = ('@SP'      + '\n' + # set A to the address of the stack pointer register (SP)
-                   'M=M-1'    + '\n' + # decrement contents of SP
-                   'A=M'      + '\n' + # set A to the contents of SP (an address being pointed to)
-                   'D=M'      + '\n' + # set D to the contents of the address that SP points to
-                   'A=A-1'    + '\n' + # set A to the address of the second number
-                   'D=M-D'    + '\n' + # subtract
-                   '@LTTRUE'  + str(label_ctr[2]) + '\n' + # jump to (EQTRUE) if zero
+            asm = ('@SP'      + '\n' +                              # pull first operand from stack and place in D register
+                   'M=M-1'    + '\n' +
+                   'A=M'      + '\n' +
+                   'D=M'      + '\n' +
+                   'A=A-1'    + '\n' +                              # set A to the address of the second operand, leaving SP where it needs to be
+                   'D=M-D'    + '\n' +                              # subtract first operand from second operand
+                   '@LTTRUE'  + str(label_ctr[2]) + '\n' +          # jump to (LTTRUE#) if result is negative
                    'D;JLT'    + '\n' +
-                   '@SP'      + '\n' + # set the contents of the stack address to 0 (false)
-                   'A=M-1'      + '\n' +
+                   '@SP'      + '\n' +                              # result is zero or positive(not lt): place 0 (false) on the stack
+                   'A=M-1'    + '\n' +
                    'M=0'      + '\n' +
-                   '@LTEND'   + str(label_ctr[2]) + '\n' + # jump to (EQEND)
+                   '@LTEND'   + str(label_ctr[2]) + '\n' +
                    '0;JMP'    + '\n' +
                    '(LTTRUE'  + str(label_ctr[2]) + ')' + '\n' + 
-                   '@SP'      + '\n' + # set the contents of the stack address to -1 (true)
-                   'A=M-1'      + '\n' + 
+                   '@SP'      + '\n' +                              # result is negative(lt): place -1 (true) on the stack
+                   'A=M-1'    + '\n' + 
                    'M=-1'     + '\n' + 
                    '(LTEND'   + str(label_ctr[2]) + ')' )
             label_ctr[2] = label_ctr[2] + 1
-            
         elif args[0] == 'and':
-            asm = ('@SP'   + '\n' + # set A to the address of the stack pointer register (SP)
-                   'M=M-1' + '\n' + # decrement contents of SP
-                   'A=M'   + '\n' + # set A to the contents of SP (an address being pointed to)
-                   'D=M'   + '\n' + # set D to the contents of the address that SP points to
-                   'A=A-1' + '\n' + # set A to the address of the second addend
-                   'M=D&M')         # bit-wise and
+            asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
+                   'M=M-1' + '\n' +
+                   'A=M'   + '\n' +
+                   'D=M'   + '\n' +
+                   'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
+                   'M=D&M')         # bit-wise AND the two operands
         elif args[0] == 'or':
-            asm = ('@SP'   + '\n' + # set A to the address of the stack pointer register (SP)
-                   'M=M-1' + '\n' + # decrement contents of SP
-                   'A=M'   + '\n' + # set A to the contents of SP (an address being pointed to)
-                   'D=M'   + '\n' + # set D to the contents of the address that SP points to
-                   'A=A-1' + '\n' + # set A to the address of the second addend
-                   'M=D|M')         # bit-wise or
+            asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
+                   'M=M-1' + '\n' +
+                   'A=M'   + '\n' +
+                   'D=M'   + '\n' +
+                   'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
+                   'M=D|M')         # bit-wise OR the two operands
         elif args[0] == 'not':
-            asm = ('@SP'   + '\n' + # set A to the address of the stack pointer register (SP)
-                   'M=M-1' + '\n' + # decrement contents of SP
-                   'A=M'   + '\n' + # set A to the contents of SP (an address being pointed to)
-                   'M=!M'  + '\n' + # bit-wise not the contents of the address that SP points to
-                   '@SP'   + '\n' + # increment contents of SP
+            asm = ('@SP'   + '\n' +
+                   'M=M-1' + '\n' +
+                   'A=M'   + '\n' +
+                   'M=!M'  + '\n' + # bit-wise NOT the contents of the address that SP points to
+                   '@SP'   + '\n' +
                    'M=M+1')
-    #elif ct is c_label
-        # ??
-    #elif ct is c_goto
-        # ??
-    #elif ct is c_if
-        # ??
     elif ct == 'C_PUSH':
         # put segment[index] onto stack
         if args[0] == 'constant':
             asm = ('@' + args[1] + '\n' + # set A to constant value
                    'D=A' + '\n' +         # D contains constant value
-                   '@SP' + '\n' +         # set A to the address of the stack pointer register (SP)
-                   'A=M' + '\n' +         # set A to the contents of SP (an address being pointed to)
+                   '@SP' + '\n' +         
+                   'A=M' + '\n' +         
                    'M=D' + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
-                   '@SP' + '\n' +         # increment contents of SP
+                   '@SP' + '\n' +         # increment stack pointer
                    'M=M+1')
         elif args[0] == 'local':
             asm = ('@LCL'  + '\n' +           # store the contents of the memory location local+index in D
@@ -295,7 +273,7 @@ def translate_command(ct, args, label_ctr, static_base):
                    '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
                    'A=M'   + '\n' + 
                    'M=D'   + '\n' +
-                   '@SP'   + '\n' +         # increment contents of SP
+                   '@SP'   + '\n' +           # increment contents of SP
                    'M=M+1')
         elif args[0] == 'argument':
             asm = ('@ARG'  + '\n' +           # store the contents of the memory location argument+index in D
@@ -306,7 +284,7 @@ def translate_command(ct, args, label_ctr, static_base):
                    '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
                    'A=M'   + '\n' + 
                    'M=D'   + '\n' +
-                   '@SP'   + '\n' +         # increment contents of SP
+                   '@SP'   + '\n' +           # increment contents of SP
                    'M=M+1')
         elif args[0] == 'this':
             asm = ('@THIS'  + '\n' +           # store the contents of the memory location this+index in D
@@ -317,7 +295,7 @@ def translate_command(ct, args, label_ctr, static_base):
                    '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
                    'A=M'   + '\n' + 
                    'M=D'   + '\n' +
-                   '@SP'   + '\n' +         # increment contents of SP
+                   '@SP'   + '\n' +           # increment contents of SP
                    'M=M+1')
         elif args[0] == 'that':
             asm = ('@THAT'  + '\n' +           # store the contents of the memory location that+index in D
@@ -328,10 +306,10 @@ def translate_command(ct, args, label_ctr, static_base):
                    '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
                    'A=M'   + '\n' + 
                    'M=D'   + '\n' +
-                   '@SP'   + '\n' +         # increment contents of SP
+                   '@SP'   + '\n' +           # increment contents of SP
                    'M=M+1')
         elif args[0] == 'pointer':
-            asm = ('@R3'  + '\n' +           # store 3+index in D
+            asm = ('@R3'  + '\n' +            # store 3+index in D
                    'D=A'   + '\n' +
                    '@'     + args[1] + '\n' +
                    'A=D+A' + '\n' +
@@ -339,10 +317,10 @@ def translate_command(ct, args, label_ctr, static_base):
                    '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
                    'A=M'   + '\n' + 
                    'M=D'   + '\n' +
-                   '@SP'   + '\n' +         # increment contents of SP
+                   '@SP'   + '\n' +           # increment contents of SP
                    'M=M+1')
         elif args[0] == 'temp':
-            asm = ('@R5'  + '\n' +           # store 5+index in D
+            asm = ('@R5'  + '\n' +            # store 5+index in D
                    'D=A'   + '\n' +
                    '@'     + args[1] + '\n' +
                    'A=D+A' + '\n' +
@@ -350,20 +328,20 @@ def translate_command(ct, args, label_ctr, static_base):
                    '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
                    'A=M'   + '\n' + 
                    'M=D'   + '\n' +
-                   '@SP'   + '\n' +         # increment contents of SP
+                   '@SP'   + '\n' +           # increment contents of SP
                    'M=M+1')
         elif args[0] == 'static':
-            asm = ('@' + static_base + '.' + args[1] + '\n' +
+            asm = ('@' + static_base + '.' + args[1] + '\n' + #store value of static variable register in D
                    'D=M' + '\n' +
-                   '@SP' + '\n' +         # set A to the address of the stack pointer register (SP)
-                   'A=M' + '\n' +         # set A to the contents of SP (an address being pointed to)
-                   'M=D' + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
-                   '@SP' + '\n' +         # increment contents of SP
+                   '@SP' + '\n' +         
+                   'A=M' + '\n' +         
+                   'M=D' + '\n' +                             # set (the register being pointed to by SP) to the value stored in D
+                   '@SP' + '\n' +                             # increment contents of SP
                    'M=M+1')
     elif ct == 'C_POP':
         # pull from stack and store in segment[index]
         if args[0] == 'constant':
-            asm = ('@SP' + '\n' +         # decrement contents of SP
+            asm = ('@SP' + '\n' +             # decrement contents of SP
                    'M=M-1')
         elif args[0] == 'local':
             asm = ('@LCL'  + '\n' +           # store the address local+index in R13
@@ -394,7 +372,7 @@ def translate_command(ct, args, label_ctr, static_base):
                    'A=M'   + '\n' + 
                    'M=D')
         elif args[0] == 'this':
-            asm = ('@THIS'  + '\n' +           # store the address this+index in R13
+            asm = ('@THIS'  + '\n' +          # store the address this+index in R13
                    'D=M'   + '\n' +
                    '@'     + args[1] + '\n' +
                    'D=D+A' + '\n' +
@@ -408,7 +386,7 @@ def translate_command(ct, args, label_ctr, static_base):
                    'A=M'   + '\n' + 
                    'M=D')
         elif args[0] == 'that':
-            asm = ('@THAT'  + '\n' +           # store the address that+index in R13
+            asm = ('@THAT'  + '\n' +          # store the address that+index in R13
                    'D=M'   + '\n' +
                    '@'     + args[1] + '\n' +
                    'D=D+A' + '\n' +
@@ -422,7 +400,7 @@ def translate_command(ct, args, label_ctr, static_base):
                    'A=M'   + '\n' + 
                    'M=D')
         elif args[0] == 'pointer':
-            asm = ('@R3'  + '\n' +           # store 3+index in R13
+            asm = ('@R3'  + '\n' +            # store 3+index in R13
                    'D=A'   + '\n' +
                    '@'     + args[1] + '\n' +
                    'D=D+A' + '\n' +
@@ -436,7 +414,7 @@ def translate_command(ct, args, label_ctr, static_base):
                    'A=M'   + '\n' + 
                    'M=D')
         elif args[0] == 'temp':
-            asm = ('@R5'  + '\n' +           # store 5+index in R13
+            asm = ('@R5'  + '\n' +            # store 5+index in R13
                    'D=A'   + '\n' +
                    '@'     + args[1] + '\n' +
                    'D=D+A' + '\n' +
@@ -450,16 +428,22 @@ def translate_command(ct, args, label_ctr, static_base):
                    'A=M'   + '\n' + 
                    'M=D')          
         elif args[0] == 'static':
-            asm = ('@SP'   + '\n' +           # set D to the contents of the address that SP points to
+            asm = ('@SP'   + '\n' +                                     # set D to the contents of the address that SP points to
                    'M=M-1' + '\n' + 
                    'A=M'   + '\n' + 
                    'D=M'   + '\n' + 
                    '@' + static_base + '.' + args[1] + '\n' +           # store the contents of D in the memory location of static variable
                    'M=D')
-    #elif ct is c_function
-        # ??
-    #elif ct is c_call
-        # ??
+    elif ct == 'C_FUNCTION':
+        asm = ''
+    elif ct == 'C_CALL':
+        asm = ''
+    elif ct == 'C_LABEL':
+        asm = ''
+    elif ct == 'C_GOTO':
+        asm = ''
+    elif ct == 'C_IF':
+        asm = ''
     return asm
 
 """
