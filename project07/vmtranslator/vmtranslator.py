@@ -329,6 +329,28 @@ def translate_command(ct, args, label_ctr):
                    'M=D'   + '\n' +
                    '@SP'   + '\n' +         # increment contents of SP
                    'M=M+1')
+        elif args[0] == 'pointer':
+            asm = ('@R3'  + '\n' +           # store the contents of the memory location 3+index in D
+                   'D=M'   + '\n' +
+                   '@'     + args[1] + '\n' +
+                   'A=D+A' + '\n' +
+                   'D=M'   + '\n' +
+                   '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
+                   'A=M'   + '\n' + 
+                   'M=D'   + '\n' +
+                   '@SP'   + '\n' +         # increment contents of SP
+                   'M=M+1')
+        elif args[0] == 'temp':
+            asm = ('@R5'  + '\n' +           # store the contents of the memory location 5+index in D
+                   'D=M'   + '\n' +
+                   '@'     + args[1] + '\n' +
+                   'A=D+A' + '\n' +
+                   'D=M'   + '\n' +
+                   '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
+                   'A=M'   + '\n' + 
+                   'M=D'   + '\n' +
+                   '@SP'   + '\n' +         # increment contents of SP
+                   'M=M+1')
     elif ct == 'C_POP':
         # pull from stack and store in segment[index]
         if args[0] == 'constant':
@@ -378,6 +400,34 @@ def translate_command(ct, args, label_ctr):
                    'M=D')
         elif args[0] == 'that':
             asm = ('@THAT'  + '\n' +           # store the address that+index in R13
+                   'D=M'   + '\n' +
+                   '@'     + args[1] + '\n' +
+                   'D=D+A' + '\n' +
+                   '@R13'  + '\n' +
+                   'M=D'   + '\n' +
+                   '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+                   'M=M-1' + '\n' + 
+                   'A=M'   + '\n' + 
+                   'D=M'   + '\n' + 
+                   '@R13'  + '\n' +           # store the contents of D in the memory location that+index
+                   'A=M'   + '\n' + 
+                   'M=D')
+        elif args[0] == 'pointer':
+            asm = ('@R3'  + '\n' +           # store the address 3+index in R13
+                   'D=M'   + '\n' +
+                   '@'     + args[1] + '\n' +
+                   'D=D+A' + '\n' +
+                   '@R13'  + '\n' +
+                   'M=D'   + '\n' +
+                   '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+                   'M=M-1' + '\n' + 
+                   'A=M'   + '\n' + 
+                   'D=M'   + '\n' + 
+                   '@R13'  + '\n' +           # store the contents of D in the memory location that+index
+                   'A=M'   + '\n' + 
+                   'M=D')
+        elif args[0] == 'that':
+            asm = ('@R5'  + '\n' +           # store the address 5+index in R13
                    'D=M'   + '\n' +
                    '@'     + args[1] + '\n' +
                    'D=D+A' + '\n' +
