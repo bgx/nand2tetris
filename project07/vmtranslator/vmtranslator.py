@@ -353,7 +353,7 @@ def translate_command(ct, args, label_ctr, static_base):
                    '@SP'   + '\n' +         # increment contents of SP
                    'M=M+1')
         elif args[0] == 'static':
-            asm = ('@' + static_base + args[1] + '\n' +
+            asm = ('@' + static_base + '.' + args[1] + '\n' +
                    'D=M' + '\n' +
                    '@SP' + '\n' +         # set A to the address of the stack pointer register (SP)
                    'A=M' + '\n' +         # set A to the contents of SP (an address being pointed to)
@@ -454,8 +454,7 @@ def translate_command(ct, args, label_ctr, static_base):
                    'M=M-1' + '\n' + 
                    'A=M'   + '\n' + 
                    'D=M'   + '\n' + 
-                   '@' + static_base + args[1] + '\n' +           # store the contents of D in the memory location of static variable
-                   'A=M'   + '\n' + 
+                   '@' + static_base + '.' + args[1] + '\n' +           # store the contents of D in the memory location of static variable
                    'M=D')
     #elif ct is c_function
         # ??
