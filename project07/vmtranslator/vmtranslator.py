@@ -55,7 +55,6 @@ def main():
             li.append(path)
     
     asm_file_name = os.path.dirname(li[0]) + '\\' + os.path.split(os.path.dirname(li[0]))[1] + '.asm'
-    static_base = os.path.split(os.path.dirname(li[0]))[1]
     
     with open(asm_file_name, 'w') as output:
     
@@ -65,11 +64,12 @@ def main():
         for file in li:
         
             with open(file, 'r') as vm:
+                static_base = os.path.split(os.path.dirname(file))[1] # static variable number j in a VM file f represented as assembly language symbol f.j
                 for line in vm:
                     line = clean_line(line, ['//'])
                     ct = get_command_type(line)
                     args = get_arguments(line, ct)
-                    asm = translate_command(ct, args, label_ctr)
+                    asm = translate_command(ct, args, label_ctr, static_base)
                     if not line:
                         oline = line
                     else:
@@ -158,9 +158,9 @@ def get_arguments(line, ct):
     #elif ct is c_call
         # call arg1 arg2
     
-def translate_command(ct, args, label_ctr):
+def translate_command(ct, args, label_ctr, static_base):
     '''Translates vm command to assembly code'''
-        
+           
     if ct == '':
         asm = ''
     #if ct == 'C_RETURN':
@@ -353,7 +353,13 @@ def translate_command(ct, args, label_ctr):
                    '@SP'   + '\n' +         # increment contents of SP
                    'M=M+1')
         elif args[0] == 'static':
-            asm = ''
+            asm = ('@' + static_base + args[1] + '\n' +
+                   'D=M' + '\n' +
+                   '@SP' + '\n' +         # set A to the address of the stack pointer register (SP)
+                   'A=M' + '\n' +         # set A to the contents of SP (an address being pointed to)
+                   'M=D' + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
+                   '@SP' + '\n' +         # increment contents of SP
+                   'M=M+1')
     elif ct == 'C_POP':
         # pull from stack and store in segment[index]
         if args[0] == 'constant':
@@ -444,7 +450,13 @@ def translate_command(ct, args, label_ctr):
                    'A=M'   + '\n' + 
                    'M=D')          
         elif args[0] == 'static':
-            asm = ''
+            asm = ('@SP'   + '\n' +           # set D to the contents of the address that SP points to
+                   'M=M-1' + '\n' + 
+                   'A=M'   + '\n' + 
+                   'D=M'   + '\n' + 
+                   '@' + static_base + args[1] + '\n' +           # store the contents of D in the memory location of static variable
+                   'A=M'   + '\n' + 
+                   'M=D')
     #elif ct is c_function
         # ??
     #elif ct is c_call
