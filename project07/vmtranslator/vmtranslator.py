@@ -55,6 +55,7 @@ def main():
             li.append(path)
     
     asm_file_name = os.path.dirname(li[0]) + '\\' + os.path.split(os.path.dirname(li[0]))[1] + '.asm'
+    static_base = os.path.split(os.path.dirname(li[0]))[1]
     
     with open(asm_file_name, 'w') as output:
     
@@ -330,8 +331,8 @@ def translate_command(ct, args, label_ctr):
                    '@SP'   + '\n' +         # increment contents of SP
                    'M=M+1')
         elif args[0] == 'pointer':
-            asm = ('@R3'  + '\n' +           # store the contents of the memory location 3+index in D
-                   'D=M'   + '\n' +
+            asm = ('@R3'  + '\n' +           # store 3+index in D
+                   'D=A'   + '\n' +
                    '@'     + args[1] + '\n' +
                    'A=D+A' + '\n' +
                    'D=M'   + '\n' +
@@ -341,8 +342,8 @@ def translate_command(ct, args, label_ctr):
                    '@SP'   + '\n' +         # increment contents of SP
                    'M=M+1')
         elif args[0] == 'temp':
-            asm = ('@R5'  + '\n' +           # store the contents of the memory location 5+index in D
-                   'D=M'   + '\n' +
+            asm = ('@R5'  + '\n' +           # store 5+index in D
+                   'D=A'   + '\n' +
                    '@'     + args[1] + '\n' +
                    'A=D+A' + '\n' +
                    'D=M'   + '\n' +
@@ -351,6 +352,8 @@ def translate_command(ct, args, label_ctr):
                    'M=D'   + '\n' +
                    '@SP'   + '\n' +         # increment contents of SP
                    'M=M+1')
+        elif args[0] == 'static':
+            asm = ''
     elif ct == 'C_POP':
         # pull from stack and store in segment[index]
         if args[0] == 'constant':
@@ -413,8 +416,8 @@ def translate_command(ct, args, label_ctr):
                    'A=M'   + '\n' + 
                    'M=D')
         elif args[0] == 'pointer':
-            asm = ('@R3'  + '\n' +           # store the address 3+index in R13
-                   'D=M'   + '\n' +
+            asm = ('@R3'  + '\n' +           # store 3+index in R13
+                   'D=A'   + '\n' +
                    '@'     + args[1] + '\n' +
                    'D=D+A' + '\n' +
                    '@R13'  + '\n' +
@@ -423,12 +426,12 @@ def translate_command(ct, args, label_ctr):
                    'M=M-1' + '\n' + 
                    'A=M'   + '\n' + 
                    'D=M'   + '\n' + 
-                   '@R13'  + '\n' +           # store the contents of D in the memory location that+index
+                   '@R13'  + '\n' +           # store the contents of D in the memory location 3+index
                    'A=M'   + '\n' + 
                    'M=D')
-        elif args[0] == 'that':
-            asm = ('@R5'  + '\n' +           # store the address 5+index in R13
-                   'D=M'   + '\n' +
+        elif args[0] == 'temp':
+            asm = ('@R5'  + '\n' +           # store 5+index in R13
+                   'D=A'   + '\n' +
                    '@'     + args[1] + '\n' +
                    'D=D+A' + '\n' +
                    '@R13'  + '\n' +
@@ -437,9 +440,11 @@ def translate_command(ct, args, label_ctr):
                    'M=M-1' + '\n' + 
                    'A=M'   + '\n' + 
                    'D=M'   + '\n' + 
-                   '@R13'  + '\n' +           # store the contents of D in the memory location that+index
+                   '@R13'  + '\n' +           # store the contents of D in the memory location 5+index
                    'A=M'   + '\n' + 
                    'M=D')          
+        elif args[0] == 'static':
+            asm = ''
     #elif ct is c_function
         # ??
     #elif ct is c_call
