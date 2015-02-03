@@ -130,19 +130,10 @@ def get_arguments(line, ct):
         return ['']
     elif ct == 'C_ARITHMETIC':
         return [line]
-    #elif ct is c_label
-        # arg1 is after label
-    #elif ct is c_goto
-        # arg1 is after goto
-    #elif ct is c_if
-        # arg1 is after if-goto
-    
-    elif ct=='C_PUSH' or ct=='C_POP':
+    elif ct=='C_LABEL' or ct=='C_GOTO' or ct=='C_IF':
+        return line.split()[1]
+    elif ct=='C_PUSH' or ct=='C_POP' or ct=='C_FUNCTION' or ct=='C_CALL':
         return line.split()[1:3]
-    #elif ct is c_function
-        # function arg1 arg2
-    #elif ct is c_call
-        # call arg1 arg2
     
 def translate_command(ct, args, label_ctr, static_base):
     '''Translates vm command to assembly code'''
@@ -439,7 +430,7 @@ def translate_command(ct, args, label_ctr, static_base):
     elif ct == 'C_CALL':
         asm = ''
     elif ct == 'C_LABEL':
-        asm = ''
+        asm = '(' + args[0] + ')' + '\n'
     elif ct == 'C_GOTO':
         asm = ''
     elif ct == 'C_IF':
