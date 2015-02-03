@@ -6,11 +6,12 @@ Writing of transator broken into 4 stages:
 3. Program flow commands
 4. Function calling commands
 
-The objective of Project 07 is to build a VM translator that implements 1. and 2.
+The objective of Project 08 is to build a VM translator that implements 1,2,3, and 4
+(1 and 2 were implemented in Project 07)
 
 Brian Grady
 
-Passed all project07 tests on 2015.1.23
+Passed all project08 tests on _____
 '''
 
 import sys
