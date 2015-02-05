@@ -138,10 +138,8 @@ def get_arguments(line, ct):
 def translate_command(ct, args, label_ctr, static_base):
     '''Translates vm command to assembly code'''
            
-    if ct == '':
+    if   ct == '':
         asm = ''
-    #if ct == 'C_RETURN':
-        # ??
     elif ct == 'C_ARITHMETIC':
         if args[0] == 'add':
             asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
@@ -425,10 +423,6 @@ def translate_command(ct, args, label_ctr, static_base):
                    'D=M'   + '\n' + 
                    '@' + static_base + '.' + args[1] + '\n' +           # store the contents of D in the memory location of static variable
                    'M=D')
-    elif ct == 'C_FUNCTION':
-        asm = ''
-    elif ct == 'C_CALL':
-        asm = ''
     elif ct == 'C_LABEL':
         asm = '(' + args + ')'
     elif ct == 'C_GOTO':
@@ -441,6 +435,12 @@ def translate_command(ct, args, label_ctr, static_base):
                'D=M'      + '\n' +
                '@' + args + '\n' +          # jump to (args) if D is not zero
                'D;JNE')
+    elif ct == 'C_CALL':
+        asm = ''
+    elif ct == 'C_FUNCTION':
+        asm = ''
+    elif ct == 'C_RETURN':
+        asm = ''
     return asm
 
 """
