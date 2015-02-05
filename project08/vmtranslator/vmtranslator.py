@@ -430,11 +430,17 @@ def translate_command(ct, args, label_ctr, static_base):
     elif ct == 'C_CALL':
         asm = ''
     elif ct == 'C_LABEL':
-        asm = '(' + args[0] + ')' + '\n'
+        asm = '(' + args + ')'
     elif ct == 'C_GOTO':
-        asm = ''
+        asm = ('@' + args + '\n' +
+              '0;JMP')
     elif ct == 'C_IF':
-        asm = ''
+        asm = ('@SP'      + '\n' +          # pop value from stack and place in D register
+               'M=M-1'    + '\n' +
+               'A=M'      + '\n' +
+               'D=M'      + '\n' +
+               '@' + args + '\n' +          # jump to (args) if D is not zero
+               'D;JNE')
     return asm
 
 """
