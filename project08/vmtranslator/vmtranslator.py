@@ -137,7 +137,7 @@ def get_arguments(line, ct):
     
 def translate_command(ct, args, label_ctr, static_base):
     '''Translates vm command to assembly code'''
-           
+    
     if   ct == '':
         asm = ''
     elif ct == 'C_ARITHMETIC':
@@ -438,9 +438,86 @@ def translate_command(ct, args, label_ctr, static_base):
     elif ct == 'C_CALL':
         asm = ''
     elif ct == 'C_FUNCTION':
-        asm = ''
+        asm = ('@' + args[1] + '\n' +
+               'D=A'   + '\n' +
+               '@' + args[0] + '.kcnt' + '\n' +
+               'M=D'   + '\n' +
+               
+               '(' + args[0] + ')' + '\n' +
+               
+               '@' + args[0] + '.kcnt' + '\n' +		# jump to f.END if f.kcnt<=0 (like condition of while loop)
+               'D=M'   + '\n' + 
+               '@' + args[0] + '.END' + '\n' +
+               'D;JLE' + '\n' +
+                
+               '@0'    + '\n' +         # set A to zero
+               'D=A'   + '\n' +         # D contains zero
+               '@SP'   + '\n' +         
+               'A=M'   + '\n' +         
+               'M=D'   + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
+               '@SP'   + '\n' +         # increment stack pointer
+               'M=M+1' + '\n' +
+               
+               '@' + args[0] + '.kcnt' + '\n' +
+               'M=M-1' + '\n' +
+                
+               '@' + args[0] + '\n' +	# Goto (f) (like the end bracket of a while loop)
+               '0;JMP' + '\n' +
+               '(' + args[0] + '.END)')
+
     elif ct == 'C_RETURN':
-        asm = ''
+        asm = ( '@LCL'   + '\n' +
+                'D=M'    + '\n' +
+                '@FRAME' + '\n' +
+                'M=D'    + '\n' +
+                
+                # get RET
+                
+                #*ARG = pop()
+                '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+                'M=M-1' + '\n' + 
+                'A=M'   + '\n' + 
+                'D=M'   + '\n' + 
+                '@ARG'  + '\n' +           # store the contents of D in the memory location argument points to
+                'A=M'   + '\n' + 
+                'M=D'   + '\n' +
+                 
+                '@ARG'  + '\n' +
+                'D=M'   + '\n' +
+                '@SP'   + '\n' +
+                'M=D+1' + '\n' +
+                
+                '@FRAME' + '\n' +
+                'M=M-1'  + '\n' +
+                'A=M'    + '\n' +
+                'D=M'    + '\n' +
+                '@THAT'  + '\n' +
+                'M=D'    + '\n' +
+                
+                '@FRAME' + '\n' +
+                'M=M-1'  + '\n' +
+                'A=M'    + '\n' +
+                'D=M'    + '\n' +
+                '@THIS'  + '\n' +
+                'M=D'    + '\n' +
+                
+                '@FRAME' + '\n' +
+                'M=M-1'  + '\n' +
+                'A=M'    + '\n' +
+                'D=M'    + '\n' +
+                '@ARG'   + '\n' +
+                'M=D'    + '\n' +
+                
+                '@FRAME' + '\n' +
+                'M=M-1'  + '\n' +
+                'A=M'    + '\n' +
+                'D=M'    + '\n' +
+                '@LCL'   + '\n' +
+                'M=D'
+                
+               
+        
+               )   #goto RET
     return asm
 
 """
