@@ -1,8 +1,9 @@
+(SimpleFunction.test)//Function SimpleFunction.test
 @2
 D=A
 @SimpleFunction.test.kcnt
 M=D
-(SimpleFunction.test)
+(SimpleFunction.test.kloop)
 @SimpleFunction.test.kcnt
 D=M
 @SimpleFunction.test.END
@@ -16,7 +17,7 @@ M=D
 M=M+1
 @SimpleFunction.test.kcnt
 M=M-1
-@SimpleFunction.test
+@SimpleFunction.test.kloop
 0;JMP
 (SimpleFunction.test.END)
 @LCL
@@ -83,9 +84,17 @@ A=M
 D=M
 A=A-1
 M=M-D
-@LCL
+@LCL//Return 
 D=M
 @FRAME
+M=D
+@FRAME
+D=M
+@5
+D=D-A
+A=D
+D=M
+@RET
 M=D
 @SP
 M=M-1
@@ -122,3 +131,6 @@ A=M
 D=M
 @LCL
 M=D
+@RET
+A=M
+0;JMP

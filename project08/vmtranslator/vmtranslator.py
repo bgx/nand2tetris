@@ -436,16 +436,76 @@ def translate_command(ct, args, label_ctr, static_base):
                '@' + args + '\n' +          # jump to (args) if D is not zero
                'D;JNE')
     elif ct == 'C_CALL':
-        asm = ''
+        asm = ( '@' + args[0] + '.RETURN' + '//Call ' + args[0] + '\n' +
+                'D=A' + '\n' +
+                '@SP' + '\n' +         
+                'A=M' + '\n' +         
+                'M=D' + '\n' +                            
+                '@SP' + '\n' +                             
+                'M=M+1' + '\n' +
+                
+                '@LCL' + '\n' +          
+                'D=M' + '\n' +
+                '@SP' + '\n' +         
+                'A=M' + '\n' +         
+                'M=D' + '\n' +                             
+                '@SP' + '\n' +                           
+                'M=M+1' + '\n' +
+                
+                '@ARG' + '\n' +      
+                'D=M' + '\n' +
+                '@SP' + '\n' +         
+                'A=M' + '\n' +         
+                'M=D' + '\n' +                           
+                '@SP' + '\n' +                          
+                'M=M+1' + '\n' +
+                
+                '@THIS' + '\n' +        
+                'D=M' + '\n' +
+                '@SP' + '\n' +         
+                'A=M' + '\n' +         
+                'M=D' + '\n' +                   
+                '@SP' + '\n' +                       
+                'M=M+1' + '\n' +
+                
+                '@THAT' + '\n' +         
+                'D=M' + '\n' +
+                '@SP' + '\n' +         
+                'A=M' + '\n' +         
+                'M=D' + '\n' +                           
+                '@SP' + '\n' +                    
+                'M=M+1' + '\n' +
+                
+                #there are probably better ways to do the following
+                '@SP'   + '\n' +           # store the address SP-n-5 in D
+                'D=M'   + '\n' +
+                '@'     + args[1] + '\n' +
+                'D=D-A' + '\n' +
+                '@5'    + '\n' +
+                'D=D-A' + '\n' +
+                '@ARG'  + '\n' +           # store the contents of D in the memory location ARG
+                'M=D'   + '\n' +
+                
+                '@SP'   + '\n' +           # store the address SP in D
+                'D=M'   + '\n' +
+                '@LCL'  + '\n' +           # store the contents of D in the memory location LCL
+                'M=D'   + '\n' +
+                
+                '@' + args[0] + '\n' +
+                '0;JMP' + '\n' +
+                
+                '(' + args[0] + '.RETURN' + ')')           
     elif ct == 'C_FUNCTION':
-        asm = ('@' + args[1] + '\n' +
+        asm = ('(' + args[0] + ')' + '//Function ' + args[0] + '\n' +
+        
+               '@' + args[1] + '\n' +
                'D=A'   + '\n' +
                '@' + args[0] + '.kcnt' + '\n' +
                'M=D'   + '\n' +
                
-               '(' + args[0] + ')' + '\n' +
+               '(' + args[0] + '.kloop)' + '\n' +
                
-               '@' + args[0] + '.kcnt' + '\n' +		# jump to f.END if f.kcnt<=0 (like condition of while loop)
+               '@' + args[0] + '.kcnt' + '\n' +		# jump to f.END if f.kcnt<=0 (like condition of while loop) [while loop can be brought out into the py script, but it makes more asm instructions]
                'D=M'   + '\n' + 
                '@' + args[0] + '.END' + '\n' +
                'D;JLE' + '\n' +
@@ -461,17 +521,24 @@ def translate_command(ct, args, label_ctr, static_base):
                '@' + args[0] + '.kcnt' + '\n' +
                'M=M-1' + '\n' +
                 
-               '@' + args[0] + '\n' +	# Goto (f) (like the end bracket of a while loop)
+               '@' + args[0] + '.kloop' + '\n' +	# Goto (f.kloop) (like the end bracket of a while loop)
                '0;JMP' + '\n' +
                '(' + args[0] + '.END)')
-
     elif ct == 'C_RETURN':
-        asm = ( '@LCL'   + '\n' +
+        asm = ( '@LCL'   '//Return ' + args[0] + '\n' +
                 'D=M'    + '\n' +
                 '@FRAME' + '\n' +
                 'M=D'    + '\n' +
                 
                 # get RET
+                '@FRAME'   + '\n' +           # store the address FRAME-5 in D
+                'D=M'   + '\n' +
+                '@5'    + '\n' +
+                'D=D-A' + '\n' +
+                'A=D'    + '\n' +
+                'D=M'    + '\n' +
+                '@RET'  + '\n' +           # store the contents of FRAME-5 in the memory location RET
+                'M=D'   + '\n' +
                 
                 #*ARG = pop()
                 '@SP'   + '\n' +           # set D to the contents of the address that SP points to
@@ -513,11 +580,14 @@ def translate_command(ct, args, label_ctr, static_base):
                 'A=M'    + '\n' +
                 'D=M'    + '\n' +
                 '@LCL'   + '\n' +
-                'M=D'
+                'M=D'    + '\n' +
                 
-               
+                #goto RET
+                '@RET' + '\n' +
+                'A=M'  + '\n' +
+                '0;JMP'
         
-               )   #goto RET
+               )
     return asm
 
 """
