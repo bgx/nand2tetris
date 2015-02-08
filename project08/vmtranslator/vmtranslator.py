@@ -32,17 +32,14 @@ def main():
     asm_file_name = os.path.dirname(li[0]) + '\\' + os.path.split(os.path.dirname(li[0]))[1] + '.asm'
     
     with open(asm_file_name, 'w') as output:
-    
-        #used to assign unique label to memory location for each translation of eq,gt,lt, or call
-        label_ctr = [0,0,0,0]
-        
+            
         # bootstrap code needs to be commented out for tests 'SimpleFunction' and 'NestedCall' until a command line switch or Sys.vm detection is implemented
         '''bootstrap = ('@256' + '\n' +
                      'D=A'  + '\n' +
                      '@SP'  + '\n' +
                      'M=D'  + '\n')
                      
-        bootstrap = bootstrap + translate_command('C_CALL',['Sys.init','0'],label_ctr, 'not_needed') + '\n'
+        bootstrap = bootstrap + translate_command('C_CALL',['Sys.init','0'], 'not_needed') + '\n'
                      
         output.write(bootstrap)'''
         
@@ -54,7 +51,7 @@ def main():
                     line = clean_line(line, ['//'])
                     ct = get_command_type(line)
                     args = get_arguments(line, ct)
-                    asm = translate_command(ct, args, label_ctr, static_base)
+                    asm = translate_command(ct, args, static_base)
                     if not line:
                         oline = ''
                     else:
@@ -145,114 +142,15 @@ def get_arguments(line, ct):
     elif ct=='C_PUSH' or ct=='C_POP' or ct=='C_FUNCTION' or ct=='C_CALL':
         return line.split()[1:3]
     
-def translate_command(ct, args, label_ctr, static_base):
+def translate_command(ct, args, static_base):
+
     '''Translates vm command to assembly code'''
     
     if   ct == '':
         asm = ''
     elif ct == 'C_ARITHMETIC':
-        if args[0] == 'add':
-            asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
-                   'M=M-1' + '\n' +
-                   'A=M'   + '\n' +
-                   'D=M'   + '\n' +
-                   'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
-                   'M=D+M')         # add the first and second operands
-        elif args[0] == 'sub':
-            asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
-                   'M=M-1' + '\n' +
-                   'A=M'   + '\n' +
-                   'D=M'   + '\n' +
-                   'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
-                   'M=M-D')         # subtract first operand from second operand
-        elif args[0] == 'neg':
-            asm = ('@SP'   + '\n' +
-                   'M=M-1' + '\n' +
-                   'A=M'   + '\n' +
-                   'M=-M'  + '\n' + # arithmetically negate the contents of the address that SP points to
-                   '@SP'   + '\n' +
-                   'M=M+1')
-        elif args[0] == 'eq':
-            asm = ('@SP'      + '\n' +                              # pull first operand from stack and place in D register
-                   'M=M-1'    + '\n' +
-                   'A=M'      + '\n' +
-                   'D=M'      + '\n' +
-                   'A=A-1'    + '\n' +                              # set A to the address of the second operand, leaving SP where it needs to be
-                   'D=M-D'    + '\n' +                              # subtract first operand from second operand
-                   '@EQTRUE'  + str(label_ctr[0]) + '\n' +          # jump to (EQTRUE#) if result is zero
-                   'D;JEQ'    + '\n' +
-                   '@SP'      + '\n' +                              # result is not zero(not equal): place 0 (false) on the stack 
-                   'A=M-1'    + '\n' +
-                   'M=0'      + '\n' +
-                   '@EQEND'   + str(label_ctr[0]) + '\n' + 
-                   '0;JMP'    + '\n' +
-                   '(EQTRUE'  + str(label_ctr[0]) + ')' + '\n' + 
-                   '@SP'      + '\n' +                              # result is zero(equal): place -1 (true) on the stack
-                   'A=M-1'    + '\n' + 
-                   'M=-1'     + '\n' + 
-                   '(EQEND'   + str(label_ctr[0]) + ')')
-            label_ctr[0] = label_ctr[0] + 1
-        elif args[0] == 'gt':
-            asm = ('@SP'      + '\n' +                              # pull first operand from stack and place in D register
-                   'M=M-1'    + '\n' +
-                   'A=M'      + '\n' +
-                   'D=M'      + '\n' +
-                   'A=A-1'    + '\n' +                              # set A to the address of the second operand, leaving SP where it needs to be
-                   'D=M-D'    + '\n' +                              # subtract first operand from second operand
-                   '@GTTRUE'  + str(label_ctr[1]) + '\n' +          # jump to (GTTRUE#) if result is positive
-                   'D;JGT'    + '\n' +
-                   '@SP'      + '\n' +                              # result is zero or negative(not gt): place 0 (false) on the stack
-                   'A=M-1'    + '\n' +
-                   'M=0'      + '\n' +
-                   '@GTEND'   + str(label_ctr[1]) + '\n' +
-                   '0;JMP'    + '\n' +
-                   '(GTTRUE'  + str(label_ctr[1]) + ')' + '\n' + 
-                   '@SP'      + '\n' +                              # result is positive(gt): place -1 (true) on the stack
-                   'A=M-1'    + '\n' + 
-                   'M=-1'     + '\n' + 
-                   '(GTEND'   + str(label_ctr[1]) + ')')
-            label_ctr[1] = label_ctr[1] + 1
-        elif args[0] == 'lt':
-            asm = ('@SP'      + '\n' +                              # pull first operand from stack and place in D register
-                   'M=M-1'    + '\n' +
-                   'A=M'      + '\n' +
-                   'D=M'      + '\n' +
-                   'A=A-1'    + '\n' +                              # set A to the address of the second operand, leaving SP where it needs to be
-                   'D=M-D'    + '\n' +                              # subtract first operand from second operand
-                   '@LTTRUE'  + str(label_ctr[2]) + '\n' +          # jump to (LTTRUE#) if result is negative
-                   'D;JLT'    + '\n' +
-                   '@SP'      + '\n' +                              # result is zero or positive(not lt): place 0 (false) on the stack
-                   'A=M-1'    + '\n' +
-                   'M=0'      + '\n' +
-                   '@LTEND'   + str(label_ctr[2]) + '\n' +
-                   '0;JMP'    + '\n' +
-                   '(LTTRUE'  + str(label_ctr[2]) + ')' + '\n' + 
-                   '@SP'      + '\n' +                              # result is negative(lt): place -1 (true) on the stack
-                   'A=M-1'    + '\n' + 
-                   'M=-1'     + '\n' + 
-                   '(LTEND'   + str(label_ctr[2]) + ')' )
-            label_ctr[2] = label_ctr[2] + 1
-        elif args[0] == 'and':
-            asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
-                   'M=M-1' + '\n' +
-                   'A=M'   + '\n' +
-                   'D=M'   + '\n' +
-                   'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
-                   'M=D&M')         # bit-wise AND the two operands
-        elif args[0] == 'or':
-            asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
-                   'M=M-1' + '\n' +
-                   'A=M'   + '\n' +
-                   'D=M'   + '\n' +
-                   'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
-                   'M=D|M')         # bit-wise OR the two operands
-        elif args[0] == 'not':
-            asm = ('@SP'   + '\n' +
-                   'M=M-1' + '\n' +
-                   'A=M'   + '\n' +
-                   'M=!M'  + '\n' + # bit-wise NOT the contents of the address that SP points to
-                   '@SP'   + '\n' +
-                   'M=M+1')
+        command = args[0]
+        asm = write_arithmetic(command)
     elif ct == 'C_PUSH':
         # put segment[index] onto stack
         if args[0] == 'constant':
@@ -446,66 +344,8 @@ def translate_command(ct, args, label_ctr, static_base):
                '@' + args + '\n' +          # jump to (args) if D is not zero
                'D;JNE')
     elif ct == 'C_CALL':
-        asm = ( '@' + args[0] + '.RETURN' + str(label_ctr[3]) + '//Call ' + args[0] + '\n' +
-                'D=A' + '\n' +
-                '@SP' + '\n' +         
-                'A=M' + '\n' +         
-                'M=D' + '\n' +                            
-                '@SP' + '\n' +                             
-                'M=M+1' + '\n' +
-                
-                '@LCL' + '\n' +          
-                'D=M' + '\n' +
-                '@SP' + '\n' +         
-                'A=M' + '\n' +         
-                'M=D' + '\n' +                             
-                '@SP' + '\n' +                           
-                'M=M+1' + '\n' +
-                
-                '@ARG' + '\n' +      
-                'D=M' + '\n' +
-                '@SP' + '\n' +         
-                'A=M' + '\n' +         
-                'M=D' + '\n' +                           
-                '@SP' + '\n' +                          
-                'M=M+1' + '\n' +
-                
-                '@THIS' + '\n' +        
-                'D=M' + '\n' +
-                '@SP' + '\n' +         
-                'A=M' + '\n' +         
-                'M=D' + '\n' +                   
-                '@SP' + '\n' +                       
-                'M=M+1' + '\n' +
-                
-                '@THAT' + '\n' +         
-                'D=M' + '\n' +
-                '@SP' + '\n' +         
-                'A=M' + '\n' +         
-                'M=D' + '\n' +                           
-                '@SP' + '\n' +                    
-                'M=M+1' + '\n' +
-                
-                #there are probably better ways to do the following
-                '@SP'   + '\n' +           # store the address SP-n-5 in D
-                'D=M'   + '\n' +
-                '@'     + args[1] + '\n' +
-                'D=D-A' + '\n' +
-                '@5'    + '\n' +
-                'D=D-A' + '\n' +
-                '@ARG'  + '\n' +           # store the contents of D in the memory location ARG
-                'M=D'   + '\n' +
-                
-                '@SP'   + '\n' +           # store the address SP in D
-                'D=M'   + '\n' +
-                '@LCL'  + '\n' +           # store the contents of D in the memory location LCL
-                'M=D'   + '\n' +
-                
-                '@' + args[0] + '\n' +
-                '0;JMP' + '\n' +
-                
-                '(' + args[0] + '.RETURN' + str(label_ctr[3]) + ')')   
-        label_ctr[3] = label_ctr[3] + 1
+        asm = write_call(*args)
+        
     elif ct == 'C_FUNCTION':
         asm = ('(' + args[0] + ')' + '//Function ' + args[0] + '\n' +
         
@@ -600,6 +440,204 @@ def translate_command(ct, args, label_ctr, static_base):
         
                )
     return asm
+
+def translate_command_parameters(parameter):
+    
+def write_init():
+
+def write_arithmetic(command):
+    '''Translates aritmetic vm command to assembly code'''
+    
+    if "counter_eq" not in write_arithmetic.__dict__:
+        write_arithmetic.counter_eq = 0
+        write_arithmetic.counter_gt = 0
+        write_arithmetic.counter_lt = 0
+        
+    if command == 'add':
+        asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
+               'M=M-1' + '\n' +
+               'A=M'   + '\n' +
+               'D=M'   + '\n' +
+               'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
+               'M=D+M')         # add the first and second operands
+    elif command == 'sub':
+        asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
+               'M=M-1' + '\n' +
+               'A=M'   + '\n' +
+               'D=M'   + '\n' +
+               'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
+               'M=M-D')         # subtract first operand from second operand
+    elif command == 'neg':
+        asm = ('@SP'   + '\n' +
+               'M=M-1' + '\n' +
+               'A=M'   + '\n' +
+               'M=-M'  + '\n' + # arithmetically negate the contents of the address that SP points to
+               '@SP'   + '\n' +
+               'M=M+1')
+    elif command == 'eq':
+        asm = ('@SP'      + '\n' +                              # pull first operand from stack and place in D register
+               'M=M-1'    + '\n' +
+               'A=M'      + '\n' +
+               'D=M'      + '\n' +
+               'A=A-1'    + '\n' +                              # set A to the address of the second operand, leaving SP where it needs to be
+               'D=M-D'    + '\n' +                              # subtract first operand from second operand
+               '@EQTRUE'  + str(write_arithmetic.counter_eq) + '\n' +          # jump to (EQTRUE#) if result is zero
+               'D;JEQ'    + '\n' +
+               '@SP'      + '\n' +                              # result is not zero(not equal): place 0 (false) on the stack 
+               'A=M-1'    + '\n' +
+               'M=0'      + '\n' +
+               '@EQEND'   + str(write_arithmetic.counter_eq) + '\n' + 
+               '0;JMP'    + '\n' +
+               '(EQTRUE'  + str(write_arithmetic.counter_eq) + ')' + '\n' + 
+               '@SP'      + '\n' +                              # result is zero(equal): place -1 (true) on the stack
+               'A=M-1'    + '\n' + 
+               'M=-1'     + '\n' + 
+               '(EQEND'   + str(write_arithmetic.counter_eq) + ')')
+        write_arithmetic.counter_eq += 1
+    elif command == 'gt':
+        asm = ('@SP'      + '\n' +                              # pull first operand from stack and place in D register
+               'M=M-1'    + '\n' +
+               'A=M'      + '\n' +
+               'D=M'      + '\n' +
+               'A=A-1'    + '\n' +                              # set A to the address of the second operand, leaving SP where it needs to be
+               'D=M-D'    + '\n' +                              # subtract first operand from second operand
+               '@GTTRUE'  + str(write_arithmetic.counter_gt) + '\n' +          # jump to (GTTRUE#) if result is positive
+               'D;JGT'    + '\n' +
+               '@SP'      + '\n' +                              # result is zero or negative(not gt): place 0 (false) on the stack
+               'A=M-1'    + '\n' +
+               'M=0'      + '\n' +
+               '@GTEND'   + str(write_arithmetic.counter_gt) + '\n' +
+               '0;JMP'    + '\n' +
+               '(GTTRUE'  + str(write_arithmetic.counter_gt) + ')' + '\n' + 
+               '@SP'      + '\n' +                              # result is positive(gt): place -1 (true) on the stack
+               'A=M-1'    + '\n' + 
+               'M=-1'     + '\n' + 
+               '(GTEND'   + str(write_arithmetic.counter_gt) + ')')
+        write_arithmetic.counter_gt += 1
+    elif command == 'lt':
+        asm = ('@SP'      + '\n' +                              # pull first operand from stack and place in D register
+               'M=M-1'    + '\n' +
+               'A=M'      + '\n' +
+               'D=M'      + '\n' +
+               'A=A-1'    + '\n' +                              # set A to the address of the second operand, leaving SP where it needs to be
+               'D=M-D'    + '\n' +                              # subtract first operand from second operand
+               '@LTTRUE'  + str(write_arithmetic.counter_lt) + '\n' +          # jump to (LTTRUE#) if result is negative
+               'D;JLT'    + '\n' +
+               '@SP'      + '\n' +                              # result is zero or positive(not lt): place 0 (false) on the stack
+               'A=M-1'    + '\n' +
+               'M=0'      + '\n' +
+               '@LTEND'   + str(write_arithmetic.counter_lt) + '\n' +
+               '0;JMP'    + '\n' +
+               '(LTTRUE'  + str(write_arithmetic.counter_lt) + ')' + '\n' + 
+               '@SP'      + '\n' +                              # result is negative(lt): place -1 (true) on the stack
+               'A=M-1'    + '\n' + 
+               'M=-1'     + '\n' + 
+               '(LTEND'   + str(write_arithmetic.counter_lt) + ')' )
+        write_arithmetic.counter_lt += 1
+    elif command == 'and':
+        asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
+               'M=M-1' + '\n' +
+               'A=M'   + '\n' +
+               'D=M'   + '\n' +
+               'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
+               'M=D&M')         # bit-wise AND the two operands
+    elif command == 'or':
+        asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
+               'M=M-1' + '\n' +
+               'A=M'   + '\n' +
+               'D=M'   + '\n' +
+               'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
+               'M=D|M')         # bit-wise OR the two operands
+    elif command == 'not':
+        asm = ('@SP'   + '\n' +
+               'M=M-1' + '\n' +
+               'A=M'   + '\n' +
+               'M=!M'  + '\n' + # bit-wise NOT the contents of the address that SP points to
+               '@SP'   + '\n' +
+               'M=M+1')
+
+    
+def write_push(segment, index):
+
+def write_pop(segment, index):
+
+def write_label(label):
+
+def write_goto(label):
+
+def write_ifgoto(label):
+
+def write_call(functionName, numArgs):
+    '''Translates aritmetic vm command to assembly code'''
+    
+    if "counter" not in write_call.__dict__:
+        write_call.counter = 0
+    
+    asm = ( '@' + functionName + '.RETURN' + str(write_call.counter) + '//Call ' + functionName + '\n' +
+            'D=A' + '\n' +
+            '@SP' + '\n' +         
+            'A=M' + '\n' +         
+            'M=D' + '\n' +                            
+            '@SP' + '\n' +                             
+            'M=M+1' + '\n' +
+            
+            '@LCL' + '\n' +          
+            'D=M' + '\n' +
+            '@SP' + '\n' +         
+            'A=M' + '\n' +         
+            'M=D' + '\n' +                             
+            '@SP' + '\n' +                           
+            'M=M+1' + '\n' +
+            
+            '@ARG' + '\n' +      
+            'D=M' + '\n' +
+            '@SP' + '\n' +         
+            'A=M' + '\n' +         
+            'M=D' + '\n' +                           
+            '@SP' + '\n' +                          
+            'M=M+1' + '\n' +
+            
+            '@THIS' + '\n' +        
+            'D=M' + '\n' +
+            '@SP' + '\n' +         
+            'A=M' + '\n' +         
+            'M=D' + '\n' +                   
+            '@SP' + '\n' +                       
+            'M=M+1' + '\n' +
+            
+            '@THAT' + '\n' +         
+            'D=M' + '\n' +
+            '@SP' + '\n' +         
+            'A=M' + '\n' +         
+            'M=D' + '\n' +                           
+            '@SP' + '\n' +                    
+            'M=M+1' + '\n' +
+            
+            #there are probably better ways to do the following
+            '@SP'   + '\n' +           # store the address SP-n-5 in D
+            'D=M'   + '\n' +
+            '@'     + numArgs + '\n' +
+            'D=D-A' + '\n' +
+            '@5'    + '\n' +
+            'D=D-A' + '\n' +
+            '@ARG'  + '\n' +           # store the contents of D in the memory location ARG
+            'M=D'   + '\n' +
+            
+            '@SP'   + '\n' +           # store the address SP in D
+            'D=M'   + '\n' +
+            '@LCL'  + '\n' +           # store the contents of D in the memory location LCL
+            'M=D'   + '\n' +
+            
+            '@' + functionName + '\n' +
+            '0;JMP' + '\n' +
+            
+            '(' + functionName + '.RETURN' + str(write_call.counter) + ')')   
+    write_call.counter += 1
+
+def write_return():
+
+def write_function(functionName, numLocals):
+
 
 if __name__ == '__main__':
     sys.exit(main())
