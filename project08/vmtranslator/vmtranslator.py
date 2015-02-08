@@ -158,20 +158,13 @@ def translate_command(ct, args, static_base):
     elif ct == 'C_POP':
         asm = write_pop(*args)
     elif ct == 'C_LABEL':
-        asm = '(' + args + ')'
+        asm = write_label(args)
     elif ct == 'C_GOTO':
-        asm = ('@' + args + '\n' +
-              '0;JMP')
+        asm = write_goto(args)
     elif ct == 'C_IF':
-        asm = ('@SP'      + '\n' +          # pop value from stack and place in D register
-               'M=M-1'    + '\n' +
-               'A=M'      + '\n' +
-               'D=M'      + '\n' +
-               '@' + args + '\n' +          # jump to (args) if D is not zero
-               'D;JNE')
+        asm = write_ifgoto(args)
     elif ct == 'C_CALL':
         asm = write_call(*args)
-        
     elif ct == 'C_FUNCTION':
         asm = ('(' + args[0] + ')' + '//Function ' + args[0] + '\n' +
         
@@ -266,9 +259,6 @@ def translate_command(ct, args, static_base):
         
                )
     return asm
-
-def translate_command_parameters(parameter):
-    '''aaa'''
     
 def write_init():
     '''aaa'''
@@ -570,13 +560,25 @@ def write_pop(segment, index):
                
 def write_label(label):
     '''aaa'''
+    asm = '(' + label + ')'
+    return asm
 
 def write_goto(label):
     '''aaa'''
-
+    asm = ( '@' + label + '\n' +
+            '0;JMP')
+    return asm
+    
 def write_ifgoto(label):
     '''aaa'''
-
+    asm = ('@SP'      + '\n' +          # pop value from stack and place in D register
+           'M=M-1'    + '\n' +
+           'A=M'      + '\n' +
+           'D=M'      + '\n' +
+           '@' + label + '\n' +          # jump to (args) if D is not zero
+           'D;JNE')
+    return asm       
+               
 def write_call(functionName, numArgs):
     '''Translates aritmetic vm command to assembly code'''
     
