@@ -166,98 +166,9 @@ def translate_command(ct, args, static_base):
     elif ct == 'C_CALL':
         asm = write_call(*args)
     elif ct == 'C_FUNCTION':
-        asm = ('(' + args[0] + ')' + '//Function ' + args[0] + '\n' +
-        
-               '@' + args[1] + '\n' +
-               'D=A'   + '\n' +
-               '@' + args[0] + '.kcnt' + '\n' +
-               'M=D'   + '\n' +
-               
-               '(' + args[0] + '.kloop)' + '\n' +
-               
-               '@' + args[0] + '.kcnt' + '\n' +		# jump to f.END if f.kcnt<=0 (like condition of while loop) [while loop can be brought out into the py script, but it makes more asm instructions]
-               'D=M'   + '\n' + 
-               '@' + args[0] + '.END' + '\n' +
-               'D;JLE' + '\n' +
-                
-               '@0'    + '\n' +         # set A to zero
-               'D=A'   + '\n' +         # D contains zero
-               '@SP'   + '\n' +         
-               'A=M'   + '\n' +         
-               'M=D'   + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
-               '@SP'   + '\n' +         # increment stack pointer
-               'M=M+1' + '\n' +
-               
-               '@' + args[0] + '.kcnt' + '\n' +
-               'M=M-1' + '\n' +
-                
-               '@' + args[0] + '.kloop' + '\n' +	# Goto (f.kloop) (like the end bracket of a while loop)
-               '0;JMP' + '\n' +
-               '(' + args[0] + '.END)')
+        asm = write_function(*args)
     elif ct == 'C_RETURN':
-        asm = ( '@LCL'   '//Return ' + '\n' +
-                'D=M'    + '\n' +
-                '@FRAME' + '\n' +
-                'M=D'    + '\n' +
-                
-                # get RET
-                '@FRAME'   + '\n' +           # store the address FRAME-5 in D
-                'D=M'   + '\n' +
-                '@5'    + '\n' +
-                'D=D-A' + '\n' +
-                'A=D'    + '\n' +
-                'D=M'    + '\n' +
-                '@RET'  + '\n' +           # store the contents of FRAME-5 in the memory location RET
-                'M=D'   + '\n' +
-                
-                #*ARG = pop()
-                '@SP'   + '\n' +           # set D to the contents of the address that SP points to
-                'M=M-1' + '\n' + 
-                'A=M'   + '\n' + 
-                'D=M'   + '\n' + 
-                '@ARG'  + '\n' +           # store the contents of D in the memory location argument points to
-                'A=M'   + '\n' + 
-                'M=D'   + '\n' +
-                 
-                '@ARG'  + '\n' +
-                'D=M'   + '\n' +
-                '@SP'   + '\n' +
-                'M=D+1' + '\n' +
-                
-                '@FRAME' + '\n' +
-                'M=M-1'  + '\n' +
-                'A=M'    + '\n' +
-                'D=M'    + '\n' +
-                '@THAT'  + '\n' +
-                'M=D'    + '\n' +
-                
-                '@FRAME' + '\n' +
-                'M=M-1'  + '\n' +
-                'A=M'    + '\n' +
-                'D=M'    + '\n' +
-                '@THIS'  + '\n' +
-                'M=D'    + '\n' +
-                
-                '@FRAME' + '\n' +
-                'M=M-1'  + '\n' +
-                'A=M'    + '\n' +
-                'D=M'    + '\n' +
-                '@ARG'   + '\n' +
-                'M=D'    + '\n' +
-                
-                '@FRAME' + '\n' +
-                'M=M-1'  + '\n' +
-                'A=M'    + '\n' +
-                'D=M'    + '\n' +
-                '@LCL'   + '\n' +
-                'M=D'    + '\n' +
-                
-                #goto RET
-                '@RET' + '\n' +
-                'A=M'  + '\n' +
-                '0;JMP'
-        
-               )
+        asm = write_return()
     return asm
     
 def write_init():
@@ -647,12 +558,104 @@ def write_call(functionName, numArgs):
     write_call.counter += 1
     return asm
 
-def write_return():
-    '''aaa'''
-
 def write_function(functionName, numLocals):
     '''aaa'''
+    asm = ('(' + functionName + ')' + '//Function ' + functionName + '\n' +
+    
+           '@' + numLocals + '\n' +
+           'D=A'   + '\n' +
+           '@' + functionName + '.kcnt' + '\n' +
+           'M=D'   + '\n' +
+           
+           '(' + functionName + '.kloop)' + '\n' +
+           
+           '@' + functionName + '.kcnt' + '\n' +		# jump to f.END if f.kcnt<=0 (like condition of while loop) [while loop can be brought out into the py script, but it makes more asm instructions]
+           'D=M'   + '\n' + 
+           '@' + functionName + '.END' + '\n' +
+           'D;JLE' + '\n' +
+            
+           '@0'    + '\n' +         # set A to zero
+           'D=A'   + '\n' +         # D contains zero
+           '@SP'   + '\n' +         
+           'A=M'   + '\n' +         
+           'M=D'   + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
+           '@SP'   + '\n' +         # increment stack pointer
+           'M=M+1' + '\n' +
+           
+           '@' + functionName + '.kcnt' + '\n' +
+           'M=M-1' + '\n' +
+            
+           '@' + functionName + '.kloop' + '\n' +	# Goto (f.kloop) (like the end bracket of a while loop)
+           '0;JMP' + '\n' +
+           '(' + functionName + '.END)')
+    return asm
 
+def write_return():
+    '''aaa'''
+    asm = ( '@LCL'   '//Return ' + '\n' +
+            'D=M'    + '\n' +
+            '@FRAME' + '\n' +
+            'M=D'    + '\n' +
+            
+            # get RET
+            '@FRAME'   + '\n' +           # store the address FRAME-5 in D
+            'D=M'   + '\n' +
+            '@5'    + '\n' +
+            'D=D-A' + '\n' +
+            'A=D'    + '\n' +
+            'D=M'    + '\n' +
+            '@RET'  + '\n' +           # store the contents of FRAME-5 in the memory location RET
+            'M=D'   + '\n' +
+            
+            #*ARG = pop()
+            '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+            'M=M-1' + '\n' + 
+            'A=M'   + '\n' + 
+            'D=M'   + '\n' + 
+            '@ARG'  + '\n' +           # store the contents of D in the memory location argument points to
+            'A=M'   + '\n' + 
+            'M=D'   + '\n' +
+             
+            '@ARG'  + '\n' +
+            'D=M'   + '\n' +
+            '@SP'   + '\n' +
+            'M=D+1' + '\n' +
+            
+            '@FRAME' + '\n' +
+            'M=M-1'  + '\n' +
+            'A=M'    + '\n' +
+            'D=M'    + '\n' +
+            '@THAT'  + '\n' +
+            'M=D'    + '\n' +
+            
+            '@FRAME' + '\n' +
+            'M=M-1'  + '\n' +
+            'A=M'    + '\n' +
+            'D=M'    + '\n' +
+            '@THIS'  + '\n' +
+            'M=D'    + '\n' +
+            
+            '@FRAME' + '\n' +
+            'M=M-1'  + '\n' +
+            'A=M'    + '\n' +
+            'D=M'    + '\n' +
+            '@ARG'   + '\n' +
+            'M=D'    + '\n' +
+            
+            '@FRAME' + '\n' +
+            'M=M-1'  + '\n' +
+            'A=M'    + '\n' +
+            'D=M'    + '\n' +
+            '@LCL'   + '\n' +
+            'M=D'    + '\n' +
+            
+            #goto RET
+            '@RET' + '\n' +
+            'A=M'  + '\n' +
+            '0;JMP'
+    
+           )
+    return asm
 
 if __name__ == '__main__':
     sys.exit(main())
