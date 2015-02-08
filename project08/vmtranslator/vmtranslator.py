@@ -19,15 +19,21 @@ import string
 import os
 import argparse
 
+static_base = ''
+
 def main():
     '''Main entry point for the script.'''
 
+    global static_base
+    
     path = get_path()
     
     if path == 'exit':
         return
         
     li = get_vm_filenames(path)
+    
+    print(li)
         
     asm_file_name = os.path.dirname(li[0]) + '\\' + os.path.split(os.path.dirname(li[0]))[1] + '.asm'
     
@@ -41,7 +47,10 @@ def main():
             with open(file, 'r') as vm:
             
                 # static variable number j in a VM file f represented as assembly language symbol f.j
-                static_base = os.path.split(os.path.dirname(file))[1]
+                static_base = os.path.splitext(os.path.basename(file))[0]
+                print(static_base)
+                
+                output.write('//' + static_base + '\n')
                 
                 for line in vm:
                     line = clean_line(line, ['//'])

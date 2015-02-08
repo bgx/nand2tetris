@@ -52,6 +52,7 @@ M=D
 @Sys.init
 0;JMP
 (Sys.init.RETURN0)
+//Sys
 (Sys.init)//Function Sys.init
 @0
 D=A

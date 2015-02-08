@@ -52,6 +52,7 @@ M=D
 @Sys.init
 0;JMP
 (Sys.init.RETURN0)
+//Main
 (Main.fibonacci)//Function Main.fibonacci
 @0
 D=A
@@ -381,6 +382,7 @@ M=D
 @RET
 A=M
 0;JMP
+//Sys
 (Sys.init)//Function Sys.init
 @0
 D=A

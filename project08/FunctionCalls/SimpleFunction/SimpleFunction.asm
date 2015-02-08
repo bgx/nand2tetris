@@ -52,6 +52,7 @@ M=D
 @Sys.init
 0;JMP
 (Sys.init.RETURN0)
+//SimpleFunction
 (SimpleFunction.test)//Function SimpleFunction.test
 @2
 D=A
