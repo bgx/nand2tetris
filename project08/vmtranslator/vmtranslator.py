@@ -46,7 +46,10 @@ def main():
         for file in li:
         
             with open(file, 'r') as vm:
-                static_base = os.path.split(os.path.dirname(file))[1] # static variable number j in a VM file f represented as assembly language symbol f.j
+            
+                # static variable number j in a VM file f represented as assembly language symbol f.j
+                static_base = os.path.split(os.path.dirname(file))[1]
+                
                 for line in vm:
                     line = clean_line(line, ['//'])
                     ct = get_command_type(line)
@@ -133,14 +136,14 @@ def get_command_type(line):
 def get_arguments(line, ct):
     '''Returns the arguments of the line's command'''
     
-    if ct == 'C_RETURN':
-        return ['']
-    elif ct == 'C_ARITHMETIC':
-        return [line]
+    if ct == 'C_ARITHMETIC':
+        return line
     elif ct=='C_LABEL' or ct=='C_GOTO' or ct=='C_IF':
         return line.split()[1]
     elif ct=='C_PUSH' or ct=='C_POP' or ct=='C_FUNCTION' or ct=='C_CALL':
         return line.split()[1:3]
+    else: #C_RETURN
+        return ''
     
 def translate_command(ct, args, static_base):
 
@@ -149,188 +152,11 @@ def translate_command(ct, args, static_base):
     if   ct == '':
         asm = ''
     elif ct == 'C_ARITHMETIC':
-        command = args[0]
-        asm = write_arithmetic(command)
+        asm = write_arithmetic(args)
     elif ct == 'C_PUSH':
-        # put segment[index] onto stack
-        if args[0] == 'constant':
-            asm = ('@' + args[1] + '\n' + # set A to constant value
-                   'D=A' + '\n' +         # D contains constant value
-                   '@SP' + '\n' +         
-                   'A=M' + '\n' +         
-                   'M=D' + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
-                   '@SP' + '\n' +         # increment stack pointer
-                   'M=M+1')
-        elif args[0] == 'local':
-            asm = ('@LCL'  + '\n' +           # store the contents of the memory location local+index in D
-                   'D=M'   + '\n' +
-                   '@'     + args[1] + '\n' +
-                   'A=D+A' + '\n' +
-                   'D=M'   + '\n' +
-                   '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
-                   'A=M'   + '\n' + 
-                   'M=D'   + '\n' +
-                   '@SP'   + '\n' +           # increment contents of SP
-                   'M=M+1')
-        elif args[0] == 'argument':
-            asm = ('@ARG'  + '\n' +           # store the contents of the memory location argument+index in D
-                   'D=M'   + '\n' +
-                   '@'     + args[1] + '\n' +
-                   'A=D+A' + '\n' +
-                   'D=M'   + '\n' +
-                   '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
-                   'A=M'   + '\n' + 
-                   'M=D'   + '\n' +
-                   '@SP'   + '\n' +           # increment contents of SP
-                   'M=M+1')
-        elif args[0] == 'this':
-            asm = ('@THIS'  + '\n' +           # store the contents of the memory location this+index in D
-                   'D=M'   + '\n' +
-                   '@'     + args[1] + '\n' +
-                   'A=D+A' + '\n' +
-                   'D=M'   + '\n' +
-                   '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
-                   'A=M'   + '\n' + 
-                   'M=D'   + '\n' +
-                   '@SP'   + '\n' +           # increment contents of SP
-                   'M=M+1')
-        elif args[0] == 'that':
-            asm = ('@THAT'  + '\n' +           # store the contents of the memory location that+index in D
-                   'D=M'   + '\n' +
-                   '@'     + args[1] + '\n' +
-                   'A=D+A' + '\n' +
-                   'D=M'   + '\n' +
-                   '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
-                   'A=M'   + '\n' + 
-                   'M=D'   + '\n' +
-                   '@SP'   + '\n' +           # increment contents of SP
-                   'M=M+1')
-        elif args[0] == 'pointer':
-            asm = ('@R3'  + '\n' +            # store 3+index in D
-                   'D=A'   + '\n' +
-                   '@'     + args[1] + '\n' +
-                   'A=D+A' + '\n' +
-                   'D=M'   + '\n' +
-                   '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
-                   'A=M'   + '\n' + 
-                   'M=D'   + '\n' +
-                   '@SP'   + '\n' +           # increment contents of SP
-                   'M=M+1')
-        elif args[0] == 'temp':
-            asm = ('@R5'  + '\n' +            # store 5+index in D
-                   'D=A'   + '\n' +
-                   '@'     + args[1] + '\n' +
-                   'A=D+A' + '\n' +
-                   'D=M'   + '\n' +
-                   '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
-                   'A=M'   + '\n' + 
-                   'M=D'   + '\n' +
-                   '@SP'   + '\n' +           # increment contents of SP
-                   'M=M+1')
-        elif args[0] == 'static':
-            asm = ('@' + static_base + '.' + args[1] + '\n' + #store value of static variable register in D
-                   'D=M' + '\n' +
-                   '@SP' + '\n' +         
-                   'A=M' + '\n' +         
-                   'M=D' + '\n' +                             # set (the register being pointed to by SP) to the value stored in D
-                   '@SP' + '\n' +                             # increment contents of SP
-                   'M=M+1')
+        asm = write_push(*args)
     elif ct == 'C_POP':
-        # pull from stack and store in segment[index]
-        if args[0] == 'constant':
-            asm = ('@SP' + '\n' +             # decrement contents of SP
-                   'M=M-1')
-        elif args[0] == 'local':
-            asm = ('@LCL'  + '\n' +           # store the address local+index in R13
-                   'D=M'   + '\n' +
-                   '@'     + args[1] + '\n' +
-                   'D=D+A' + '\n' +
-                   '@R13'  + '\n' +
-                   'M=D'   + '\n' +
-                   '@SP'   + '\n' +           # set D to the contents of the address that SP points to
-                   'M=M-1' + '\n' + 
-                   'A=M'   + '\n' + 
-                   'D=M'   + '\n' + 
-                   '@R13'  + '\n' +           # store the contents of D in the memory location local+index
-                   'A=M'   + '\n' + 
-                   'M=D')
-        elif args[0] == 'argument':
-            asm = ('@ARG'  + '\n' +           # store the address argument+index in R13
-                   'D=M'   + '\n' +
-                   '@'     + args[1] + '\n' +
-                   'D=D+A' + '\n' +
-                   '@R13'  + '\n' +
-                   'M=D'   + '\n' +
-                   '@SP'   + '\n' +           # set D to the contents of the address that SP points to
-                   'M=M-1' + '\n' + 
-                   'A=M'   + '\n' + 
-                   'D=M'   + '\n' + 
-                   '@R13'  + '\n' +           # store the contents of D in the memory location argument+index
-                   'A=M'   + '\n' + 
-                   'M=D')
-        elif args[0] == 'this':
-            asm = ('@THIS'  + '\n' +          # store the address this+index in R13
-                   'D=M'   + '\n' +
-                   '@'     + args[1] + '\n' +
-                   'D=D+A' + '\n' +
-                   '@R13'  + '\n' +
-                   'M=D'   + '\n' +
-                   '@SP'   + '\n' +           # set D to the contents of the address that SP points to
-                   'M=M-1' + '\n' + 
-                   'A=M'   + '\n' + 
-                   'D=M'   + '\n' + 
-                   '@R13'  + '\n' +           # store the contents of D in the memory location this+index
-                   'A=M'   + '\n' + 
-                   'M=D')
-        elif args[0] == 'that':
-            asm = ('@THAT'  + '\n' +          # store the address that+index in R13
-                   'D=M'   + '\n' +
-                   '@'     + args[1] + '\n' +
-                   'D=D+A' + '\n' +
-                   '@R13'  + '\n' +
-                   'M=D'   + '\n' +
-                   '@SP'   + '\n' +           # set D to the contents of the address that SP points to
-                   'M=M-1' + '\n' + 
-                   'A=M'   + '\n' + 
-                   'D=M'   + '\n' + 
-                   '@R13'  + '\n' +           # store the contents of D in the memory location that+index
-                   'A=M'   + '\n' + 
-                   'M=D')
-        elif args[0] == 'pointer':
-            asm = ('@R3'  + '\n' +            # store 3+index in R13
-                   'D=A'   + '\n' +
-                   '@'     + args[1] + '\n' +
-                   'D=D+A' + '\n' +
-                   '@R13'  + '\n' +
-                   'M=D'   + '\n' +
-                   '@SP'   + '\n' +           # set D to the contents of the address that SP points to
-                   'M=M-1' + '\n' + 
-                   'A=M'   + '\n' + 
-                   'D=M'   + '\n' + 
-                   '@R13'  + '\n' +           # store the contents of D in the memory location 3+index
-                   'A=M'   + '\n' + 
-                   'M=D')
-        elif args[0] == 'temp':
-            asm = ('@R5'  + '\n' +            # store 5+index in R13
-                   'D=A'   + '\n' +
-                   '@'     + args[1] + '\n' +
-                   'D=D+A' + '\n' +
-                   '@R13'  + '\n' +
-                   'M=D'   + '\n' +
-                   '@SP'   + '\n' +           # set D to the contents of the address that SP points to
-                   'M=M-1' + '\n' + 
-                   'A=M'   + '\n' + 
-                   'D=M'   + '\n' + 
-                   '@R13'  + '\n' +           # store the contents of D in the memory location 5+index
-                   'A=M'   + '\n' + 
-                   'M=D')          
-        elif args[0] == 'static':
-            asm = ('@SP'   + '\n' +                                     # set D to the contents of the address that SP points to
-                   'M=M-1' + '\n' + 
-                   'A=M'   + '\n' + 
-                   'D=M'   + '\n' + 
-                   '@' + static_base + '.' + args[1] + '\n' +           # store the contents of D in the memory location of static variable
-                   'M=D')
+        asm = write_pop(*args)
     elif ct == 'C_LABEL':
         asm = '(' + args + ')'
     elif ct == 'C_GOTO':
@@ -442,8 +268,10 @@ def translate_command(ct, args, static_base):
     return asm
 
 def translate_command_parameters(parameter):
+    '''aaa'''
     
 def write_init():
+    '''aaa'''
 
 def write_arithmetic(command):
     '''Translates aritmetic vm command to assembly code'''
@@ -452,7 +280,6 @@ def write_arithmetic(command):
         write_arithmetic.counter_eq = 0
         write_arithmetic.counter_gt = 0
         write_arithmetic.counter_lt = 0
-        
     if command == 'add':
         asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
                'M=M-1' + '\n' +
@@ -555,17 +382,200 @@ def write_arithmetic(command):
                'M=!M'  + '\n' + # bit-wise NOT the contents of the address that SP points to
                '@SP'   + '\n' +
                'M=M+1')
+    return asm
 
-    
 def write_push(segment, index):
+    # put segment[index] onto stack
+    if segment == 'constant':
+        asm = ('@' + index + '\n' + # set A to constant value
+               'D=A' + '\n' +         # D contains constant value
+               '@SP' + '\n' +         
+               'A=M' + '\n' +         
+               'M=D' + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
+               '@SP' + '\n' +         # increment stack pointer
+               'M=M+1')
+    elif segment == 'local':
+        asm = ('@LCL'  + '\n' +           # store the contents of the memory location local+index in D
+               'D=M'   + '\n' +
+               '@'     + index + '\n' +
+               'A=D+A' + '\n' +
+               'D=M'   + '\n' +
+               '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
+               'A=M'   + '\n' + 
+               'M=D'   + '\n' +
+               '@SP'   + '\n' +           # increment contents of SP
+               'M=M+1')
+    elif segment == 'argument':
+        asm = ('@ARG'  + '\n' +           # store the contents of the memory location argument+index in D
+               'D=M'   + '\n' +
+               '@'     + index + '\n' +
+               'A=D+A' + '\n' +
+               'D=M'   + '\n' +
+               '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
+               'A=M'   + '\n' + 
+               'M=D'   + '\n' +
+               '@SP'   + '\n' +           # increment contents of SP
+               'M=M+1')
+    elif segment == 'this':
+        asm = ('@THIS'  + '\n' +           # store the contents of the memory location this+index in D
+               'D=M'   + '\n' +
+               '@'     + index + '\n' +
+               'A=D+A' + '\n' +
+               'D=M'   + '\n' +
+               '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
+               'A=M'   + '\n' + 
+               'M=D'   + '\n' +
+               '@SP'   + '\n' +           # increment contents of SP
+               'M=M+1')
+    elif segment == 'that':
+        asm = ('@THAT'  + '\n' +           # store the contents of the memory location that+index in D
+               'D=M'   + '\n' +
+               '@'     + index + '\n' +
+               'A=D+A' + '\n' +
+               'D=M'   + '\n' +
+               '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
+               'A=M'   + '\n' + 
+               'M=D'   + '\n' +
+               '@SP'   + '\n' +           # increment contents of SP
+               'M=M+1')
+    elif segment == 'pointer':
+        asm = ('@R3'  + '\n' +            # store 3+index in D
+               'D=A'   + '\n' +
+               '@'     + index + '\n' +
+               'A=D+A' + '\n' +
+               'D=M'   + '\n' +
+               '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
+               'A=M'   + '\n' + 
+               'M=D'   + '\n' +
+               '@SP'   + '\n' +           # increment contents of SP
+               'M=M+1')
+    elif segment == 'temp':
+        asm = ('@R5'  + '\n' +            # store 5+index in D
+               'D=A'   + '\n' +
+               '@'     + index + '\n' +
+               'A=D+A' + '\n' +
+               'D=M'   + '\n' +
+               '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
+               'A=M'   + '\n' + 
+               'M=D'   + '\n' +
+               '@SP'   + '\n' +           # increment contents of SP
+               'M=M+1')
+    elif segment == 'static':
+        asm = ('@' + static_base + '.' + index + '\n' + #store value of static variable register in D
+               'D=M' + '\n' +
+               '@SP' + '\n' +         
+               'A=M' + '\n' +         
+               'M=D' + '\n' +                             # set (the register being pointed to by SP) to the value stored in D
+               '@SP' + '\n' +                             # increment contents of SP
+               'M=M+1')
+    return asm
 
 def write_pop(segment, index):
-
+    # pull from stack and store in segment[index]
+    if segment == 'constant':
+        asm = ('@SP' + '\n' +             # decrement contents of SP
+               'M=M-1')
+    elif segment == 'local':
+        asm = ('@LCL'  + '\n' +           # store the address local+index in R13
+               'D=M'   + '\n' +
+               '@'     + index + '\n' +
+               'D=D+A' + '\n' +
+               '@R13'  + '\n' +
+               'M=D'   + '\n' +
+               '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+               'M=M-1' + '\n' + 
+               'A=M'   + '\n' + 
+               'D=M'   + '\n' + 
+               '@R13'  + '\n' +           # store the contents of D in the memory location local+index
+               'A=M'   + '\n' + 
+               'M=D')
+    elif segment == 'argument':
+        asm = ('@ARG'  + '\n' +           # store the address argument+index in R13
+               'D=M'   + '\n' +
+               '@'     + index + '\n' +
+               'D=D+A' + '\n' +
+               '@R13'  + '\n' +
+               'M=D'   + '\n' +
+               '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+               'M=M-1' + '\n' + 
+               'A=M'   + '\n' + 
+               'D=M'   + '\n' + 
+               '@R13'  + '\n' +           # store the contents of D in the memory location argument+index
+               'A=M'   + '\n' + 
+               'M=D')
+    elif segment == 'this':
+        asm = ('@THIS'  + '\n' +          # store the address this+index in R13
+               'D=M'   + '\n' +
+               '@'     + index + '\n' +
+               'D=D+A' + '\n' +
+               '@R13'  + '\n' +
+               'M=D'   + '\n' +
+               '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+               'M=M-1' + '\n' + 
+               'A=M'   + '\n' + 
+               'D=M'   + '\n' + 
+               '@R13'  + '\n' +           # store the contents of D in the memory location this+index
+               'A=M'   + '\n' + 
+               'M=D')
+    elif segment == 'that':
+        asm = ('@THAT'  + '\n' +          # store the address that+index in R13
+               'D=M'   + '\n' +
+               '@'     + index + '\n' +
+               'D=D+A' + '\n' +
+               '@R13'  + '\n' +
+               'M=D'   + '\n' +
+               '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+               'M=M-1' + '\n' + 
+               'A=M'   + '\n' + 
+               'D=M'   + '\n' + 
+               '@R13'  + '\n' +           # store the contents of D in the memory location that+index
+               'A=M'   + '\n' + 
+               'M=D')
+    elif segment == 'pointer':
+        asm = ('@R3'  + '\n' +            # store 3+index in R13
+               'D=A'   + '\n' +
+               '@'     + index + '\n' +
+               'D=D+A' + '\n' +
+               '@R13'  + '\n' +
+               'M=D'   + '\n' +
+               '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+               'M=M-1' + '\n' + 
+               'A=M'   + '\n' + 
+               'D=M'   + '\n' + 
+               '@R13'  + '\n' +           # store the contents of D in the memory location 3+index
+               'A=M'   + '\n' + 
+               'M=D')
+    elif segment == 'temp':
+        asm = ('@R5'  + '\n' +            # store 5+index in R13
+               'D=A'   + '\n' +
+               '@'     + index + '\n' +
+               'D=D+A' + '\n' +
+               '@R13'  + '\n' +
+               'M=D'   + '\n' +
+               '@SP'   + '\n' +           # set D to the contents of the address that SP points to
+               'M=M-1' + '\n' + 
+               'A=M'   + '\n' + 
+               'D=M'   + '\n' + 
+               '@R13'  + '\n' +           # store the contents of D in the memory location 5+index
+               'A=M'   + '\n' + 
+               'M=D')          
+    elif segment == 'static':
+        asm = ('@SP'   + '\n' +                                     # set D to the contents of the address that SP points to
+               'M=M-1' + '\n' + 
+               'A=M'   + '\n' + 
+               'D=M'   + '\n' + 
+               '@' + static_base + '.' + index + '\n' +           # store the contents of D in the memory location of static variable
+               'M=D')
+    return asm
+               
 def write_label(label):
+    '''aaa'''
 
 def write_goto(label):
+    '''aaa'''
 
 def write_ifgoto(label):
+    '''aaa'''
 
 def write_call(functionName, numArgs):
     '''Translates aritmetic vm command to assembly code'''
@@ -633,10 +643,13 @@ def write_call(functionName, numArgs):
             
             '(' + functionName + '.RETURN' + str(write_call.counter) + ')')   
     write_call.counter += 1
+    return asm
 
 def write_return():
+    '''aaa'''
 
 def write_function(functionName, numLocals):
+    '''aaa'''
 
 
 if __name__ == '__main__':
