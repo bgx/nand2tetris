@@ -1,3 +1,57 @@
+@256
+D=A
+@SP
+M=D
+@Sys.init.RETURN0//Call Sys.init
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@LCL
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@ARG
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THIS
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THAT
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@SP
+D=M
+@0
+D=D-A
+@5
+D=D-A
+@ARG
+M=D
+@SP
+D=M
+@LCL
+M=D
+@Sys.init
+0;JMP
+(Sys.init.RETURN0)
 (Class1.set)//Function Class1.set
 @0
 D=A
@@ -440,7 +494,7 @@ A=M
 M=D
 @SP
 M=M+1
-@Class1.set.RETURN//Call Class1.set
+@Class1.set.RETURN1//Call Class1.set
 D=A
 @SP
 A=M
@@ -489,7 +543,7 @@ D=M
 M=D
 @Class1.set
 0;JMP
-(Class1.set.RETURN)
+(Class1.set.RETURN1)
 @R5
 D=A
 @0
@@ -517,7 +571,7 @@ A=M
 M=D
 @SP
 M=M+1
-@Class2.set.RETURN//Call Class2.set
+@Class2.set.RETURN2//Call Class2.set
 D=A
 @SP
 A=M
@@ -566,7 +620,7 @@ D=M
 M=D
 @Class2.set
 0;JMP
-(Class2.set.RETURN)
+(Class2.set.RETURN2)
 @R5
 D=A
 @0
@@ -580,7 +634,7 @@ D=M
 @R13
 A=M
 M=D
-@Class1.get.RETURN//Call Class1.get
+@Class1.get.RETURN3//Call Class1.get
 D=A
 @SP
 A=M
@@ -629,8 +683,8 @@ D=M
 M=D
 @Class1.get
 0;JMP
-(Class1.get.RETURN)
-@Class2.get.RETURN//Call Class2.get
+(Class1.get.RETURN3)
+@Class2.get.RETURN4//Call Class2.get
 D=A
 @SP
 A=M
@@ -679,7 +733,7 @@ D=M
 M=D
 @Class2.get
 0;JMP
-(Class2.get.RETURN)
+(Class2.get.RETURN4)
 (WHILE)
 @WHILE
 0;JMP

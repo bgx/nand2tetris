@@ -1,3 +1,57 @@
+@256
+D=A
+@SP
+M=D
+@Sys.init.RETURN0//Call Sys.init
+D=A
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@LCL
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@ARG
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THIS
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@THAT
+D=M
+@SP
+A=M
+M=D
+@SP
+M=M+1
+@SP
+D=M
+@0
+D=D-A
+@5
+D=D-A
+@ARG
+M=D
+@SP
+D=M
+@LCL
+M=D
+@Sys.init
+0;JMP
+(Sys.init.RETURN0)
 (Main.fibonacci)//Function Main.fibonacci
 @0
 D=A
@@ -148,7 +202,7 @@ A=M
 D=M
 A=A-1
 M=M-D
-@Main.fibonacci.RETURN//Call Main.fibonacci
+@Main.fibonacci.RETURN1//Call Main.fibonacci
 D=A
 @SP
 A=M
@@ -197,7 +251,7 @@ D=M
 M=D
 @Main.fibonacci
 0;JMP
-(Main.fibonacci.RETURN)
+(Main.fibonacci.RETURN1)
 @ARG
 D=M
 @0
@@ -221,7 +275,7 @@ A=M
 D=M
 A=A-1
 M=M-D
-@Main.fibonacci.RETURN//Call Main.fibonacci
+@Main.fibonacci.RETURN2//Call Main.fibonacci
 D=A
 @SP
 A=M
@@ -270,7 +324,7 @@ D=M
 M=D
 @Main.fibonacci
 0;JMP
-(Main.fibonacci.RETURN)
+(Main.fibonacci.RETURN2)
 @SP
 M=M-1
 A=M
@@ -356,7 +410,7 @@ A=M
 M=D
 @SP
 M=M+1
-@Main.fibonacci.RETURN//Call Main.fibonacci
+@Main.fibonacci.RETURN3//Call Main.fibonacci
 D=A
 @SP
 A=M
@@ -405,7 +459,7 @@ D=M
 M=D
 @Main.fibonacci
 0;JMP
-(Main.fibonacci.RETURN)
+(Main.fibonacci.RETURN3)
 (WHILE)
 @WHILE
 0;JMP

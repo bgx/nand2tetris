@@ -33,8 +33,18 @@ def main():
     
     with open(asm_file_name, 'w') as output:
     
-        #used to assign unique label to memory location for each translation of eq,gt, or lt
-        label_ctr = [0,0,0]
+        #used to assign unique label to memory location for each translation of eq,gt,lt, or call
+        label_ctr = [0,0,0,0]
+        
+        # bootstrap code needs to be commented out for tests 'SimpleFunction' and 'NestedCall' until a command line switch or Sys.vm detection is implemented
+        '''bootstrap = ('@256' + '\n' +
+                     'D=A'  + '\n' +
+                     '@SP'  + '\n' +
+                     'M=D'  + '\n')
+                     
+        bootstrap = bootstrap + translate_command('C_CALL',['Sys.init','0'],label_ctr, 'not_needed') + '\n'
+                     
+        output.write(bootstrap)'''
         
         for file in li:
         
@@ -436,7 +446,7 @@ def translate_command(ct, args, label_ctr, static_base):
                '@' + args + '\n' +          # jump to (args) if D is not zero
                'D;JNE')
     elif ct == 'C_CALL':
-        asm = ( '@' + args[0] + '.RETURN' + '//Call ' + args[0] + '\n' +
+        asm = ( '@' + args[0] + '.RETURN' + str(label_ctr[3]) + '//Call ' + args[0] + '\n' +
                 'D=A' + '\n' +
                 '@SP' + '\n' +         
                 'A=M' + '\n' +         
@@ -494,7 +504,8 @@ def translate_command(ct, args, label_ctr, static_base):
                 '@' + args[0] + '\n' +
                 '0;JMP' + '\n' +
                 
-                '(' + args[0] + '.RETURN' + ')')           
+                '(' + args[0] + '.RETURN' + str(label_ctr[3]) + ')')   
+        label_ctr[3] = label_ctr[3] + 1
     elif ct == 'C_FUNCTION':
         asm = ('(' + args[0] + ')' + '//Function ' + args[0] + '\n' +
         
@@ -525,7 +536,7 @@ def translate_command(ct, args, label_ctr, static_base):
                '0;JMP' + '\n' +
                '(' + args[0] + '.END)')
     elif ct == 'C_RETURN':
-        asm = ( '@LCL'   '//Return ' + args[0] + '\n' +
+        asm = ( '@LCL'   '//Return ' + '\n' +
                 'D=M'    + '\n' +
                 '@FRAME' + '\n' +
                 'M=D'    + '\n' +
@@ -589,44 +600,6 @@ def translate_command(ct, args, label_ctr, static_base):
         
                )
     return asm
-
-"""
-def translate_a_command(line,symbol_table):
-    '''Takes assembly a-command and translates it to machine code
-
-    assembly a-command -- @(symbol or value)
-    machine code word = 0 (symbol or value in 15 bits)
-    '''
-    line = line[1:]
-    if not line.isdigit():
-        if line not in symbol_table:
-            symbol_table[line] = symbol_table['variable_pointer']
-            symbol_table['variable_pointer'] += 1
-        word = '0' + bin(int(symbol_table[line]))[2:].zfill(15)
-    else:
-        word = '0' + bin(int(line))[2:].zfill(15) 
-    return word
-
-def translate_c_command(line):
-    '''Takes assembly c-command and translates it to machine code
-
-    assembly c-command -- dest=comp;jump   dest or jump may be omitted 
-    machine code word = 1 11 (comp 7bits) (dest 3bits) (jmp 3bits)
-    '''
-    if '=' in line and ';' in line:
-        word = ''
-    elif '=' in line:
-        dest,comp = line.split('=')
-        dest,comp = dest.strip(),comp.strip()
-        word = '111' + lookup_comp(comp) + lookup_dest(dest) + '000'
-    elif ';' in line:
-        comp,jmp = line.split(';')
-        comp,jmp = comp.strip(),jmp.strip()
-        word = '111' + lookup_comp(comp) + '000' + lookup_jmp(jmp)
-    else:
-        word = ''
-    return word
-"""
 
 if __name__ == '__main__':
     sys.exit(main())
