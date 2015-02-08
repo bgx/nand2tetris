@@ -33,15 +33,8 @@ def main():
     
     with open(asm_file_name, 'w') as output:
             
-        # bootstrap code needs to be commented out for tests 'SimpleFunction' and 'NestedCall' until a command line switch or Sys.vm detection is implemented
-        '''bootstrap = ('@256' + '\n' +
-                     'D=A'  + '\n' +
-                     '@SP'  + '\n' +
-                     'M=D'  + '\n')
-                     
-        bootstrap = bootstrap + translate_command('C_CALL',['Sys.init','0'], 'not_needed') + '\n'
-                     
-        output.write(bootstrap)'''
+        # Comment out for tests 'SimpleFunction' and 'NestedCall' until a command line switch or Sys.vm detection is implemented
+        output.write(write_init())
         
         for file in li:
         
@@ -171,8 +164,15 @@ def translate_command(ct, args, static_base):
         asm = write_return()
     return asm
     
+
 def write_init():
     '''aaa'''
+    asm = ('@256' + '\n' +
+           'D=A'  + '\n' +
+           '@SP'  + '\n' +
+           'M=D'  + '\n' +
+           write_call('Sys.init','0') + '\n')
+    return asm
 
 def write_arithmetic(command):
     '''Translates aritmetic vm command to assembly code'''
