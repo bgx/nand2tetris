@@ -12,5 +12,5 @@ RUN.bat is a batch file that will generate an *.asm file in each of the six proj
 
 RUN.bat can be started from the command line by typing its pathname.
 
-***project08/vmtranslator passed all project08 tests on ________***
+***project08/vmtranslator passed all project08 tests on 2015.02.16***
 -Brian Grady

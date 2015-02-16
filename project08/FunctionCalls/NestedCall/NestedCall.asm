@@ -1,4 +1,4 @@
-(Sys.init)//Function Sys.init
+(Sys.init)
 @0
 D=A
 @Sys.init.kcnt
@@ -20,7 +20,7 @@ M=M-1
 @Sys.init.kloop
 0;JMP
 (Sys.init.END)
-@Sys.main.RETURN0//Call Sys.main
+@Sys.main.RETURN0
 D=A
 @SP
 A=M
@@ -86,7 +86,7 @@ M=D
 (LOOP)
 @LOOP
 0;JMP
-(Sys.main)//Function Sys.main
+(Sys.main)
 @0
 D=A
 @Sys.main.kcnt
@@ -115,7 +115,7 @@ A=M
 M=D
 @SP
 M=M+1
-@Sys.add12.RETURN1//Call Sys.add12
+@Sys.add12.RETURN1
 D=A
 @SP
 A=M
@@ -185,7 +185,7 @@ A=M
 M=D
 @SP
 M=M+1
-@LCL//Return 
+@LCL
 D=M
 @FRAME
 M=D
@@ -235,7 +235,7 @@ M=D
 @RET
 A=M
 0;JMP
-(Sys.add12)//Function Sys.add12
+(Sys.add12)
 @3
 D=A
 @Sys.add12.kcnt
@@ -280,7 +280,7 @@ A=M
 D=M
 A=A-1
 M=D+M
-@LCL//Return 
+@LCL
 D=M
 @FRAME
 M=D

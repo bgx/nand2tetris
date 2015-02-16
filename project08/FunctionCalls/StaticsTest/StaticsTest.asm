@@ -2,7 +2,7 @@
 D=A
 @SP
 M=D
-@Sys.init.RETURN0//Call Sys.init
+@Sys.init.RETURN0
 D=A
 @SP
 A=M
@@ -52,7 +52,7 @@ M=D
 @Sys.init
 0;JMP
 (Sys.init.RETURN0)
-(Class1.set)//Function Class1.set
+(Class1.set)
 @0
 D=A
 @Class1.set.kcnt
@@ -113,7 +113,7 @@ A=M
 M=D
 @SP
 M=M+1
-@LCL//Return 
+@LCL
 D=M
 @FRAME
 M=D
@@ -163,7 +163,7 @@ M=D
 @RET
 A=M
 0;JMP
-(Class1.get)//Function Class1.get
+(Class1.get)
 @0
 D=A
 @Class1.get.kcnt
@@ -205,7 +205,7 @@ A=M
 D=M
 A=A-1
 M=M-D
-@LCL//Return 
+@LCL
 D=M
 @FRAME
 M=D
@@ -255,7 +255,7 @@ M=D
 @RET
 A=M
 0;JMP
-(Class2.set)//Function Class2.set
+(Class2.set)
 @0
 D=A
 @Class2.set.kcnt
@@ -316,7 +316,7 @@ A=M
 M=D
 @SP
 M=M+1
-@LCL//Return 
+@LCL
 D=M
 @FRAME
 M=D
@@ -366,7 +366,7 @@ M=D
 @RET
 A=M
 0;JMP
-(Class2.get)//Function Class2.get
+(Class2.get)
 @0
 D=A
 @Class2.get.kcnt
@@ -408,7 +408,7 @@ A=M
 D=M
 A=A-1
 M=M-D
-@LCL//Return 
+@LCL
 D=M
 @FRAME
 M=D
@@ -458,7 +458,7 @@ M=D
 @RET
 A=M
 0;JMP
-(Sys.init)//Function Sys.init
+(Sys.init)
 @0
 D=A
 @Sys.init.kcnt
@@ -494,7 +494,7 @@ A=M
 M=D
 @SP
 M=M+1
-@Class1.set.RETURN1//Call Class1.set
+@Class1.set.RETURN1
 D=A
 @SP
 A=M
@@ -571,7 +571,7 @@ A=M
 M=D
 @SP
 M=M+1
-@Class2.set.RETURN2//Call Class2.set
+@Class2.set.RETURN2
 D=A
 @SP
 A=M
@@ -634,7 +634,7 @@ D=M
 @R13
 A=M
 M=D
-@Class1.get.RETURN3//Call Class1.get
+@Class1.get.RETURN3
 D=A
 @SP
 A=M
@@ -684,7 +684,7 @@ M=D
 @Class1.get
 0;JMP
 (Class1.get.RETURN3)
-@Class2.get.RETURN4//Call Class2.get
+@Class2.get.RETURN4
 D=A
 @SP
 A=M

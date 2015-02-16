@@ -11,7 +11,7 @@ The objective of Project 08 is to build a VM translator that implements 1,2,3, a
 
 Brian Grady
 
-Passed all project08 tests on _____
+Passed all project08 tests on 2015.02.16
 '''
 
 import sys

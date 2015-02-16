@@ -1,4 +1,4 @@
-(SimpleFunction.test)//Function SimpleFunction.test
+(SimpleFunction.test)
 @2
 D=A
 @SimpleFunction.test.kcnt
@@ -84,7 +84,7 @@ A=M
 D=M
 A=A-1
 M=M-D
-@LCL//Return 
+@LCL
 D=M
 @FRAME
 M=D
