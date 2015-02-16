@@ -52,7 +52,6 @@ M=D
 @Sys.init
 0;JMP
 (Sys.init.RETURN0)
-//Class1
 (Class1.set)//Function Class1.set
 @0
 D=A
@@ -256,7 +255,6 @@ M=D
 @RET
 A=M
 0;JMP
-//Class2
 (Class2.set)//Function Class2.set
 @0
 D=A
@@ -460,7 +458,6 @@ M=D
 @RET
 A=M
 0;JMP
-//Sys
 (Sys.init)//Function Sys.init
 @0
 D=A

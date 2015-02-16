@@ -1,58 +1,3 @@
-@256
-D=A
-@SP
-M=D
-@Sys.init.RETURN0//Call Sys.init
-D=A
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@LCL
-D=M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@ARG
-D=M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@THIS
-D=M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@THAT
-D=M
-@SP
-A=M
-M=D
-@SP
-M=M+1
-@SP
-D=M
-@0
-D=D-A
-@5
-D=D-A
-@ARG
-M=D
-@SP
-D=M
-@LCL
-M=D
-@Sys.init
-0;JMP
-(Sys.init.RETURN0)
-//Sys
 (Sys.init)//Function Sys.init
 @0
 D=A
@@ -75,7 +20,7 @@ M=M-1
 @Sys.init.kloop
 0;JMP
 (Sys.init.END)
-@Sys.main.RETURN1//Call Sys.main
+@Sys.main.RETURN0//Call Sys.main
 D=A
 @SP
 A=M
@@ -124,7 +69,7 @@ D=M
 M=D
 @Sys.main
 0;JMP
-(Sys.main.RETURN1)
+(Sys.main.RETURN0)
 @R5
 D=A
 @1
@@ -170,7 +115,7 @@ A=M
 M=D
 @SP
 M=M+1
-@Sys.add12.RETURN2//Call Sys.add12
+@Sys.add12.RETURN1//Call Sys.add12
 D=A
 @SP
 A=M
@@ -219,7 +164,7 @@ D=M
 M=D
 @Sys.add12
 0;JMP
-(Sys.add12.RETURN2)
+(Sys.add12.RETURN1)
 @R5
 D=A
 @0
