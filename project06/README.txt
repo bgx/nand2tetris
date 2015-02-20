@@ -1,3 +1,5 @@
+ASSEMBLER
+
 hackassembler.py is a Python script that will translate an *.asm assembly language file into a *.hack machine code file.
 
 To run hackassembler.py from a Windows command line, use the syntax:

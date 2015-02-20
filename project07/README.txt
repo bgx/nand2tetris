@@ -1,3 +1,5 @@
+VIRTUAL MACHINE I: STACK ARITHMETIC
+
 vmtranslator.py is a Python script that will translate a *.vm virtual machine file into a *.asm assembly language file.
 
 (vmtranslator.py in project07 folder translates stack arithmetic and memory access commands,
