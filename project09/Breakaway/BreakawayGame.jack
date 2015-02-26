@@ -47,8 +47,8 @@ class BreakawayGame {
 
         let exit = false;
 
-        while (~exit) 
-            do processInput();
+        while (~exit) {
+            //do processInput();
             do update();
             do render();
             do Sys.wait(55);
@@ -58,53 +58,56 @@ class BreakawayGame {
 	}
 
     /** Process Input. */
-    method void processInput() {
-            /**// waits for a key to be pressed.
-            while (key = 0) {
-                let key = Keyboard.keyPressed();
-                do ball.moveBall();
-                do Sys.wait(55); // Delays the next movement.  (Anything below ~53 and the ball starts flickering (player can see the erase() frame)
-            }
-
-            if (key = 81) { //q
-                let exit = true;
-            }
-            if (key = 90) {
-                //z or x
-            }
-            if (key = 88) {
-                //z or x
-            }
-            if (key = 131) {
-                //up
-            }
-            if (key = 133) {
-                //down
-            }
-            if (key = 130) {
-                //left
-            }
-            if (key = 132) {
-                //right
-            }
-
-            // waits for the key to be released.
-            while (~(key = 0)) {
-                let key = Keyboard.keyPressed();
-                do ball.moveBall();
-                do Sys.wait(55); // Delays the next movement.  (Anything below ~53 and the ball starts flickering (player can see the erase() frame)
-            }*/
+    /**method void processInput() {
         return;
-    }
+        // waits for a key to be pressed.
+        while (key = 0) {
+            let key = Keyboard.keyPressed();
+            do ball.moveBall();
+            do Sys.wait(55); // Delays the next movement.  (Anything below ~53 and the ball starts flickering (player can see the erase() frame)
+        }
+
+        if (key = 81) { //q
+            let exit = true;
+        }
+        if (key = 90) {
+            //z or x
+        }
+        if (key = 88) {
+            //z or x
+        }
+        if (key = 131) {
+            //up
+        }
+        if (key = 133) {
+            //down
+        }
+        if (key = 130) {
+            //left
+        }
+        if (key = 132) {
+            //right
+        }
+
+        // waits for the key to be released.
+        while (~(key = 0)) {
+            let key = Keyboard.keyPressed();
+            do ball.moveBall();
+            do Sys.wait(55); // Delays the next movement.  (Anything below ~53 and the ball starts flickering (player can see the erase() frame)
+        }
+        //return;
+    }*/
     
         /** Update game state. */
     method void update() {
-        
+        do ball.moveBall();
         return;
     }
 
         /** Render graphics on screen. */
     method void render() {
+        do playarea.clear();
+        do ball.draw();
         return;
     }
 }

@@ -83,3 +83,25 @@ call Screen.drawRectangle 4
 pop temp 0
 push constant 0
 return
+function PlayArea.clear 0
+push argument 0
+pop pointer 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push this 3
+push constant 1
+add
+push this 5
+push constant 1
+add
+push this 2
+push constant 1
+sub
+push this 4
+push constant 1
+sub
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return

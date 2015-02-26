@@ -42,5 +42,11 @@ class PlayArea {
         do Screen.setColor(false);
         do Screen.drawRectangle(x_lower + 1, y_lower + 1, x_upper - 1, y_upper - 1);
         return;
+    }   
+
+    method void clear() {
+        do Screen.setColor(false);
+        do Screen.drawRectangle(x_lower + 1, y_lower + 1, x_upper - 1, y_upper - 1);
+        return;
     }
 }

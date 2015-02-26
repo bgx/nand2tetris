@@ -61,13 +61,9 @@ class Ball {
         if ( ((y + delta_y - (4*size) + 4) < 12) | ((y + delta_y + (4*size) - 4) > 1008) ){
             let delta_y = -delta_y;
         }
-        
-        do erase();
-    
+            
         let x = x + delta_x;
         let y = y + delta_y;
-
-        do draw();
     
         return;
     }

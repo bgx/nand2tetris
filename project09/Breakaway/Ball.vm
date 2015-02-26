@@ -123,9 +123,6 @@ push this 4
 neg
 pop this 4
 label IF_FALSE1
-push pointer 0
-call Ball.erase 1
-pop temp 0
 push this 0
 push this 3
 add
@@ -134,8 +131,5 @@ push this 1
 push this 4
 add
 pop this 1
-push pointer 0
-call Ball.draw 1
-pop temp 0
 push constant 0
 return
