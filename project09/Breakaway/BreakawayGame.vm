@@ -1,5 +1,5 @@
 function BreakawayGame.new 0
-push constant 2
+push constant 5
 call Memory.alloc 1
 pop pointer 0
 push constant 216
@@ -13,6 +13,12 @@ push constant 10
 push constant 27
 call Ball.new 5
 pop this 1
+push constant 255
+push constant 127
+push constant 25
+push constant 7
+call Paddle.new 4
+pop this 2
 push pointer 0
 return
 function BreakawayGame.dispose 0
@@ -24,37 +30,80 @@ pop temp 0
 push this 1
 call Ball.dispose 1
 pop temp 0
+push this 2
+call Paddle.dispose 1
+pop temp 0
 push pointer 0
 call Memory.deAlloc 1
 pop temp 0
 push constant 0
 return
-function BreakawayGame.run 2
+function BreakawayGame.run 0
 push argument 0
 pop pointer 0
 push constant 0
-pop local 1
+pop this 4
 label WHILE_EXP0
-push local 1
+push this 4
 not
 not
 if-goto WHILE_END0
+push pointer 0
+call BreakawayGame.processInput 1
+pop temp 0
 push pointer 0
 call BreakawayGame.update 1
 pop temp 0
 push pointer 0
 call BreakawayGame.render 1
 pop temp 0
-push constant 60
+push constant 55
 call Sys.wait 1
 pop temp 0
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0
 return
+function BreakawayGame.processInput 0
+push argument 0
+pop pointer 0
+call Keyboard.keyPressed 0
+pop this 3
+push constant 0
+return
 function BreakawayGame.update 0
 push argument 0
 pop pointer 0
+push this 3
+push constant 81
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+pop this 4
+label IF_FALSE0
+push this 3
+push constant 130
+eq
+if-goto IF_TRUE1
+goto IF_FALSE1
+label IF_TRUE1
+push this 2
+call Paddle.moveLeft 1
+pop temp 0
+label IF_FALSE1
+push this 3
+push constant 132
+eq
+if-goto IF_TRUE2
+goto IF_FALSE2
+label IF_TRUE2
+push this 2
+call Paddle.moveRight 1
+pop temp 0
+label IF_FALSE2
 push this 1
 call Ball.moveBall 1
 pop temp 0
@@ -65,6 +114,9 @@ push argument 0
 pop pointer 0
 push this 0
 call PlayArea.clear 1
+pop temp 0
+push this 2
+call Paddle.draw 1
 pop temp 0
 push this 1
 call Ball.draw 1

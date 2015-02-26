@@ -19,8 +19,15 @@ class BreakawayGame {
     field Ball ball;
     
     // The paddle
+    field Paddle paddle;
     
     // The wall
+    
+    // User input
+    field char key;
+    
+    // Exit state
+    field boolean exit;
 
     /** Constructs a new Breakaway Game. */
     constructor BreakawayGame new() {
@@ -28,6 +35,8 @@ class BreakawayGame {
         let playarea = PlayArea.new(216, 252);
         
         let ball = Ball.new(1024, 512, 2, 10, 27);
+        
+        let paddle = Paddle.new(255, 127, 25, 7);
 
         return this;
     }
@@ -36,19 +45,17 @@ class BreakawayGame {
     method void dispose() {
         do playarea.dispose();
         do ball.dispose();
+        do paddle.dispose();
         do Memory.deAlloc(this);
         return;
     }
 
     /** The game loop. Very simple: processInput, update, render. */
     method void run() {
-        var char key;
-        var boolean exit;
-
         let exit = false;
 
         while (~exit) {
-            //do processInput();
+            do processInput();
             do update();
             do render();
             do Sys.wait(55);
@@ -58,16 +65,9 @@ class BreakawayGame {
 	}
 
     /** Process Input. */
-    /**method void processInput() {
-        return;
-        // waits for a key to be pressed.
-        while (key = 0) {
-            let key = Keyboard.keyPressed();
-            do ball.moveBall();
-            do Sys.wait(55); // Delays the next movement.  (Anything below ~53 and the ball starts flickering (player can see the erase() frame)
-        }
-
-        if (key = 81) { //q
+    method void processInput() {
+        let key = Keyboard.keyPressed();
+        /**if (key = 81) { //q
             let exit = true;
         }
         if (key = 90) {
@@ -87,19 +87,21 @@ class BreakawayGame {
         }
         if (key = 132) {
             //right
-        }
-
-        // waits for the key to be released.
-        while (~(key = 0)) {
-            let key = Keyboard.keyPressed();
-            do ball.moveBall();
-            do Sys.wait(55); // Delays the next movement.  (Anything below ~53 and the ball starts flickering (player can see the erase() frame)
-        }
-        //return;
-    }*/
+        }*/
+        return;
+    }
     
         /** Update game state. */
     method void update() {
+        if (key = 81) {
+            let exit = true;
+        }
+        if (key = 130) {
+            do paddle.moveLeft();
+        }
+        if (key = 132) {
+            do paddle.moveRight();
+        }
         do ball.moveBall();
         return;
     }
@@ -107,6 +109,7 @@ class BreakawayGame {
         /** Render graphics on screen. */
     method void render() {
         do playarea.clear();
+        do paddle.draw();
         do ball.draw();
         return;
     }
