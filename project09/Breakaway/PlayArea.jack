@@ -1,0 +1,46 @@
+// Brian Grady
+// File name: src/project09/Breakaway/PlayArea.jack
+
+/**
+ * Implements a graphic square. A graphic square has a screen location
+ * and a size. It also has methods for drawing, erasing, moving on the 
+ * screen, and changing its size.
+ */
+class PlayArea {
+
+    // Location on the screen
+    field int width, height;
+    
+    // Store the values of the first out of bounds pixel values
+    field int x_upper, x_lower, y_upper, y_lower;
+
+    /** Constructs a new screen-centered play area with a given size. */
+    constructor PlayArea new(int Awidth, int Aheight) {
+        let width = Awidth;
+        let height = Aheight;
+        
+        let x_lower = 255 - (width/2);
+        let x_upper = 256 + (width/2);
+        let y_lower = 127 - (height/2);
+        let y_upper = 128 + (height/2);
+        
+        do draw();
+
+        return this;
+    }
+
+    /** Deallocates the object's memory. */
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Draws the play area on the screen. */
+    method void draw() {
+        do Screen.setColor(true);
+        do Screen.drawRectangle(x_lower - 1, y_lower - 1, x_upper + 1, y_upper + 1);
+        do Screen.setColor(false);
+        do Screen.drawRectangle(x_lower + 1, y_lower + 1, x_upper - 1, y_upper - 1);
+        return;
+    }
+}

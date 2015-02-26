@@ -1,0 +1,110 @@
+// Brian Grady
+// File name: src/project09/Breakaway/BreakawayGame.jack
+
+/**
+ * Implements the Breakaway game.
+ * In this game you move a paddle to direct a moving
+ * ball into a wall of breakable bricks.
+ * The left and right arrow keys are used to move the paddle.
+ * The 'q' key is used to quit the game.
+ */
+class BreakawayGame {
+
+    // The play area
+    field PlayArea playarea;
+    
+    // The score
+    
+    // The ball
+    field Ball ball;
+    
+    // The paddle
+    
+    // The wall
+
+    /** Constructs a new Breakaway Game. */
+    constructor BreakawayGame new() {
+        
+        let playarea = PlayArea.new(216, 252);
+        
+        let ball = Ball.new(1024, 512, 2, 10, 27);
+
+        return this;
+    }
+
+    /** Deallocates the object's memory. */
+    method void dispose() {
+        do playarea.dispose();
+        do ball.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** The game loop. Very simple: processInput, update, render. */
+    method void run() {
+        var char key;
+        var boolean exit;
+
+        let exit = false;
+
+        while (~exit) 
+            do processInput();
+            do update();
+            do render();
+            do Sys.wait(55);
+        }
+            
+        return;
+	}
+
+    /** Process Input. */
+    method void processInput() {
+            /**// waits for a key to be pressed.
+            while (key = 0) {
+                let key = Keyboard.keyPressed();
+                do ball.moveBall();
+                do Sys.wait(55); // Delays the next movement.  (Anything below ~53 and the ball starts flickering (player can see the erase() frame)
+            }
+
+            if (key = 81) { //q
+                let exit = true;
+            }
+            if (key = 90) {
+                //z or x
+            }
+            if (key = 88) {
+                //z or x
+            }
+            if (key = 131) {
+                //up
+            }
+            if (key = 133) {
+                //down
+            }
+            if (key = 130) {
+                //left
+            }
+            if (key = 132) {
+                //right
+            }
+
+            // waits for the key to be released.
+            while (~(key = 0)) {
+                let key = Keyboard.keyPressed();
+                do ball.moveBall();
+                do Sys.wait(55); // Delays the next movement.  (Anything below ~53 and the ball starts flickering (player can see the erase() frame)
+            }*/
+        return;
+    }
+    
+        /** Update game state. */
+    method void update() {
+        
+        return;
+    }
+
+        /** Render graphics on screen. */
+    method void render() {
+        return;
+    }
+}
