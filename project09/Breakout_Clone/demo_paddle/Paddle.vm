@@ -1,4 +1,4 @@
-function Ball.new 0
+function Paddle.new 0
 push constant 5
 call Memory.alloc 1
 pop pointer 0
@@ -8,16 +8,16 @@ push argument 1
 pop this 1
 push argument 2
 pop this 2
-push argument 3
+push constant 10
 pop this 3
-push argument 4
+push constant 15
 pop this 4
 push pointer 0
-call Ball.draw 1
+call Paddle.draw 1
 pop temp 0
 push pointer 0
 return
-function Ball.dispose 0
+function Paddle.dispose 0
 push argument 0
 pop pointer 0
 push pointer 0
@@ -25,7 +25,7 @@ call Memory.deAlloc 1
 pop temp 0
 push constant 0
 return
-function Ball.draw 0
+function Paddle.draw 0
 push argument 0
 pop pointer 0
 push constant 0
@@ -35,15 +35,28 @@ pop temp 0
 push this 0
 push constant 4
 call Math.divide 2
+push constant 12
+sub
 push this 1
 push constant 4
 call Math.divide 2
-push this 2
-call Screen.drawCircle 3
+push constant 3
+sub
+push this 0
+push constant 4
+call Math.divide 2
+push constant 12
+add
+push this 1
+push constant 4
+call Math.divide 2
+push constant 3
+add
+call Screen.drawRectangle 4
 pop temp 0
 push constant 0
 return
-function Ball.erase 0
+function Paddle.erase 0
 push argument 0
 pop pointer 0
 push constant 0
@@ -52,37 +65,46 @@ pop temp 0
 push this 0
 push constant 4
 call Math.divide 2
+push constant 12
+sub
 push this 1
 push constant 4
 call Math.divide 2
-push this 2
-call Screen.drawCircle 3
+push constant 3
+sub
+push this 0
+push constant 4
+call Math.divide 2
+push constant 12
+add
+push this 1
+push constant 4
+call Math.divide 2
+push constant 3
+add
+call Screen.drawRectangle 4
 pop temp 0
 push constant 0
 return
-function Ball.moveBall 0
+function Paddle.movePaddle 0
 push argument 0
 pop pointer 0
 push this 0
 push this 3
 add
 push constant 4
-push this 2
+push constant 12
 call Math.multiply 2
 sub
-push constant 4
-add
 push constant 596
 lt
 push this 0
 push this 3
 add
 push constant 4
-push this 2
+push constant 12
 call Math.multiply 2
 add
-push constant 4
-sub
 push constant 1448
 gt
 or
@@ -97,22 +119,18 @@ push this 1
 push this 4
 add
 push constant 4
-push this 2
+push constant 3
 call Math.multiply 2
 sub
-push constant 4
-add
 push constant 12
 lt
 push this 1
 push this 4
 add
 push constant 4
-push this 2
+push constant 3
 call Math.multiply 2
 add
-push constant 4
-sub
 push constant 1008
 gt
 or
@@ -124,7 +142,7 @@ neg
 pop this 4
 label IF_FALSE1
 push pointer 0
-call Ball.erase 1
+call Paddle.erase 1
 pop temp 0
 push this 0
 push this 3
@@ -135,7 +153,7 @@ push this 4
 add
 pop this 1
 push pointer 0
-call Ball.draw 1
+call Paddle.draw 1
 pop temp 0
 push constant 0
 return

@@ -1,28 +1,26 @@
-function BallDemo.new 0
+function PaddleDemo.new 0
 push constant 1
 call Memory.alloc 1
 pop pointer 0
 push constant 1024
 push constant 512
 push constant 2
-push constant 10
-push constant 15
-call Ball.new 5
+call Paddle.new 3
 pop this 0
 push pointer 0
 return
-function BallDemo.dispose 0
+function PaddleDemo.dispose 0
 push argument 0
 pop pointer 0
 push this 0
-call Ball.dispose 1
+call Paddle.dispose 1
 pop temp 0
 push pointer 0
 call Memory.deAlloc 1
 pop temp 0
 push constant 0
 return
-function BallDemo.run 1
+function PaddleDemo.run 1
 push argument 0
 pop pointer 0
 push constant 0
@@ -52,7 +50,7 @@ not
 not
 if-goto WHILE_END0
 push this 0
-call Ball.moveBall 1
+call Paddle.movePaddle 1
 pop temp 0
 push constant 55
 call Sys.wait 1
