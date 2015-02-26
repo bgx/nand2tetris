@@ -43,12 +43,12 @@ add
 push constant 4
 push this 4
 call Math.multiply 2
-push constant 4
+push constant 8
 sub
 push constant 4
 push this 5
 call Math.multiply 2
-push constant 4
+push constant 8
 add
 call Hitbox.new 4
 pop this 6

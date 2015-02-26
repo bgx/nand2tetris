@@ -6,8 +6,8 @@ push constant 216
 push constant 252
 call PlayArea.new 2
 pop this 0
-push constant 1024
-push constant 512
+push constant 800
+push constant 300
 push constant 2
 push constant 10
 push constant 27
@@ -57,7 +57,7 @@ pop temp 0
 push pointer 0
 call BreakawayGame.render 1
 pop temp 0
-push constant 55
+push constant 25
 call Sys.wait 1
 pop temp 0
 goto WHILE_EXP0
@@ -71,9 +71,12 @@ call Keyboard.keyPressed 0
 pop this 3
 push constant 0
 return
-function BreakawayGame.update 2
+function BreakawayGame.update 3
 push argument 0
 pop pointer 0
+push this 0
+call PlayArea.getHitbox 1
+pop local 1
 push this 3
 push constant 81
 eq
@@ -91,28 +94,60 @@ if-goto IF_TRUE1
 goto IF_FALSE1
 label IF_TRUE1
 push this 2
-call Paddle.moveLeft 1
+call Paddle.moveLeftSim 1
 pop temp 0
-label IF_FALSE1
-push this 3
-push constant 132
-eq
+push this 2
+call Paddle.getHitbox 1
+pop local 2
+push local 2
+call Hitbox.getXLower 1
+push local 1
+call Hitbox.getXLower 1
+lt
+not
 if-goto IF_TRUE2
 goto IF_FALSE2
 label IF_TRUE2
 push this 2
-call Paddle.moveRight 1
+call Paddle.moveLeft 1
 pop temp 0
 label IF_FALSE2
+label IF_FALSE1
+push this 3
+push constant 132
+eq
+if-goto IF_TRUE3
+goto IF_FALSE3
+label IF_TRUE3
+push this 2
+call Paddle.moveRightSim 1
+pop temp 0
+push this 2
+call Paddle.getHitbox 1
+pop local 2
+push local 2
+call Hitbox.getXUpper 1
+push local 1
+call Hitbox.getXUpper 1
+gt
+not
+if-goto IF_TRUE4
+goto IF_FALSE4
+label IF_TRUE4
+push this 2
+call Paddle.moveRight 1
+pop temp 0
+label IF_FALSE4
+label IF_FALSE3
 push this 1
 call Ball.moveBallSim 1
 pop temp 0
 push this 1
 call Ball.getHitbox 1
 pop local 0
-push this 0
-call PlayArea.getHitbox 1
-pop local 1
+push this 2
+call Paddle.getHitbox 1
+pop local 2
 push local 0
 call Hitbox.getXLower 1
 push local 1
@@ -124,13 +159,13 @@ push local 1
 call Hitbox.getXUpper 1
 gt
 or
-if-goto IF_TRUE3
-goto IF_FALSE3
-label IF_TRUE3
+if-goto IF_TRUE5
+goto IF_FALSE5
+label IF_TRUE5
 push this 1
 call Ball.flipDeltaX 1
 pop temp 0
-label IF_FALSE3
+label IF_FALSE5
 push local 0
 call Hitbox.getYLower 1
 push local 1
@@ -142,15 +177,36 @@ push local 1
 call Hitbox.getYUpper 1
 gt
 or
-if-goto IF_TRUE4
-goto IF_FALSE4
-label IF_TRUE4
+if-goto IF_TRUE6
+goto IF_FALSE6
+label IF_TRUE6
 push this 1
 call Ball.flipDeltaY 1
 pop temp 0
-label IF_FALSE4
+label IF_FALSE6
+push local 0
+call Hitbox.getYUpper 1
+push local 2
+call Hitbox.getYLower 1
+gt
+if-goto IF_TRUE7
+goto IF_FALSE7
+label IF_TRUE7
+push this 1
+call Ball.flipDeltaY 1
+pop temp 0
+label IF_FALSE7
 push this 1
 call Ball.moveBall 1
+pop temp 0
+push local 0
+call Hitbox.dispose 1
+pop temp 0
+push local 1
+call Hitbox.dispose 1
+pop temp 0
+push local 2
+call Hitbox.dispose 1
 pop temp 0
 push constant 0
 return

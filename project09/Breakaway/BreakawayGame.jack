@@ -34,7 +34,7 @@ class BreakawayGame {
         
         let playarea = PlayArea.new(216, 252);
         
-        let ball = Ball.new(1024, 512, 2, 10, 27);
+        let ball = Ball.new(800, 300, 2, 10, 27);
         
         let paddle = Paddle.new(255, 127, 25, 7);
 
@@ -58,7 +58,8 @@ class BreakawayGame {
             do processInput();
             do update();
             do render();
-            do Sys.wait(55);
+            //do Sys.wait(55);
+            do Sys.wait(25);
         }
             
         return;
@@ -95,31 +96,56 @@ class BreakawayGame {
     method void update() {
         var Hitbox ballh, playareah, paddleh;
         
+        let playareah = playarea.getHitbox();
+        
         if (key = 81) {
             let exit = true;
         }
+        
+        // sim paddle movement, resolve collisions with play area, move paddle
         if (key = 130) {
-            do paddle.moveLeft();
+            do paddle.moveLeftSim();
+            let paddleh = paddle.getHitbox();
+            if ( ~(paddleh.getXLower() < playareah.getXLower()) ) {
+                do paddle.moveLeft();
+            }    
         }
+            
         if (key = 132) {
-            do paddle.moveRight();
+            do paddle.moveRightSim();
+            let paddleh = paddle.getHitbox();
+            if ( ~(paddleh.getXUpper() > playareah.getXUpper()) ) {
+                do paddle.moveRight();
+            }    
         }
+        
+        
+        // sim ball movement, resolve collisions with play area and paddle, move ball
         
         do ball.moveBallSim();
-        
         let ballh = ball.getHitbox();
-        let playareah = playarea.getHitbox();
         let paddleh = paddle.getHitbox();
-        
+
         if ( ( ballh.getXLower() < playareah.getXLower() ) | ( ballh.getXUpper() > playareah.getXUpper() ) ) {
             do ball.flipDeltaX();
         }
 
         if ( ( ballh.getYLower() < playareah.getYLower() ) | ( ballh.getYUpper() > playareah.getYUpper() ) ) {
             do ball.flipDeltaY();
-        }        
+        }
+        
+        // this code is causing an illegal radius error
+        //if ( ( ballh.getYUpper() > paddleh.getYLower() ) & ( ballh.getYLower() < paddleh.getYUpper() ) &
+        //     ( ballh.getXUpper() > paddleh.getXLower() ) & ( ballh.getXLower() < paddleh.getXUpper() ) ){
+        if ( ballh.getYUpper() > paddleh.getYLower() ) {
+            do ball.flipDeltaY();
+        }
         
         do ball.moveBall();
+        
+        do ballh.dispose();
+        do playareah.dispose();
+        do paddleh.dispose();
         
         return;
     }

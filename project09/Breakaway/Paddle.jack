@@ -9,10 +9,13 @@
 class Paddle {
 
     // Location on the screen
-    field int x, y;
+    field int x, y, x_sim, y_sim;
 
     // The size of the square
     field int width, height;
+    
+    // Hitbox
+    field Hitbox hitbox;
 
     /** Constructs a new square with a given location and size. */
     constructor Paddle new(int Ax, int Ay, int Awidth, int Aheight) {
@@ -22,6 +25,8 @@ class Paddle {
         let height = Aheight;
 
         do draw();
+        
+        let hitbox = Hitbox.new((4*(x + (width/2))),(4*(x - (width/2))), (4*(y + (height/2))), (4*(y - (height/2))));
 
         return this;
     }
@@ -45,20 +50,36 @@ class Paddle {
         do Screen.drawRectangle(x - (width/2), y - (height/2), x + (width/2), y + (height/2));
         return;
     }
-
+    
+    method void moveLeftSim() {
+        let x_sim = x - 4;
+        do hitbox.update((4*(x_sim + (width/2))), (4*(x_sim - (width/2))), (4*(y_sim + (height/2))), (4*(y_sim - (height/2))));
+        return;
+    }
+    
+    method void moveRightSim() {
+        let x_sim = x + 4;
+        do hitbox.update((4*(x_sim + (width/2))), (4*(x_sim - (width/2))), (4*(y_sim + (height/2))), (4*(y_sim - (height/2))));
+        return;
+    }
+    
+    /** Returns a hitbox of the paddle */
+    method Hitbox getHitbox() {
+        return hitbox;
+    }
+    
     /** Moves left by 4 pixels. */
     method void moveLeft() {
-        if ( (x - (width/2)) > 147) {
-            let x = x - 4;
-        }
+        let x = x - 4;
+        do hitbox.update((4*(x + (width/2))), (4*(x - (width/2))), (4*(y + (height/2))), (4*(y - (height/2))));
+
         return;
     }
 
     /** Moves right by 4 pixels. */
     method void moveRight() {
-        if ( (x + (width/2)) < 364) {
-            let x = x + 4;
-        }
+        let x = x + 4;
+        do hitbox.update((4*(x + (width/2))), (4*(x - (width/2))), (4*(y + (height/2))), (4*(y - (height/2))));
         return;
     }
 }

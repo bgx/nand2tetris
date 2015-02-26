@@ -11,22 +11,23 @@ class Hitbox {
     // Store the values of the first out of bounds pixel values
     field int x_upper, x_lower, y_upper, y_lower;
     
-    // Collision switch is true if a collision is detected
-    field boolean collision;
-
     /** Constructs a new square with a given location and size. */
     constructor Hitbox new(int Axu, int Axl, int Ayu, int Ayl) {
         let x_upper = Axu;
         let x_lower = Axl;
         let y_upper = Ayu;
         let y_lower = Ayl;
-        
-        let collision = false;
 
         return this;
     }
 
     /** Deallocates the object's memory. */
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+    
+    /** Updates the object. */
     method void update(int Axu, int Axl, int Ayu, int Ayl) {
         let x_upper = Axu;
         let x_lower = Axl;
@@ -34,16 +35,7 @@ class Hitbox {
         let y_lower = Ayl;
         return;
     }
-    
-    method void collisionSwitch() {
-        let collision = ~collision;
-        return;
-    }    
-    
-    method boolean getCollisionSwitch() {
-        return collision;
-    }    
-    
+        
     method int getXUpper() {
         return x_upper;
     }    
