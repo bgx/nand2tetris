@@ -46,18 +46,18 @@ class Paddle {
         return;
     }
 
-    /** Moves left by 2 pixels. */
+    /** Moves left by 4 pixels. */
     method void moveLeft() {
         if ( (x - (width/2)) > 147) {
-            let x = x - 2;
+            let x = x - 4;
         }
         return;
     }
 
-    /** Moves right by 2 pixels. */
+    /** Moves right by 4 pixels. */
     method void moveRight() {
         if ( (x + (width/2)) < 364) {
-            let x = x + 2;
+            let x = x + 4;
         }
         return;
     }

@@ -13,6 +13,9 @@ class PlayArea {
     
     // Store the values of the first out of bounds pixel values
     field int x_upper, x_lower, y_upper, y_lower;
+    
+    // Hitbox of playingn field
+    field Hitbox hitbox;
 
     /** Constructs a new screen-centered play area with a given size. */
     constructor PlayArea new(int Awidth, int Aheight) {
@@ -24,6 +27,8 @@ class PlayArea {
         let y_lower = 127 - (height/2);
         let y_upper = 128 + (height/2);
         
+        let hitbox = Hitbox.new((4*x_upper)-4,(4*x_lower)+4, (4*y_upper)-4, (4*y_lower)+4);
+        
         do draw();
 
         return this;
@@ -34,6 +39,11 @@ class PlayArea {
         do Memory.deAlloc(this);
         return;
     }
+    
+    /** Returns a hitbox of the play area */
+    method Hitbox getHitbox() {
+        return hitbox;
+    }    
 
     /** Draws the play area on the screen. */
     method void draw() {

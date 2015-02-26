@@ -93,6 +93,8 @@ class BreakawayGame {
     
         /** Update game state. */
     method void update() {
+        var Hitbox ballh, playareah, paddleh;
+        
         if (key = 81) {
             let exit = true;
         }
@@ -102,7 +104,23 @@ class BreakawayGame {
         if (key = 132) {
             do paddle.moveRight();
         }
+        
+        do ball.moveBallSim();
+        
+        let ballh = ball.getHitbox();
+        let playareah = playarea.getHitbox();
+        let paddleh = paddle.getHitbox();
+        
+        if ( ( ballh.getXLower() < playareah.getXLower() ) | ( ballh.getXUpper() > playareah.getXUpper() ) ) {
+            do ball.flipDeltaX();
+        }
+
+        if ( ( ballh.getYLower() < playareah.getYLower() ) | ( ballh.getYUpper() > playareah.getYUpper() ) ) {
+            do ball.flipDeltaY();
+        }        
+        
         do ball.moveBall();
+        
         return;
     }
 
@@ -113,4 +131,32 @@ class BreakawayGame {
         do ball.draw();
         return;
     }
+    
+    /**method boolean collisionDetector( Hitbox A, Hitbox B ) {
+        var Hitbox a, b;
+        var int axu, axl, ayu, ayl;
+        var int bxu, bxl, byu, byl;
+        let a = A;
+        let b = B;
+        
+        let axu = a.getXUpper();
+        let axl = a.getXLower();
+        let ayu = a.getYUpper();
+        let ayl = a.getYLower();
+        
+        let bxu = b.getXUpper();
+        let bxl = b.getXLower();
+        let byu = b.getYUpper();
+        let byl = b.getYLower();
+        
+        
+    
+    }*/
+    
+    /**method void collisionResolver(    ) {
+        var Hitbox hitbox;
+        
+        hitbox = ball.getHitbox();
+    }*/
+        
 }

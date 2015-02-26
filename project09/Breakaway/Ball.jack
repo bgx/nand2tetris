@@ -8,13 +8,19 @@
 class Ball {
 
     // Location on a 2048x1024 screen
-    field int x, y;
+    field int x, y, x_sim, y_sim;
 
     // The size of the ball
     field int size;
     
     // The change in position of the ball
     field int delta_x, delta_y;
+    
+    // Hitbox of the ball
+    field Hitbox hitbox;
+    
+    // Collision flag
+    field boolean collision;
         
     /** Constructs a new ball with a given location, size, and delta location. */
     constructor Ball new(int Ax, int Ay, int Asize, int Adelta_x, int Adelta_y) {
@@ -23,6 +29,9 @@ class Ball {
         let size = Asize;
         let delta_x = Adelta_x;
         let delta_y = Adelta_y;
+        
+        let hitbox = Hitbox.new(x + (4*size) - 4, x - (4*size) + 4, y + (4*size) - 4, y - (4*size) + 4);
+        let collision = false;
 
         do draw();
 
@@ -49,22 +58,38 @@ class Ball {
         return;
     }
     
+    /** Simulates the movement of the ball on the screen. */
+    method void moveBallSim() {
+        let x_sim = x + delta_x;
+        let y_sim = y + delta_y;
+        do hitbox.update(x_sim + (4*size) - 4, x_sim - (4*size) + 4, y_sim + (4*size) - 4, y_sim - (4*size) + 4);
+        return;
+    }
+    
+    /** Returns a hitbox of the ball */
+    method Hitbox getHitbox() {
+        return hitbox;
+    }
+    
+    method void collisionSwitch() {
+        let collision = ~collision;
+        return;
+    }
+    
+    method void flipDeltaX() {
+        let delta_x = -delta_x;
+        return;
+    }
+    
+    method void flipDeltaY() {
+        let delta_y = -delta_y;
+        return;
+    }
+    
     /** Moves the ball on the screen. */
     method void moveBall() {
-        
-        // 4*148=592; 4*363 = 1452      add or subtract 4 to account for integer-divide-by-4 when drawing and erasing
-        if ( ((x + delta_x - (4*size) + 4) < 596) | ((x + delta_x + (4*size) - 4) > 1448) ){
-            let delta_x = -delta_x;
-        }
-        
-        // 4*2=8; 4*253 = 1012    
-        if ( ((y + delta_y - (4*size) + 4) < 12) | ((y + delta_y + (4*size) - 4) > 1008) ){
-            let delta_y = -delta_y;
-        }
-            
         let x = x + delta_x;
         let y = y + delta_y;
-    
         return;
     }
 }

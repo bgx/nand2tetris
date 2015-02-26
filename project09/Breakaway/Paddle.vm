@@ -98,7 +98,7 @@ if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push this 0
-push constant 2
+push constant 4
 sub
 pop this 0
 label IF_FALSE0
@@ -118,7 +118,7 @@ if-goto IF_TRUE0
 goto IF_FALSE0
 label IF_TRUE0
 push this 0
-push constant 2
+push constant 4
 add
 pop this 0
 label IF_FALSE0

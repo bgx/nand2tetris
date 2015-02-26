@@ -1,5 +1,5 @@
 function Ball.new 0
-push constant 5
+push constant 9
 call Memory.alloc 1
 pop pointer 0
 push argument 0
@@ -7,11 +7,43 @@ pop this 0
 push argument 1
 pop this 1
 push argument 2
-pop this 2
-push argument 3
-pop this 3
-push argument 4
 pop this 4
+push argument 3
+pop this 5
+push argument 4
+pop this 6
+push this 0
+push constant 4
+push this 4
+call Math.multiply 2
+add
+push constant 4
+sub
+push this 0
+push constant 4
+push this 4
+call Math.multiply 2
+sub
+push constant 4
+add
+push this 1
+push constant 4
+push this 4
+call Math.multiply 2
+add
+push constant 4
+sub
+push this 1
+push constant 4
+push this 4
+call Math.multiply 2
+sub
+push constant 4
+add
+call Hitbox.new 4
+pop this 7
+push constant 0
+pop this 8
 push pointer 0
 call Ball.draw 1
 pop temp 0
@@ -38,7 +70,7 @@ call Math.divide 2
 push this 1
 push constant 4
 call Math.divide 2
-push this 2
+push this 4
 call Screen.drawCircle 3
 pop temp 0
 push constant 0
@@ -55,80 +87,93 @@ call Math.divide 2
 push this 1
 push constant 4
 call Math.divide 2
-push this 2
+push this 4
 call Screen.drawCircle 3
 pop temp 0
+push constant 0
+return
+function Ball.moveBallSim 0
+push argument 0
+pop pointer 0
+push this 0
+push this 5
+add
+pop this 2
+push this 1
+push this 6
+add
+pop this 3
+push this 7
+push this 2
+push constant 4
+push this 4
+call Math.multiply 2
+add
+push constant 4
+sub
+push this 2
+push constant 4
+push this 4
+call Math.multiply 2
+sub
+push constant 4
+add
+push this 3
+push constant 4
+push this 4
+call Math.multiply 2
+add
+push constant 4
+sub
+push this 3
+push constant 4
+push this 4
+call Math.multiply 2
+sub
+push constant 4
+add
+call Hitbox.update 5
+pop temp 0
+push constant 0
+return
+function Ball.getHitbox 0
+push argument 0
+pop pointer 0
+push this 7
+return
+function Ball.collisionSwitch 0
+push argument 0
+pop pointer 0
+push this 8
+not
+pop this 8
+push constant 0
+return
+function Ball.flipDeltaX 0
+push argument 0
+pop pointer 0
+push this 5
+neg
+pop this 5
+push constant 0
+return
+function Ball.flipDeltaY 0
+push argument 0
+pop pointer 0
+push this 6
+neg
+pop this 6
 push constant 0
 return
 function Ball.moveBall 0
 push argument 0
 pop pointer 0
 push this 0
-push this 3
-add
-push constant 4
-push this 2
-call Math.multiply 2
-sub
-push constant 4
-add
-push constant 596
-lt
-push this 0
-push this 3
-add
-push constant 4
-push this 2
-call Math.multiply 2
-add
-push constant 4
-sub
-push constant 1448
-gt
-or
-if-goto IF_TRUE0
-goto IF_FALSE0
-label IF_TRUE0
-push this 3
-neg
-pop this 3
-label IF_FALSE0
-push this 1
-push this 4
-add
-push constant 4
-push this 2
-call Math.multiply 2
-sub
-push constant 4
-add
-push constant 12
-lt
-push this 1
-push this 4
-add
-push constant 4
-push this 2
-call Math.multiply 2
-add
-push constant 4
-sub
-push constant 1008
-gt
-or
-if-goto IF_TRUE1
-goto IF_FALSE1
-label IF_TRUE1
-push this 4
-neg
-pop this 4
-label IF_FALSE1
-push this 0
-push this 3
+push this 5
 add
 pop this 0
 push this 1
-push this 4
+push this 6
 add
 pop this 1
 push constant 0

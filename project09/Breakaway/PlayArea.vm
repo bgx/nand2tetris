@@ -1,5 +1,5 @@
 function PlayArea.new 0
-push constant 6
+push constant 7
 call Memory.alloc 1
 pop pointer 0
 push argument 0
@@ -30,6 +30,28 @@ push constant 2
 call Math.divide 2
 add
 pop this 4
+push constant 4
+push this 2
+call Math.multiply 2
+push constant 4
+sub
+push constant 4
+push this 3
+call Math.multiply 2
+push constant 4
+add
+push constant 4
+push this 4
+call Math.multiply 2
+push constant 4
+sub
+push constant 4
+push this 5
+call Math.multiply 2
+push constant 4
+add
+call Hitbox.new 4
+pop this 6
 push pointer 0
 call PlayArea.draw 1
 pop temp 0
@@ -42,6 +64,11 @@ push pointer 0
 call Memory.deAlloc 1
 pop temp 0
 push constant 0
+return
+function PlayArea.getHitbox 0
+push argument 0
+pop pointer 0
+push this 6
 return
 function PlayArea.draw 0
 push argument 0
