@@ -23,6 +23,8 @@ class Paddle {
         let y = Ay;
         let width = Awidth;
         let height = Aheight;
+        
+        let y_sim = y;
 
         do draw();
         

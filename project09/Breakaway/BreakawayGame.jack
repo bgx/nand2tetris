@@ -32,11 +32,11 @@ class BreakawayGame {
     /** Constructs a new Breakaway Game. */
     constructor BreakawayGame new() {
         
-        let playarea = PlayArea.new(216, 252);
+        let playarea = PlayArea.new(216, 252); //216,252
         
-        let ball = Ball.new(800, 300, 2, 10, 27);
+        let ball = Ball.new(800, 300, 2, 10, 27); // ?,?,2,?,?
         
-        let paddle = Paddle.new(255, 127, 25, 7);
+        let paddle = Paddle.new(255, 127, 25, 7); // ?,?,25,7
 
         return this;
     }
@@ -58,8 +58,7 @@ class BreakawayGame {
             do processInput();
             do update();
             do render();
-            //do Sys.wait(55);
-            do Sys.wait(25);
+            do Sys.wait(55);
         }
             
         return;
@@ -68,31 +67,10 @@ class BreakawayGame {
     /** Process Input. */
     method void processInput() {
         let key = Keyboard.keyPressed();
-        /**if (key = 81) { //q
-            let exit = true;
-        }
-        if (key = 90) {
-            //z or x
-        }
-        if (key = 88) {
-            //z or x
-        }
-        if (key = 131) {
-            //up
-        }
-        if (key = 133) {
-            //down
-        }
-        if (key = 130) {
-            //left
-        }
-        if (key = 132) {
-            //right
-        }*/
         return;
     }
     
-        /** Update game state. */
+    /** Update game state. */
     method void update() {
         var Hitbox ballh, playareah, paddleh;
         
@@ -106,7 +84,7 @@ class BreakawayGame {
         if (key = 130) {
             do paddle.moveLeftSim();
             let paddleh = paddle.getHitbox();
-            if ( ~(paddleh.getXLower() < playareah.getXLower()) ) {
+            if ( ~( paddleh.getXLower() < playareah.getXLower() ) ) {
                 do paddle.moveLeft();
             }    
         }
@@ -134,13 +112,11 @@ class BreakawayGame {
             do ball.flipDeltaY();
         }
         
-        // this code is causing an illegal radius error
-        //if ( ( ballh.getYUpper() > paddleh.getYLower() ) & ( ballh.getYLower() < paddleh.getYUpper() ) &
-        //     ( ballh.getXUpper() > paddleh.getXLower() ) & ( ballh.getXLower() < paddleh.getXUpper() ) ){
-        if ( ballh.getYUpper() > paddleh.getYLower() ) {
+        if ( ( ballh.getYUpper() > paddleh.getYLower() ) & ( ballh.getYLower() < paddleh.getYUpper() ) &
+             ( ballh.getXUpper() > paddleh.getXLower() ) & ( ballh.getXLower() < paddleh.getXUpper() ) ){
             do ball.flipDeltaY();
         }
-        
+                
         do ball.moveBall();
         
         do ballh.dispose();

@@ -57,7 +57,7 @@ pop temp 0
 push pointer 0
 call BreakawayGame.render 1
 pop temp 0
-push constant 25
+push constant 55
 call Sys.wait 1
 pop temp 0
 goto WHILE_EXP0
@@ -189,6 +189,24 @@ call Hitbox.getYUpper 1
 push local 2
 call Hitbox.getYLower 1
 gt
+push local 0
+call Hitbox.getYLower 1
+push local 2
+call Hitbox.getYUpper 1
+lt
+and
+push local 0
+call Hitbox.getXUpper 1
+push local 2
+call Hitbox.getXLower 1
+gt
+and
+push local 0
+call Hitbox.getXLower 1
+push local 2
+call Hitbox.getXUpper 1
+lt
+and
 if-goto IF_TRUE7
 goto IF_FALSE7
 label IF_TRUE7
