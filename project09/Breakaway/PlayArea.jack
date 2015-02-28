@@ -27,8 +27,7 @@ class PlayArea {
         let y_lower = 127 - (height/2);
         let y_upper = 128 + (height/2);
         
-        //let hitbox = Hitbox.new((4*x_upper)-4,(4*x_lower)+4, (4*y_upper)-4, (4*y_lower)+4);
-        let hitbox = Hitbox.new((4*x_upper)-4,(4*x_lower)+4, (4*y_upper)-8, (4*y_lower)+8);
+        let hitbox = Hitbox.new(x_upper, x_lower, y_upper, y_lower);
         
         do draw();
 

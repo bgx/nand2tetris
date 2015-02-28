@@ -28,7 +28,7 @@ class Paddle {
 
         do draw();
         
-        let hitbox = Hitbox.new((4*(x + (width/2))),(4*(x - (width/2))), (4*(y + (height/2))), (4*(y - (height/2))));
+        let hitbox = Hitbox.new(x + (width/2),x - (width/2), y + (height/2), y - (height/2));
 
         return this;
     }
@@ -55,13 +55,13 @@ class Paddle {
     
     method void moveLeftSim() {
         let x_sim = x - 4;
-        do hitbox.update((4*(x_sim + (width/2))), (4*(x_sim - (width/2))), (4*(y_sim + (height/2))), (4*(y_sim - (height/2))));
+        do hitbox.update(x_sim + (width/2), x_sim - (width/2), y_sim + (height/2), y_sim - (height/2));
         return;
     }
     
     method void moveRightSim() {
         let x_sim = x + 4;
-        do hitbox.update((4*(x_sim + (width/2))), (4*(x_sim - (width/2))), (4*(y_sim + (height/2))), (4*(y_sim - (height/2))));
+        do hitbox.update(x_sim + (width/2), x_sim - (width/2), y_sim + (height/2), y_sim - (height/2));
         return;
     }
     
@@ -73,7 +73,7 @@ class Paddle {
     /** Moves left by 4 pixels. */
     method void moveLeft() {
         let x = x - 4;
-        do hitbox.update((4*(x + (width/2))), (4*(x - (width/2))), (4*(y + (height/2))), (4*(y - (height/2))));
+        do hitbox.update(x + (width/2), x - (width/2), y + (height/2), y - (height/2));
 
         return;
     }
@@ -81,7 +81,7 @@ class Paddle {
     /** Moves right by 4 pixels. */
     method void moveRight() {
         let x = x + 4;
-        do hitbox.update((4*(x + (width/2))), (4*(x - (width/2))), (4*(y + (height/2))), (4*(y - (height/2))));
+        do hitbox.update(x + (width/2), x - (width/2), y + (height/2), y - (height/2));
         return;
     }
 }

@@ -7,7 +7,7 @@
  */
 class Ball {
 
-    // Location on a 2048x1024 screen
+    // Location on screen
     field int x, y, x_sim, y_sim;
 
     // The size of the ball
@@ -30,7 +30,7 @@ class Ball {
         let delta_x = Adelta_x;
         let delta_y = Adelta_y;
         
-        let hitbox = Hitbox.new(x + (4*size) - 4, x - (4*size) + 4, y + (4*size) - 4, y - (4*size) + 4);
+        let hitbox = Hitbox.new(x + size, x - size, y + size, y - size);
         let collision = false;
 
         do draw();
@@ -47,14 +47,14 @@ class Ball {
     /** Draws the ball on the screen. */
     method void draw() {
         do Screen.setColor(true);
-        do Screen.drawCircle(x/4, y/4, size);
+        do Screen.drawCircle(x, y, size);
         return;
     }
 
     /** Erases the ball from the screen. */
     method void erase() {
         do Screen.setColor(false);
-        do Screen.drawCircle(x/4, y/4, size);
+        do Screen.drawCircle(x, y, size);
         return;
     }
     
@@ -62,7 +62,7 @@ class Ball {
     method void moveBallSim() {
         let x_sim = x + delta_x;
         let y_sim = y + delta_y;
-        do hitbox.update(x_sim + (4*size) - 4, x_sim - (4*size) + 4, y_sim + (4*size) - 4, y_sim - (4*size) + 4);
+        do hitbox.update(x_sim + size, x_sim - size, y_sim + size, y_sim - size);
         return;
     }
     

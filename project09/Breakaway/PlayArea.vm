@@ -30,26 +30,10 @@ push constant 2
 call Math.divide 2
 add
 pop this 4
-push constant 4
 push this 2
-call Math.multiply 2
-push constant 4
-sub
-push constant 4
 push this 3
-call Math.multiply 2
-push constant 4
-add
-push constant 4
 push this 4
-call Math.multiply 2
-push constant 8
-sub
-push constant 4
 push this 5
-call Math.multiply 2
-push constant 8
-add
 call Hitbox.new 4
 pop this 6
 push pointer 0

@@ -15,34 +15,26 @@ pop this 3
 push pointer 0
 call Paddle.draw 1
 pop temp 0
-push constant 4
 push this 0
 push this 4
 push constant 2
 call Math.divide 2
 add
-call Math.multiply 2
-push constant 4
 push this 0
 push this 4
 push constant 2
 call Math.divide 2
 sub
-call Math.multiply 2
-push constant 4
 push this 1
 push this 5
 push constant 2
 call Math.divide 2
 add
-call Math.multiply 2
-push constant 4
 push this 1
 push this 5
 push constant 2
 call Math.divide 2
 sub
-call Math.multiply 2
 call Hitbox.new 4
 pop this 6
 push pointer 0
@@ -124,34 +116,26 @@ push constant 4
 sub
 pop this 2
 push this 6
-push constant 4
 push this 2
 push this 4
 push constant 2
 call Math.divide 2
 add
-call Math.multiply 2
-push constant 4
 push this 2
 push this 4
 push constant 2
 call Math.divide 2
 sub
-call Math.multiply 2
-push constant 4
 push this 3
 push this 5
 push constant 2
 call Math.divide 2
 add
-call Math.multiply 2
-push constant 4
 push this 3
 push this 5
 push constant 2
 call Math.divide 2
 sub
-call Math.multiply 2
 call Hitbox.update 5
 pop temp 0
 push constant 0
@@ -164,34 +148,26 @@ push constant 4
 add
 pop this 2
 push this 6
-push constant 4
 push this 2
 push this 4
 push constant 2
 call Math.divide 2
 add
-call Math.multiply 2
-push constant 4
 push this 2
 push this 4
 push constant 2
 call Math.divide 2
 sub
-call Math.multiply 2
-push constant 4
 push this 3
 push this 5
 push constant 2
 call Math.divide 2
 add
-call Math.multiply 2
-push constant 4
 push this 3
 push this 5
 push constant 2
 call Math.divide 2
 sub
-call Math.multiply 2
 call Hitbox.update 5
 pop temp 0
 push constant 0
@@ -209,34 +185,26 @@ push constant 4
 sub
 pop this 0
 push this 6
-push constant 4
 push this 0
 push this 4
 push constant 2
 call Math.divide 2
 add
-call Math.multiply 2
-push constant 4
 push this 0
 push this 4
 push constant 2
 call Math.divide 2
 sub
-call Math.multiply 2
-push constant 4
 push this 1
 push this 5
 push constant 2
 call Math.divide 2
 add
-call Math.multiply 2
-push constant 4
 push this 1
 push this 5
 push constant 2
 call Math.divide 2
 sub
-call Math.multiply 2
 call Hitbox.update 5
 pop temp 0
 push constant 0
@@ -249,34 +217,26 @@ push constant 4
 add
 pop this 0
 push this 6
-push constant 4
 push this 0
 push this 4
 push constant 2
 call Math.divide 2
 add
-call Math.multiply 2
-push constant 4
 push this 0
 push this 4
 push constant 2
 call Math.divide 2
 sub
-call Math.multiply 2
-push constant 4
 push this 1
 push this 5
 push constant 2
 call Math.divide 2
 add
-call Math.multiply 2
-push constant 4
 push this 1
 push this 5
 push constant 2
 call Math.divide 2
 sub
-call Math.multiply 2
 call Hitbox.update 5
 pop temp 0
 push constant 0

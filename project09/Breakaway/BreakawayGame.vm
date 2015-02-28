@@ -6,11 +6,11 @@ push constant 216
 push constant 252
 call PlayArea.new 2
 pop this 0
-push constant 800
-push constant 300
+push constant 250
+push constant 100
 push constant 2
-push constant 10
-push constant 27
+push constant 2
+push constant 6
 call Ball.new 5
 pop this 1
 push constant 255
