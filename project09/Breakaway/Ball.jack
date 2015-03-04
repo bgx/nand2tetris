@@ -18,11 +18,8 @@ class Ball {
     
     // Hitbox of the ball
     field Hitbox hitbox;
-    
-    // Collision flag
-    field boolean collision;
-        
-    /** Constructs a new ball with a given location, size, and delta location. */
+          
+    /** Constructs a new ball with a given location, size, and delta x and y. */
     constructor Ball new(int Ax, int Ay, int Asize, int Adelta_x, int Adelta_y) {
         let x = Ax;
         let y = Ay;
@@ -30,8 +27,7 @@ class Ball {
         let delta_x = Adelta_x;
         let delta_y = Adelta_y;
         
-        let hitbox = Hitbox.new(x + size, x - size, y + size, y - size);
-        let collision = false;
+        let hitbox = Hitbox.new(x - size, x + size, y - size, y + size);
 
         do draw();
 
@@ -62,7 +58,7 @@ class Ball {
     method void moveBallSim() {
         let x_sim = x + delta_x;
         let y_sim = y + delta_y;
-        do hitbox.update(x_sim + size, x_sim - size, y_sim + size, y_sim - size);
+        do hitbox.update(x_sim - size, x_sim + size, y_sim - size, y_sim + size);
         return;
     }
     
@@ -70,17 +66,14 @@ class Ball {
     method Hitbox getHitbox() {
         return hitbox;
     }
-    
-    method void collisionSwitch() {
-        let collision = ~collision;
-        return;
-    }
-    
+        
+    /** Arithmetically negates the delta_x value */
     method void flipDeltaX() {
         let delta_x = -delta_x;
         return;
     }
     
+    /** Arithmetically negates the delta_y value */
     method void flipDeltaY() {
         let delta_y = -delta_y;
         return;

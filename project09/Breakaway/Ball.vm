@@ -1,5 +1,5 @@
 function Ball.new 0
-push constant 9
+push constant 8
 call Memory.alloc 1
 pop pointer 0
 push argument 0
@@ -14,20 +14,18 @@ push argument 4
 pop this 6
 push this 0
 push this 4
-add
+sub
 push this 0
 push this 4
-sub
-push this 1
-push this 4
 add
 push this 1
 push this 4
 sub
+push this 1
+push this 4
+add
 call Hitbox.new 4
 pop this 7
-push constant 0
-pop this 8
 push pointer 0
 call Ball.draw 1
 pop temp 0
@@ -82,16 +80,16 @@ pop this 3
 push this 7
 push this 2
 push this 4
-add
+sub
 push this 2
 push this 4
-sub
-push this 3
-push this 4
 add
 push this 3
 push this 4
 sub
+push this 3
+push this 4
+add
 call Hitbox.update 5
 pop temp 0
 push constant 0
@@ -100,14 +98,6 @@ function Ball.getHitbox 0
 push argument 0
 pop pointer 0
 push this 7
-return
-function Ball.collisionSwitch 0
-push argument 0
-pop pointer 0
-push this 8
-not
-pop this 8
-push constant 0
 return
 function Ball.flipDeltaX 0
 push argument 0

@@ -1,0 +1,87 @@
+// Brian Grady
+// File name: src/project09/Breakaway/Brick.jack
+
+/**
+ * Implements a graphic brick. A graphic square has a screen location
+ * and a size. It also has methods for drawing, erasing, moving on the 
+ * screen, and changing its size.
+ */
+class Brick {
+
+    // Unique brick identification
+    field int brickID;
+    
+    // Location on the screen
+    field int x, y;
+
+    // The size of the brick
+    field int width, height;
+    
+    // Hitbox
+    field Hitbox hitbox;
+
+    /** Constructs a new brick with a given location and size. */
+    constructor Brick new( int AbrickID, int Ax, int Ay, int Awidth, int Aheight) {
+        let brickID = AbrickID;
+        let x = Ax;
+        let y = Ay;
+        let width = Awidth;
+        let height = Aheight;
+        
+        do draw();
+        
+        let hitbox = Hitbox.new(x - (width/2),x + (width/2), y - (height/2), y + (height/2));
+
+        return this;
+    }
+
+    /** Deallocates the object's memory. */
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Draws the brick on the screen. */
+    method void draw() {
+        do Screen.setColor(true);
+        
+        if (((x + (width/2)) > 363)) {
+            do Screen.drawRectangle(x - (width/2), y - (height/2), 363, y + (height/2));
+            do Screen.drawRectangle(148, y - (height/2), (x - 216) + (width/2), y + (height/2));
+        }
+        else {
+            if (((x - (width/2)) < 148)) {
+                do Screen.drawRectangle(x - (width/2) + 216, y - (height/2), 363, y + (height/2));
+                do Screen.drawRectangle(148, y - (height/2), x + (width/2), y + (height/2));
+            }
+            else {
+                do Screen.drawRectangle(x - (width/2), y - (height/2), x + (width/2), y + (height/2));
+            }
+        }    
+        
+        return;
+    }
+
+    /** Erases the square from the screen. */
+    method void erase() {
+        do Screen.setColor(false);
+        do Screen.drawRectangle(x - (width/2), y - (height/2), x + (width/2), y + (height/2));
+        return;
+    }
+        
+    /** Returns a hitbox of the paddle */
+    method Hitbox getHitbox() {
+        return hitbox;
+    }
+    
+    /** Moves right by 4 pixels. */
+    method void moveRight() {
+        let x = x + 4;
+        if (x > 363) {
+            let x = x - 216;
+        }    
+        //do hitbox.update(x + (width/2), x - (width/2), y + (height/2), y - (height/2));
+        return;
+    }
+    
+}

@@ -3,8 +3,8 @@
 
 /**
  * Implements the Breakaway game.
- * In this game you move a paddle to direct a moving
- * ball into a wall of breakable bricks.
+ * The player moves a paddle left and right to redirect a
+ * moving ball into a "wall" of breakable bricks.
  * The left and right arrow keys are used to move the paddle.
  * The 'q' key is used to quit the game.
  */
@@ -22,6 +22,7 @@ class BreakawayGame {
     field Paddle paddle;
     
     // The wall
+    field Wall wall;
     
     // User input
     field char key;
@@ -32,11 +33,18 @@ class BreakawayGame {
     /** Constructs a new Breakaway Game. */
     constructor BreakawayGame new() {
         
-        let playarea = PlayArea.new(216, 252); //216,252
+        let playarea = PlayArea.new(216, 252); //(width, height)
         
-        let ball = Ball.new(250, 100, 2, 2, 6); // ?,?,2,?,?
+        let ball = Ball.new(250, 100, 2, 3, 6); // x,y,size,delta_x,delta_y
         
-        let paddle = Paddle.new(255, 127, 25, 7); // ?,?,25,7
+        let paddle = Paddle.new(255, 220, 25, 7); // x,y,width,height
+                
+        let wall = Wall.new();
+        do wall.newBrick(255, 50, 20, 10);
+        do wall.newBrick(185, 50, 20, 10);
+        do wall.newBrick(205, 80, 20, 10);
+        do wall.newBrick(295, 90, 20, 10);
+
 
         return this;
     }
@@ -46,11 +54,12 @@ class BreakawayGame {
         do playarea.dispose();
         do ball.dispose();
         do paddle.dispose();
+        do wall.dispose();
         do Memory.deAlloc(this);
         return;
     }
 
-    /** The game loop. Very simple: processInput, update, render. */
+    /** The game loop. Very simple: processInput, update, render, delay. */
     method void run() {
         let exit = false;
 
@@ -64,35 +73,37 @@ class BreakawayGame {
         return;
 	}
 
-    /** Process Input. */
+    /** Process player input from the keyboard. */
+    /** Notes: Maybe save input in a more readable way than key = 81 or 130 or 132? */
     method void processInput() {
         let key = Keyboard.keyPressed();
         return;
     }
     
     /** Update game state. */
+    /** Notes: Need to clean this up so its easy to read (move objects, collision detection, collision resolution)*/
     method void update() {
         var Hitbox ballh, playareah, paddleh;
         
         let playareah = playarea.getHitbox();
         
-        if (key = 81) {
+        if (key = 81) {         // q
             let exit = true;
         }
         
         // sim paddle movement, resolve collisions with play area, move paddle
-        if (key = 130) {
+        if (key = 130) {        // left arrow
             do paddle.moveLeftSim();
             let paddleh = paddle.getHitbox();
-            if ( ~( paddleh.getXLower() < playareah.getXLower() ) ) {
+            if ( ~( paddleh.getXmin() < playareah.getXmin() ) ) {
                 do paddle.moveLeft();
             }    
         }
             
-        if (key = 132) {
+        if (key = 132) {        // right arrow
             do paddle.moveRightSim();
             let paddleh = paddle.getHitbox();
-            if ( ~(paddleh.getXUpper() > playareah.getXUpper()) ) {
+            if ( ~(paddleh.getXmax() > playareah.getXmax()) ) {
                 do paddle.moveRight();
             }    
         }
@@ -104,16 +115,16 @@ class BreakawayGame {
         let ballh = ball.getHitbox();
         let paddleh = paddle.getHitbox();
 
-        if ( ( ballh.getXLower() < playareah.getXLower() ) | ( ballh.getXUpper() > playareah.getXUpper() ) ) {
+        if ( ( ballh.getXmin() < playareah.getXmin() ) | ( ballh.getXmax() > playareah.getXmax() ) ) {
             do ball.flipDeltaX();
         }
 
-        if ( ( ballh.getYLower() < playareah.getYLower() ) | ( ballh.getYUpper() > playareah.getYUpper() ) ) {
+        if ( ( ballh.getYmin() < playareah.getYmin() ) | ( ballh.getYmax() > playareah.getYmax() ) ) {
             do ball.flipDeltaY();
         }
         
-        if ( ( ballh.getYUpper() > paddleh.getYLower() ) & ( ballh.getYLower() < paddleh.getYUpper() ) &
-             ( ballh.getXUpper() > paddleh.getXLower() ) & ( ballh.getXLower() < paddleh.getXUpper() ) ){
+        if ( ( ballh.getYmax() > paddleh.getYmin() ) & ( ballh.getYmin() < paddleh.getYmax() ) &
+             ( ballh.getXmax() > paddleh.getXmin() ) & ( ballh.getXmin() < paddleh.getXmax() ) ){
             do ball.flipDeltaY();
         }
                 
@@ -123,42 +134,20 @@ class BreakawayGame {
         do playareah.dispose();
         do paddleh.dispose();
         
+        do wall.moveRight();
+               
         return;
     }
 
         /** Render graphics on screen. */
     method void render() {
         do playarea.clear();
+        
+        do wall.draw();
         do paddle.draw();
         do ball.draw();
+        
         return;
     }
-    
-    /**method boolean collisionDetector( Hitbox A, Hitbox B ) {
-        var Hitbox a, b;
-        var int axu, axl, ayu, ayl;
-        var int bxu, bxl, byu, byl;
-        let a = A;
-        let b = B;
-        
-        let axu = a.getXUpper();
-        let axl = a.getXLower();
-        let ayu = a.getYUpper();
-        let ayl = a.getYLower();
-        
-        let bxu = b.getXUpper();
-        let bxl = b.getXLower();
-        let byu = b.getYUpper();
-        let byl = b.getYLower();
-        
-        
-    
-    }*/
-    
-    /**method void collisionResolver(    ) {
-        var Hitbox hitbox;
-        
-        hitbox = ball.getHitbox();
-    }*/
-        
+            
 }

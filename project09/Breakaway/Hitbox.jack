@@ -2,21 +2,23 @@
 // File name: src/project09/Breakaway/Hitbox.jack
 
 /**
- * Implements a graphic square. A graphic square has a screen location
- * and a size. It also has methods for drawing, erasing, moving on the 
- * screen, and changing its size.
+ * Implements a hitbox, which is in this case defined as an 
+ * axis-aligned minimum bounding rectangle. An object's hitbox
+ * consists of the values of min(x), max(x), min(y), max(y),
+ * or the rows and columns at the edges of an object's graphic.
+ * It also has methods for setting and getting the bounds of the hitbox.
  */
 class Hitbox {
 
     // Store the values of the first out of bounds pixel values
-    field int x_upper, x_lower, y_upper, y_lower;
+    field int x_min, x_max, y_min, y_max;
     
     /** Constructs a new square with a given location and size. */
-    constructor Hitbox new(int Axu, int Axl, int Ayu, int Ayl) {
-        let x_upper = Axu;
-        let x_lower = Axl;
-        let y_upper = Ayu;
-        let y_lower = Ayl;
+    constructor Hitbox new(int Ax_min, int Ax_max, int Ay_min, int Ay_max) {
+        let x_min = Ax_min;
+        let x_max = Ax_max;
+        let y_min = Ay_min;
+        let y_max = Ay_max;
 
         return this;
     }
@@ -28,28 +30,32 @@ class Hitbox {
     }
     
     /** Updates the object. */
-    method void update(int Axu, int Axl, int Ayu, int Ayl) {
-        let x_upper = Axu;
-        let x_lower = Axl;
-        let y_upper = Ayu;
-        let y_lower = Ayl;
+    method void update(int Ax_min, int Ax_max, int Ay_min, int Ay_max) {
+        let x_min = Ax_min;
+        let x_max = Ax_max;
+        let y_min = Ay_min;
+        let y_max = Ay_max;
         return;
     }
-        
-    method int getXUpper() {
-        return x_upper;
+    
+    /** Returns min(x) */   
+    method int getXmin() {
+        return x_min;
     }    
 
-    method int getXLower() {
-        return x_lower;
+    /** Returns max(x) */   
+    method int getXmax() {
+        return x_max;
     }
     
-    method int getYUpper() {
-        return y_upper;
+    /** Returns min(y) */   
+    method int getYmin() {
+        return y_min;
     }
     
-    method int getYLower() {
-        return y_lower;
+    /** Returns max(y) */   
+    method int getYmax() {
+        return y_max;
     }
     
 }

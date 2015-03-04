@@ -1,0 +1,117 @@
+// Brian Grady
+// File name: src/project09/Breakaway/Wall.jack
+
+/**
+ * Implements a graphic wall made of bricks. A graphic square has a screen location
+ * and a size. It also has methods for drawing, erasing, moving on the 
+ * screen, and changing its size.
+ */
+class Wall {
+
+    // Number of bricks created
+    field int count;
+    
+    // Array to hold bricks
+    field Array bricks;
+    
+    // Temp Brick container for
+    field Brick t;
+    
+    // Location on the screen
+    field int x, y;
+
+    // The size of the brick
+    field int width, height;
+    
+    // Hitbox
+    field Hitbox hitbox;
+
+    /** Constructs a new wall with a given location and size. */
+    constructor Wall new() {
+    
+        let count = 0;
+        let bricks = Array.new(6); //keep track of up to 6 bricks
+
+        return this;
+    }
+
+    /** Deallocates the object's memory. */
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    /** Create new brick at centered at (x,y) of size (width, height) **/
+    method void newBrick(int Ax, int Ay, int Awidth, int Aheight) {
+        
+        //let bricks[count] = Brick.new(count, Ax, Ay, Awidth, Aheight);
+        let t = Brick.new(count, Ax, Ay, Awidth, Aheight);
+        let bricks[count] = t;
+        
+        let count = count + 1;
+        
+        return;
+    }
+        
+    
+    /** Draws the wall on the screen. */
+    method void draw() {
+    
+        
+        
+        var int i;
+        var Brick temp; // may not be necessary
+        
+        do Screen.setColor(true);
+        
+        let i = 0;
+        while (i < count) {
+            let temp = bricks[i];
+            do temp.draw();
+            let i = i + 1;
+        }
+        
+        return;
+    }
+
+    /** Erases the square from the screen. */
+    method void erase() {
+        
+        
+        
+        var int i;
+        var Brick temp; // may not be necessary
+        
+        do Screen.setColor(false);
+        
+        let i = 0;
+        while (i < count) {
+            let temp = bricks[i];
+            do temp.erase();
+            let i = i + 1;
+        }    
+        return;
+    }
+    
+    /** Moves a bricks right by 4 pixels. */
+    method void moveRight() {
+        var int i;
+        var Brick temp; // may not be necessary
+        
+        let i = 0;
+        while (i < count) {
+            let temp = bricks[i];
+            do temp.moveRight();
+            let i = i + 1;
+        }
+        
+        return;
+    }
+
+        
+    /** Returns a hitbox of the paddle */
+    method Hitbox getHitbox() {
+        return hitbox;
+    }
+    
+}

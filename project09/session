@@ -1,0 +1,15 @@
+<NotepadPlus>
+    <Session activeView="0">
+        <mainView activeIndex="1">
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="648" startPos="0" endPos="0" selMode="0" lang="Jack" encoding="-1" filename="C:\Users\Brian\Documents\nand2tetris\src\project09\Breakaway\Ball.jack" backupFilePath="" originalFileLastModifTimestamp="1425093870" />
+            <File firstVisibleLine="37" xOffset="0" scrollWidth="880" startPos="1170" endPos="1170" selMode="0" lang="Jack" encoding="-1" filename="C:\Users\Brian\Documents\nand2tetris\src\project09\Breakaway\BreakawayGame.jack" backupFilePath="" originalFileLastModifTimestamp="1425406281" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="1" startPos="0" endPos="0" selMode="0" lang="Jack" encoding="-1" filename="C:\Users\Brian\Documents\nand2tetris\src\project09\Breakaway\Hitbox.jack" backupFilePath="" originalFileLastModifTimestamp="1424985650" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="520" startPos="0" endPos="0" selMode="0" lang="Jack" encoding="-1" filename="C:\Users\Brian\Documents\nand2tetris\src\project09\Breakaway\Main.jack" backupFilePath="" originalFileLastModifTimestamp="1424966517" />
+            <File firstVisibleLine="47" xOffset="0" scrollWidth="824" startPos="2196" endPos="2196" selMode="0" lang="Jack" encoding="-1" filename="C:\Users\Brian\Documents\nand2tetris\src\project09\Breakaway\Paddle.jack" backupFilePath="" originalFileLastModifTimestamp="1425093770" />
+            <File firstVisibleLine="0" xOffset="0" scrollWidth="576" startPos="0" endPos="0" selMode="0" lang="Jack" encoding="-1" filename="C:\Users\Brian\Documents\nand2tetris\src\project09\Breakaway\PlayArea.jack" backupFilePath="" originalFileLastModifTimestamp="1425093640" />
+            <File firstVisibleLine="47" xOffset="0" scrollWidth="824" startPos="2531" endPos="2531" selMode="0" lang="Jack" encoding="-1" filename="C:\Users\Brian\Documents\nand2tetris\src\project09\Breakaway\Brick.jack" backupFilePath="" originalFileLastModifTimestamp="1425404215" />
+            <File firstVisibleLine="49" xOffset="0" scrollWidth="752" startPos="2094" endPos="2094" selMode="0" lang="Jack" encoding="-1" filename="C:\Users\Brian\Documents\nand2tetris\src\project09\Breakaway\Wall.jack" backupFilePath="" originalFileLastModifTimestamp="1425404941" />
+        </mainView>
+        <subView activeIndex="0" />
+    </Session>
+</NotepadPlus>

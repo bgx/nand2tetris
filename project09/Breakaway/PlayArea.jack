@@ -2,8 +2,9 @@
 // File name: src/project09/Breakaway/PlayArea.jack
 
 /**
- * Implements a graphic square. A graphic square has a screen location
- * and a size. It also has methods for drawing, erasing, moving on the 
+ * Implements a play area. A play area has a width and height.
+ * It is 2 pixels thick, centered around the (x:255,256; y: 127,128) block.
+ * It also has methods for drawing, erasing, moving on the 
  * screen, and changing its size.
  */
 class PlayArea {
@@ -12,9 +13,9 @@ class PlayArea {
     field int width, height;
     
     // Store the values of the first out of bounds pixel values
-    field int x_upper, x_lower, y_upper, y_lower;
+    field int x_min, x_max, y_min, y_max;
     
-    // Hitbox of playingn field
+    // Hitbox of playing field
     field Hitbox hitbox;
 
     /** Constructs a new screen-centered play area with a given size. */
@@ -22,12 +23,12 @@ class PlayArea {
         let width = Awidth;
         let height = Aheight;
         
-        let x_lower = 255 - (width/2);
-        let x_upper = 256 + (width/2);
-        let y_lower = 127 - (height/2);
-        let y_upper = 128 + (height/2);
+        let x_min = 255 - (width/2);
+        let x_max = 256 + (width/2);
+        let y_min = 127 - (height/2);
+        let y_max = 128 + (height/2);
         
-        let hitbox = Hitbox.new(x_upper, x_lower, y_upper, y_lower);
+        let hitbox = Hitbox.new(x_min, x_max, y_min, y_max);
         
         do draw();
 
@@ -40,23 +41,24 @@ class PlayArea {
         return;
     }
     
-    /** Returns a hitbox of the play area */
+    /** Returns the hitbox of the play area */
     method Hitbox getHitbox() {
         return hitbox;
     }    
 
-    /** Draws the play area on the screen. */
+    /** Draws the 2 pixel wide border of the play area on the screen. */
     method void draw() {
         do Screen.setColor(true);
-        do Screen.drawRectangle(x_lower - 1, y_lower - 1, x_upper + 1, y_upper + 1);
+        do Screen.drawRectangle(x_min - 1, y_min - 1, x_max + 1, y_max + 1);
         do Screen.setColor(false);
-        do Screen.drawRectangle(x_lower + 1, y_lower + 1, x_upper - 1, y_upper - 1);
+        do Screen.drawRectangle(x_min + 1, y_min + 1, x_max - 1, y_max - 1);
         return;
     }   
 
+    /** Clears the screen inside the play area borders. */
     method void clear() {
         do Screen.setColor(false);
-        do Screen.drawRectangle(x_lower + 1, y_lower + 1, x_upper - 1, y_upper - 1);
+        do Screen.drawRectangle(x_min + 1, y_min + 1, x_max - 1, y_max - 1);
         return;
     }
 }

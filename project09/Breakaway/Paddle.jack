@@ -2,22 +2,22 @@
 // File name: src/project09/Breakaway/Paddle.jack
 
 /**
- * Implements a graphic paddle. A graphic square has a screen location
- * and a size. It also has methods for drawing, erasing, moving on the 
- * screen, and changing its size.
+ * Implements a paddle. A paddle has a screen location,
+ * width, and height. It also has methods for drawing, erasing, and moving on the 
+ * screen.
  */
 class Paddle {
 
     // Location on the screen
     field int x, y, x_sim, y_sim;
 
-    // The size of the square
+    // The width and height of the paddle
     field int width, height;
     
     // Hitbox
     field Hitbox hitbox;
 
-    /** Constructs a new square with a given location and size. */
+    /** Constructs a new paddle with a given location, width, and height. */
     constructor Paddle new(int Ax, int Ay, int Awidth, int Aheight) {
         let x = Ax;
         let y = Ay;
@@ -28,7 +28,7 @@ class Paddle {
 
         do draw();
         
-        let hitbox = Hitbox.new(x + (width/2),x - (width/2), y + (height/2), y - (height/2));
+        let hitbox = Hitbox.new(x - (width/2), x + (width/2), y - (height/2), y + (height/2));
 
         return this;
     }
@@ -39,29 +39,31 @@ class Paddle {
         return;
     }
 
-    /** Draws the square on the screen. */
+    /** Draws the paddle on the screen. */
     method void draw() {
         do Screen.setColor(true);
         do Screen.drawRectangle(x - (width/2), y - (height/2), x + (width/2), y + (height/2));
         return;
     }
 
-    /** Erases the square from the screen. */
+    /** Erases the paddle from the screen. */
     method void erase() {
         do Screen.setColor(false);
         do Screen.drawRectangle(x - (width/2), y - (height/2), x + (width/2), y + (height/2));
         return;
     }
     
+    /** Simulates moving the paddle left. */
     method void moveLeftSim() {
         let x_sim = x - 4;
-        do hitbox.update(x_sim + (width/2), x_sim - (width/2), y_sim + (height/2), y_sim - (height/2));
+        do hitbox.update(x_sim - (width/2), x_sim + (width/2), y_sim - (height/2), y_sim + (height/2));
         return;
     }
     
+    /** Simulates moving the paddle right. */
     method void moveRightSim() {
         let x_sim = x + 4;
-        do hitbox.update(x_sim + (width/2), x_sim - (width/2), y_sim + (height/2), y_sim - (height/2));
+        do hitbox.update(x_sim - (width/2), x_sim + (width/2), y_sim - (height/2), y_sim + (height/2));
         return;
     }
     
@@ -73,7 +75,7 @@ class Paddle {
     /** Moves left by 4 pixels. */
     method void moveLeft() {
         let x = x - 4;
-        do hitbox.update(x + (width/2), x - (width/2), y + (height/2), y - (height/2));
+        do hitbox.update(x - (width/2), x + (width/2), y - (height/2), y + (height/2));
 
         return;
     }
@@ -81,7 +83,7 @@ class Paddle {
     /** Moves right by 4 pixels. */
     method void moveRight() {
         let x = x + 4;
-        do hitbox.update(x + (width/2), x - (width/2), y + (height/2), y - (height/2));
+        do hitbox.update(x - (width/2), x + (width/2), y - (height/2), y + (height/2));
         return;
     }
 }

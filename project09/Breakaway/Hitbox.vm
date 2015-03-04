@@ -33,22 +33,22 @@ push argument 4
 pop this 3
 push constant 0
 return
-function Hitbox.getXUpper 0
+function Hitbox.getXmin 0
 push argument 0
 pop pointer 0
 push this 0
 return
-function Hitbox.getXLower 0
+function Hitbox.getXmax 0
 push argument 0
 pop pointer 0
 push this 1
 return
-function Hitbox.getYUpper 0
+function Hitbox.getYmin 0
 push argument 0
 pop pointer 0
 push this 2
 return
-function Hitbox.getYLower 0
+function Hitbox.getYmax 0
 push argument 0
 pop pointer 0
 push this 3

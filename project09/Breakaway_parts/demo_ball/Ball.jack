@@ -28,6 +28,19 @@ class Ball {
 
         return this;
     }
+    
+    /** Seeing what happens if there are two different constructors */
+    constructor Ball new() {
+        let x = 200;
+        let y = 150;
+        let size = 2;
+        let delta_x = 3;
+        let delta_y = 6;
+
+        do draw();
+
+        return this;
+    }
 
     /** Deallocates the object's memory. */
     method void dispose() {

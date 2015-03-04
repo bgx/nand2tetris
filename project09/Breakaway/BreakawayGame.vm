@@ -1,5 +1,5 @@
 function BreakawayGame.new 0
-push constant 5
+push constant 6
 call Memory.alloc 1
 pop pointer 0
 push constant 216
@@ -9,16 +9,46 @@ pop this 0
 push constant 250
 push constant 100
 push constant 2
-push constant 2
+push constant 3
 push constant 6
 call Ball.new 5
 pop this 1
 push constant 255
-push constant 127
+push constant 220
 push constant 25
 push constant 7
 call Paddle.new 4
 pop this 2
+call Wall.new 0
+pop this 3
+push this 3
+push constant 255
+push constant 50
+push constant 20
+push constant 10
+call Wall.newBrick 5
+pop temp 0
+push this 3
+push constant 185
+push constant 50
+push constant 20
+push constant 10
+call Wall.newBrick 5
+pop temp 0
+push this 3
+push constant 205
+push constant 80
+push constant 20
+push constant 10
+call Wall.newBrick 5
+pop temp 0
+push this 3
+push constant 295
+push constant 90
+push constant 20
+push constant 10
+call Wall.newBrick 5
+pop temp 0
 push pointer 0
 return
 function BreakawayGame.dispose 0
@@ -33,6 +63,9 @@ pop temp 0
 push this 2
 call Paddle.dispose 1
 pop temp 0
+push this 3
+call Wall.dispose 1
+pop temp 0
 push pointer 0
 call Memory.deAlloc 1
 pop temp 0
@@ -42,9 +75,9 @@ function BreakawayGame.run 0
 push argument 0
 pop pointer 0
 push constant 0
-pop this 4
+pop this 5
 label WHILE_EXP0
-push this 4
+push this 5
 not
 not
 if-goto WHILE_END0
@@ -68,7 +101,7 @@ function BreakawayGame.processInput 0
 push argument 0
 pop pointer 0
 call Keyboard.keyPressed 0
-pop this 3
+pop this 4
 push constant 0
 return
 function BreakawayGame.update 3
@@ -77,7 +110,7 @@ pop pointer 0
 push this 0
 call PlayArea.getHitbox 1
 pop local 1
-push this 3
+push this 4
 push constant 81
 eq
 if-goto IF_TRUE0
@@ -85,9 +118,9 @@ goto IF_FALSE0
 label IF_TRUE0
 push constant 0
 not
-pop this 4
+pop this 5
 label IF_FALSE0
-push this 3
+push this 4
 push constant 130
 eq
 if-goto IF_TRUE1
@@ -100,9 +133,9 @@ push this 2
 call Paddle.getHitbox 1
 pop local 2
 push local 2
-call Hitbox.getXLower 1
+call Hitbox.getXmin 1
 push local 1
-call Hitbox.getXLower 1
+call Hitbox.getXmin 1
 lt
 not
 if-goto IF_TRUE2
@@ -113,7 +146,7 @@ call Paddle.moveLeft 1
 pop temp 0
 label IF_FALSE2
 label IF_FALSE1
-push this 3
+push this 4
 push constant 132
 eq
 if-goto IF_TRUE3
@@ -126,9 +159,9 @@ push this 2
 call Paddle.getHitbox 1
 pop local 2
 push local 2
-call Hitbox.getXUpper 1
+call Hitbox.getXmax 1
 push local 1
-call Hitbox.getXUpper 1
+call Hitbox.getXmax 1
 gt
 not
 if-goto IF_TRUE4
@@ -149,14 +182,14 @@ push this 2
 call Paddle.getHitbox 1
 pop local 2
 push local 0
-call Hitbox.getXLower 1
+call Hitbox.getXmin 1
 push local 1
-call Hitbox.getXLower 1
+call Hitbox.getXmin 1
 lt
 push local 0
-call Hitbox.getXUpper 1
+call Hitbox.getXmax 1
 push local 1
-call Hitbox.getXUpper 1
+call Hitbox.getXmax 1
 gt
 or
 if-goto IF_TRUE5
@@ -167,14 +200,14 @@ call Ball.flipDeltaX 1
 pop temp 0
 label IF_FALSE5
 push local 0
-call Hitbox.getYLower 1
+call Hitbox.getYmin 1
 push local 1
-call Hitbox.getYLower 1
+call Hitbox.getYmin 1
 lt
 push local 0
-call Hitbox.getYUpper 1
+call Hitbox.getYmax 1
 push local 1
-call Hitbox.getYUpper 1
+call Hitbox.getYmax 1
 gt
 or
 if-goto IF_TRUE6
@@ -185,26 +218,26 @@ call Ball.flipDeltaY 1
 pop temp 0
 label IF_FALSE6
 push local 0
-call Hitbox.getYUpper 1
+call Hitbox.getYmax 1
 push local 2
-call Hitbox.getYLower 1
+call Hitbox.getYmin 1
 gt
 push local 0
-call Hitbox.getYLower 1
+call Hitbox.getYmin 1
 push local 2
-call Hitbox.getYUpper 1
+call Hitbox.getYmax 1
 lt
 and
 push local 0
-call Hitbox.getXUpper 1
+call Hitbox.getXmax 1
 push local 2
-call Hitbox.getXLower 1
+call Hitbox.getXmin 1
 gt
 and
 push local 0
-call Hitbox.getXLower 1
+call Hitbox.getXmin 1
 push local 2
-call Hitbox.getXUpper 1
+call Hitbox.getXmax 1
 lt
 and
 if-goto IF_TRUE7
@@ -226,6 +259,9 @@ pop temp 0
 push local 2
 call Hitbox.dispose 1
 pop temp 0
+push this 3
+call Wall.moveRight 1
+pop temp 0
 push constant 0
 return
 function BreakawayGame.render 0
@@ -233,6 +269,9 @@ push argument 0
 pop pointer 0
 push this 0
 call PlayArea.clear 1
+pop temp 0
+push this 3
+call Wall.draw 1
 pop temp 0
 push this 2
 call Paddle.draw 1
