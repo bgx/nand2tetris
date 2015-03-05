@@ -14,53 +14,61 @@ class Wall {
     // Array to hold bricks
     field Array bricks;
     
-    // Temp Brick container for
-    field Brick t;
+    // Temporary Brick for assignments
+    field Brick temp;
     
-    // Location on the screen
-    field int x, y;
-
-    // The size of the brick
-    field int width, height;
-    
-    // Hitbox
-    field Hitbox hitbox;
-
-    /** Constructs a new wall with a given location and size. */
     constructor Wall new() {
-    
         let count = 0;
-        let bricks = Array.new(6); //keep track of up to 6 bricks
-
+        let bricks = Array.new(20); //keep track of up to 20 bricks
         return this;
     }
 
-    /** Deallocates the object's memory. */
     method void dispose() {
         do Memory.deAlloc(this);
         return;
     }
-
-    /** Create new brick at centered at (x,y) of size (width, height) **/
+    
+    // Code explanation:...
+    // var Brick temp;
+    // let temp = bricks[i];
+    // ...Only the reference is copied - no new object is constructed
+    // (temp and bricks[i] are references to the same object)
+    
     method void newBrick(int Ax, int Ay, int Awidth, int Aheight) {
-        
-        //let bricks[count] = Brick.new(count, Ax, Ay, Awidth, Aheight);
-        let t = Brick.new(count, Ax, Ay, Awidth, Aheight);
-        let bricks[count] = t;
-        
+        let bricks[count] = Brick.new(Ax, Ay, Awidth, Aheight);
         let count = count + 1;
-        
         return;
     }
         
+    method void destroyBrick(int brickID) {
+        var int i;
+        let i = brickID;
+        while ( i < (count-1) ) {
+            let bricks[i] = bricks[i+1];
+            let i = i + 1;
+        }    
+        let count = count - 1;
+        return;
+    }
+    
+    method void newBrickGroup(int Ax, int Ay, int Awidth, int Aheight, int Adelta_x, int Adelta_y, int Arows, int Acolumns) {
+        var int i, j;
+        
+        let i = 0;
+        while(i < Arows) {
+            let j = 0;
+            while (j < Acolumns) {
+                do newBrick(Ax + (j*Adelta_x), Ay + (i*Adelta_y), Awidth, Aheight);
+                let j = j + 1;
+            }
+            let i = i + 1;
+        }    
+        return;
+    }
     
     /** Draws the wall on the screen. */
     method void draw() {
-    
-        
-        
         var int i;
-        var Brick temp; // may not be necessary
         
         do Screen.setColor(true);
         
@@ -70,17 +78,12 @@ class Wall {
             do temp.draw();
             let i = i + 1;
         }
-        
         return;
     }
 
-    /** Erases the square from the screen. */
+    /** Erases the wall from the screen. */
     method void erase() {
-        
-        
-        
         var int i;
-        var Brick temp; // may not be necessary
         
         do Screen.setColor(false);
         
@@ -93,10 +96,9 @@ class Wall {
         return;
     }
     
-    /** Moves a bricks right by 4 pixels. */
+    /** Moves all bricks right by 4 pixels. */
     method void moveRight() {
         var int i;
-        var Brick temp; // may not be necessary
         
         let i = 0;
         while (i < count) {
@@ -107,11 +109,42 @@ class Wall {
         
         return;
     }
-
+    
+    /** Moves all bricks left by 4 pixels. */
+    method void moveLeft() {
+        var int i;
         
-    /** Returns a hitbox of the paddle */
-    method Hitbox getHitbox() {
-        return hitbox;
+        let i = 0;
+        while (i < count) {
+            let temp = bricks[i];
+            do temp.moveLeft();
+            let i = i + 1;
+        }
+        
+        return;
     }
+
+    /** Returns the Brick object of bricks[] indexed by brickID */    
+    method Brick getBrick(int brickID) {
+        return bricks[brickID];
+    }
+    
+    method int getCount() {
+        return count;
+    }
+    
+    method Hitbox getHitbox(int brickID) {
+        let temp = bricks[brickID];
+        return temp.getHitbox();
+    }    
+    
+    /** Returns true if no bricks are left in the wall*/
+    method boolean isDestroyed() {
+        var boolean destroyed;
+        if (count = 0) {
+            let destroyed = true;
+        }            
+        return destroyed;
+    }    
     
 }

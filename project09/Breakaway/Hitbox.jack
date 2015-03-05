@@ -13,23 +13,19 @@ class Hitbox {
     // Store the values of the first out of bounds pixel values
     field int x_min, x_max, y_min, y_max;
     
-    /** Constructs a new square with a given location and size. */
     constructor Hitbox new(int Ax_min, int Ax_max, int Ay_min, int Ay_max) {
         let x_min = Ax_min;
         let x_max = Ax_max;
         let y_min = Ay_min;
         let y_max = Ay_max;
-
         return this;
     }
 
-    /** Deallocates the object's memory. */
     method void dispose() {
         do Memory.deAlloc(this);
         return;
     }
     
-    /** Updates the object. */
     method void update(int Ax_min, int Ax_max, int Ay_min, int Ay_max) {
         let x_min = Ax_min;
         let x_max = Ax_max;
@@ -38,24 +34,16 @@ class Hitbox {
         return;
     }
     
-    /** Returns min(x) */   
     method int getXmin() {
         return x_min;
     }    
-
-    /** Returns max(x) */   
     method int getXmax() {
         return x_max;
     }
-    
-    /** Returns min(y) */   
     method int getYmin() {
         return y_min;
     }
-    
-    /** Returns max(y) */   
     method int getYmax() {
         return y_max;
     }
-    
 }

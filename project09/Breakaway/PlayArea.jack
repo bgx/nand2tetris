@@ -3,22 +3,18 @@
 
 /**
  * Implements a play area. A play area has a width and height.
- * It is 2 pixels thick, centered around the (x:255,256; y: 127,128) block.
- * It also has methods for drawing, erasing, moving on the 
- * screen, and changing its size.
+ * It is a 2 pixel thick rectangle, centered around the (x:255,256; y: 127,128) block.
+ * It also has methods for drawing and erasing.
  */
 class PlayArea {
 
-    // Location on the screen
     field int width, height;
     
     // Store the values of the first out of bounds pixel values
     field int x_min, x_max, y_min, y_max;
     
-    // Hitbox of playing field
     field Hitbox hitbox;
 
-    /** Constructs a new screen-centered play area with a given size. */
     constructor PlayArea new(int Awidth, int Aheight) {
         let width = Awidth;
         let height = Aheight;
@@ -27,27 +23,23 @@ class PlayArea {
         let x_max = 256 + (width/2);
         let y_min = 127 - (height/2);
         let y_max = 128 + (height/2);
-        
         let hitbox = Hitbox.new(x_min, x_max, y_min, y_max);
         
-        do draw();
+        do drawBorder();
 
         return this;
     }
 
-    /** Deallocates the object's memory. */
     method void dispose() {
         do Memory.deAlloc(this);
         return;
     }
     
-    /** Returns the hitbox of the play area */
     method Hitbox getHitbox() {
         return hitbox;
     }    
 
-    /** Draws the 2 pixel wide border of the play area on the screen. */
-    method void draw() {
+    method void drawBorder() {
         do Screen.setColor(true);
         do Screen.drawRectangle(x_min - 1, y_min - 1, x_max + 1, y_max + 1);
         do Screen.setColor(false);

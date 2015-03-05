@@ -37,7 +37,7 @@ push this 5
 call Hitbox.new 4
 pop this 6
 push pointer 0
-call PlayArea.draw 1
+call PlayArea.drawBorder 1
 pop temp 0
 push pointer 0
 return
@@ -54,7 +54,7 @@ push argument 0
 pop pointer 0
 push this 6
 return
-function PlayArea.draw 0
+function PlayArea.drawBorder 0
 push argument 0
 pop pointer 0
 push constant 0
