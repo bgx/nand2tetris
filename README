@@ -34,4 +34,14 @@ project08 - Virtual Machine II
     
 project09 - High-Level Language
     Program in Jack, a simple object-based language, to 
-    prepare for writing a Jack compiler and the Jack operating system 
+    prepare for writing a Jack compiler and the Jack operating system
+    
+project10 - Compiler I
+    Write the first part of a Jack compiler, a syntax analyzer
+    (tokenizing and parsing)
+    
+project11 - Compiler II
+    (Code Generation)
+
+project12 - Operating System
+    ()
