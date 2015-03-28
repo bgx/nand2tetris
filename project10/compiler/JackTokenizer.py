@@ -3,20 +3,20 @@
 import os
 
 def jack_tokenizer(jack_filename):
-    with open(jack_filename, 'r') as jack:
-        jack_lines = jack.readlines()
             
     xmlT = (get_xml_filename(jack_filename)).split('.')[0] + 'T.xml'        
     with open(xmlT, 'w') as tokens:
     
-        for line in jack_lines:
-            line = clean_line(line, ['//'])
-            xml = line
-            if not line:
-                oline = ''
-            else:
-                oline = xml + '\n'
-            tokens.write(oline)
+        with open(jack_filename, 'r') as jack:
+    
+            for line in jack:
+                line = clean_line(line, ['//'])
+                xml = line
+                if not line:
+                    oline = ''
+                else:
+                    oline = xml + '\n'
+                tokens.write(oline)
     
     return xmlT
             
