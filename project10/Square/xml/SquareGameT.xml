@@ -1,81 +1,315 @@
-/**
-* Implements the Square Dance game.
-* In this game you can move a black square around the screen and
-* change its size during the movement.
-* In the beginning, the square is located at the top-left corner
-* of the screen. The arrow keys are used to move the square.
-* The 'z' & 'x' keys are used to decrement and increment the size.
-* The 'q' key is used to quit the game.
-*/
-class SquareGame {
-field Square square;
-field int direction;
-/** Constructs a new Square Game. */
-constructor SquareGame new() {
-let square = Square.new(0, 0, 30);
-let direction = 0;
-return this;
-}
-/** Deallocates the object's memory. */
-method void dispose() {
-do square.dispose();
-do Memory.deAlloc(this);
-return;
-}
-/** Starts the game. Handles inputs from the user that control
-*  the square's movement, direction and size. */
-method void run() {
-var char key;
-var boolean exit;
-let exit = false;
-while (~exit) {
-while (key = 0) {
-let key = Keyboard.keyPressed();
-do moveSquare();
-}
-if (key = 81) {
-let exit = true;
-}
-if (key = 90) {
-do square.decSize();
-}
-if (key = 88) {
-do square.incSize();
-}
-if (key = 131) {
-let direction = 1;
-}
-if (key = 133) {
-let direction = 2;
-}
-if (key = 130) {
-let direction = 3;
-}
-if (key = 132) {
-let direction = 4;
-}
-while (~(key = 0)) {
-let key = Keyboard.keyPressed();
-do moveSquare();
-}
-}
-return;
-}
-/** Moves the square by 2 pixels in the current direction. */
-method void moveSquare() {
-if (direction = 1) {
-do square.moveUp();
-}
-if (direction = 2) {
-do square.moveDown();
-}
-if (direction = 3) {
-do square.moveLeft();
-}
-if (direction = 4) {
-do square.moveRight();
-}
-do Sys.wait(5);
-return;
-}
-}
+<tokens>
+	<KEYWORD> class </KEYWORD>
+	<IDENTIFIER> SquareGame </IDENTIFIER>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> field </KEYWORD>
+	<IDENTIFIER> Square </IDENTIFIER>
+	<IDENTIFIER> square </IDENTIFIER>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> field </KEYWORD>
+	<KEYWORD> int </KEYWORD>
+	<IDENTIFIER> direction </IDENTIFIER>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> constructor </KEYWORD>
+	<IDENTIFIER> SquareGame </IDENTIFIER>
+	<IDENTIFIER> new </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> let </KEYWORD>
+	<IDENTIFIER> square </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<IDENTIFIER> Square </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> new </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<INT_CONST> 0 </INT_CONST>
+	<SYMBOL> , </SYMBOL>
+	<INT_CONST> 0 </INT_CONST>
+	<SYMBOL> , </SYMBOL>
+	<INT_CONST> 30 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> let </KEYWORD>
+	<IDENTIFIER> direction </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 0 </INT_CONST>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> return </KEYWORD>
+	<KEYWORD> this </KEYWORD>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> method </KEYWORD>
+	<KEYWORD> void </KEYWORD>
+	<IDENTIFIER> dispose </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> do </KEYWORD>
+	<IDENTIFIER> square </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> dispose </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> do </KEYWORD>
+	<IDENTIFIER> Memory </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> deAlloc </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<KEYWORD> this </KEYWORD>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> return </KEYWORD>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> method </KEYWORD>
+	<KEYWORD> void </KEYWORD>
+	<IDENTIFIER> run </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> var </KEYWORD>
+	<KEYWORD> char </KEYWORD>
+	<IDENTIFIER> key </IDENTIFIER>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> var </KEYWORD>
+	<KEYWORD> boolean </KEYWORD>
+	<IDENTIFIER> exit </IDENTIFIER>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> let </KEYWORD>
+	<IDENTIFIER> exit </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<KEYWORD> false </KEYWORD>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> while </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ~ </SYMBOL>
+	<IDENTIFIER> exit </IDENTIFIER>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> while </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<IDENTIFIER> key </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 0 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> let </KEYWORD>
+	<IDENTIFIER> key </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<IDENTIFIER> Keyboard </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> keyPressed </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> do </KEYWORD>
+	<IDENTIFIER> moveSquare </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> if </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<IDENTIFIER> key </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 81 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> let </KEYWORD>
+	<IDENTIFIER> exit </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<KEYWORD> true </KEYWORD>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> if </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<IDENTIFIER> key </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 90 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> do </KEYWORD>
+	<IDENTIFIER> square </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> decSize </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> if </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<IDENTIFIER> key </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 88 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> do </KEYWORD>
+	<IDENTIFIER> square </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> incSize </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> if </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<IDENTIFIER> key </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 131 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> let </KEYWORD>
+	<IDENTIFIER> direction </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 1 </INT_CONST>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> if </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<IDENTIFIER> key </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 133 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> let </KEYWORD>
+	<IDENTIFIER> direction </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 2 </INT_CONST>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> if </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<IDENTIFIER> key </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 130 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> let </KEYWORD>
+	<IDENTIFIER> direction </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 3 </INT_CONST>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> if </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<IDENTIFIER> key </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 132 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> let </KEYWORD>
+	<IDENTIFIER> direction </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 4 </INT_CONST>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> while </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ~ </SYMBOL>
+	<SYMBOL> ( </SYMBOL>
+	<IDENTIFIER> key </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 0 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> let </KEYWORD>
+	<IDENTIFIER> key </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<IDENTIFIER> Keyboard </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> keyPressed </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> do </KEYWORD>
+	<IDENTIFIER> moveSquare </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> return </KEYWORD>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> method </KEYWORD>
+	<KEYWORD> void </KEYWORD>
+	<IDENTIFIER> moveSquare </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> if </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<IDENTIFIER> direction </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 1 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> do </KEYWORD>
+	<IDENTIFIER> square </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> moveUp </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> if </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<IDENTIFIER> direction </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 2 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> do </KEYWORD>
+	<IDENTIFIER> square </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> moveDown </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> if </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<IDENTIFIER> direction </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 3 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> do </KEYWORD>
+	<IDENTIFIER> square </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> moveLeft </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> if </KEYWORD>
+	<SYMBOL> ( </SYMBOL>
+	<IDENTIFIER> direction </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<INT_CONST> 4 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> do </KEYWORD>
+	<IDENTIFIER> square </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> moveRight </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<KEYWORD> do </KEYWORD>
+	<IDENTIFIER> Sys </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> wait </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<INT_CONST> 5 </INT_CONST>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> return </KEYWORD>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+</tokens>

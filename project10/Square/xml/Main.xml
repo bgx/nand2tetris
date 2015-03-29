@@ -1,13 +1,42 @@
-/**
-* The Main class initializes a new Square Dance game and starts it.
-*/
-class Main {
-/** Initializes a new game and starts it. */
-function void main() {
-var SquareGame game;
-let game = SquareGame.new();
-do game.run();
-do game.dispose();
-return;
-}
-}
+<tokens>
+	<KEYWORD> class </KEYWORD>
+	<IDENTIFIER> Main </IDENTIFIER>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> function </KEYWORD>
+	<KEYWORD> void </KEYWORD>
+	<IDENTIFIER> main </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> { </SYMBOL>
+	<KEYWORD> var </KEYWORD>
+	<IDENTIFIER> SquareGame </IDENTIFIER>
+	<IDENTIFIER> game </IDENTIFIER>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> let </KEYWORD>
+	<IDENTIFIER> game </IDENTIFIER>
+	<SYMBOL> = </SYMBOL>
+	<IDENTIFIER> SquareGame </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> new </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> do </KEYWORD>
+	<IDENTIFIER> game </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> run </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> do </KEYWORD>
+	<IDENTIFIER> game </IDENTIFIER>
+	<SYMBOL> . </SYMBOL>
+	<IDENTIFIER> dispose </IDENTIFIER>
+	<SYMBOL> ( </SYMBOL>
+	<SYMBOL> ) </SYMBOL>
+	<SYMBOL> ; </SYMBOL>
+	<KEYWORD> return </KEYWORD>
+	<SYMBOL> ; </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+	<SYMBOL> } </SYMBOL>
+</tokens>
