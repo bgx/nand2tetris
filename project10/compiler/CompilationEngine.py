@@ -1,14 +1,14 @@
 ''' CompilationEngine '''
 
-def compile(xmlT):
-        
-    with open(xmlT.split('T.')[0] + '.xml', 'w') as output:  
-
-        with open(xmlT, 'r') as tokens:
-    
-            for line in tokens:
-                oline = line
-                output.write(oline)
+def compile(tokens,output):
+    '''test output if tokens are being passed correctly'''    
+    for pair in tokens:
+        xml = pair[0] + ' ' + str(pair[1])
+        if not pair:
+            oline = ''
+        else:
+            oline = '\t' + xml + '\n'
+        output.write(oline)
         
 
 if __name__ == '__main__':

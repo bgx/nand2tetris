@@ -23,6 +23,8 @@ import argparse
 import JackTokenizer
 import CompilationEngine
 
+
+
 def main():
     '''Main entry point for the script.'''
     
@@ -39,8 +41,19 @@ def main():
     #### write to file for each .jack file
     for file in jack_filenames:
     
-        xmlT = JackTokenizer.jack_tokenizer(file)
-        CompilationEngine.compile(xmlT)
+        xml = get_xml_filename(file)
+        xmlT = xml.split('.')[0] + 'T.xml'
+        
+        with open(xml, 'w') as xml_output:
+            with open(xmlT, 'w') as xmlT_output:
+            
+                xmlT_output.write('<tokens>' + '\n')
+                with open(file, 'r') as jack:
+                    mlc_flag = False
+                    for line in jack:
+                        tokens,mlc_flag = JackTokenizer.jack_tokenizer(line,mlc_flag,xmlT_output)
+                        CompilationEngine.compile(tokens, xml_output)
+                xmlT_output.write('</tokens>')
         
        
 # functions to collect information from command line call of JackCompiler.py
@@ -87,6 +100,13 @@ def get_jack_filenames(path):
         else:
             jack_filenames.append(path)
     return jack_filenames
+    
+def get_xml_filename(jack_filename):
+    ''' returns xml filename for a given jack_filename '''
+    xml_filename = os.path.dirname(jack_filename) + '\\xml\\' + (os.path.split(jack_filename)[1]).split('.')[0] + '.xml'
+    if not os.path.exists(os.path.dirname(xml_filename)):
+        os.makedirs(os.path.dirname(xml_filename))
+    return xml_filename
    
 if __name__ == '__main__':
     sys.exit(main())
