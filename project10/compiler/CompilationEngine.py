@@ -13,36 +13,37 @@ def compile(tokens,output):
             oline = '\t' + xml + '\n'
         output.write(oline)
         
-def getToken(n):
-
+'''def getToken(n):
+    
 def compileClass(output):
-
+    
 def compileClassVarDec():
-
+    
 def compileSubroutine():
-
+    
 def compileParameterList():
-
+    
 def compileVarDec():
-
+    
 def compileStatements():
-
+    
 def compileDo():
-
+    
 def compileLet():
-
+    
 def compileWhile():
-
+    
 def compileReturn():
-
+    
 def compileIf():
-
+    
 def compileExpression():
-
+    
 def compileTerm():
-
+    
 def compileExpressionList():
-      
+    
+    '''
 
 if __name__ == '__main__':
     sys.exit(main())

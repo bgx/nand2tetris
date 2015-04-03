@@ -19,11 +19,9 @@ import sys
 import string
 import os
 import argparse
+import re
 
-import JackTokenizer
 import CompilationEngine
-
-
 
 def main():
     '''Main entry point for the script.'''
@@ -41,19 +39,20 @@ def main():
     #### write to file for each .jack file
     for file in jack_filenames:
     
+        jt = JackTokenizer(file)
         xml = get_xml_filename(file)
-        xmlT = xml.split('.')[0] + 'T.xml'
         
         with open(xml, 'w') as xml_output:
-            with open(xmlT, 'w') as xmlT_output:
+        
+            while(jt.advance()):
+                    xml_text = jt.tokenType() + ' ' + str(jt.tokenValue())
+                    if not xml_text:
+                        oline = ''
+                    else:
+                        oline = xml_text + '\n'
+                    xml_output.write(oline)
             
-                xmlT_output.write('<tokens>' + '\n')
-                with open(file, 'r') as jack:
-                    mlc_flag = False
-                    for line in jack:
-                        tokens,mlc_flag = JackTokenizer.jack_tokenizer(line,mlc_flag,xmlT_output)
-                        CompilationEngine.compile(tokens, xml_output)
-                xmlT_output.write('</tokens>')
+        del jt    
         
        
 # functions to collect information from command line call of JackCompiler.py
@@ -107,6 +106,115 @@ def get_xml_filename(jack_filename):
     if not os.path.exists(os.path.dirname(xml_filename)):
         os.makedirs(os.path.dirname(xml_filename))
     return xml_filename
+    
+class JackTokenizer:
+    
+    def __init__(self,jack_filename):
+        self.keywords = {'class','constructor','function','method','field','static','var','int',
+                         'char','boolean','void','true','false','null','this','let','do','if',
+                         'else','while','return'}
+        self.symbols  = {'{','}','(',')','[',']','.',',',';','+','-','*','/','&','|','<','>','=','~'}
+        self.token_specification = [
+            ('MLC_START',    r'\/\*'),                  # Multi-line comment start
+            ('MLC_FINISH',   r'\*\/'),                  # Multi-line comment finish
+            ('SLC_START',    r'\/{2}'),                 # Single line comment start
+            ('IDENTIFIER',   r'[a-zA-Z_][A-Za-z\d]*'),  # Identifiers
+            ('INT_CONST',    r'\d+'),                   # Integer constants
+            ('STRING_CONST', r'\".+\"'),                # String constants
+            ('OTHER',        r'[^\s]'),                 # Other
+        ]
+        self.tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in self.token_specification)
+        self.xml_translate = {'KEYWORD':'keyword','SYMBOL':'symbol','INT_CONST':'integerConstant',
+                              'STRING_CONST':'stringConstant','IDENTIFIER':'identifier'}
+        ####
+
+        self.jack = open(jack_filename, 'r')
+        
+        ####
+        xmlT_filename = os.path.dirname(jack_filename) + '\\xml\\' + (os.path.split(jack_filename)[1]).split('.')[0] + 'T.xml'
+        if not os.path.exists(os.path.dirname(xmlT_filename)):
+            os.makedirs(os.path.dirname(xmlT_filename))
+        self.xmlT = open(xmlT_filename, 'w')
+        ####
+        
+        self.xmlT.write('<tokens>' + '\n')
+        
+        self.mlc_flag = False;
+        self.token_buffer = []
+        self.rebuffer()
+        self.tokenize_line()
+        self.token_buffer_k = 0
+        self.advancePass = True
+        
+        
+    def __del__(self):
+        self.xmlT.write('</tokens>')
+        self.xmlT.close()
+        
+        
+    def tokenize_line(self):
+        self.token_buffer.clear()
+        slc_flag = False;
+        for mo in re.finditer(self.tok_regex,self.line):
+            tokenType = mo.lastgroup
+            value = mo.group(tokenType)
+            if self.mlc_flag:
+                if tokenType == 'MLC_FINISH':
+                    self.mlc_flag = False;
+            elif tokenType == 'MLC_START':
+                self.mlc_flag = True;
+            elif not slc_flag:
+                if tokenType == 'SLC_START':
+                    slc_flag = True;
+                else:
+                    if tokenType == 'IDENTIFIER' and value in self.keywords:
+                        tokenType = 'KEYWORD'
+                    elif tokenType == 'STRING_CONST':
+                        value = value[1:-1]
+                    elif tokenType == 'OTHER':
+                        if value in self.symbols:
+                            tokenType = 'SYMBOL'
+                            if value == '<':
+                                value = '&lt;'
+                            elif value == '>':
+                                value = '&gt;'
+                            elif value == '&':
+                                value = '&amp;'
+                        else:
+                            tokenType = 'MISMATCH'
+                    xml = '<' + self.xml_translate[tokenType] + '> ' + str(value) + ' </' + self.xml_translate[tokenType] + '>'
+                    if not xml:
+                        oline = ''
+                    else:
+                        oline = '\t' + xml + '\n'
+                    self.xmlT.write(oline)
+                    self.token_buffer.append((tokenType,value))
+                    
+    def advance(self):
+        self.token_buffer_k += 1
+        success = True
+        if (self.token_buffer_k >= len(self.token_buffer)):
+            success = self.rebuffer()
+        return success
+            
+    def rebuffer(self):
+        self.token_buffer_k = 0
+        self.line = self.jack.readline()
+        self.tokenize_line()
+        while(self.line != '' and len(self.token_buffer) < 1):
+            self.line = self.jack.readline()
+            self.tokenize_line()
+        if(self.line == ''):
+            return False
+        else:
+            return True
+    
+    def tokenType(self):
+        return self.token_buffer[self.token_buffer_k][0]
+        
+    def tokenValue(self):
+        return self.token_buffer[self.token_buffer_k][1]         
+    
    
 if __name__ == '__main__':
     sys.exit(main())
