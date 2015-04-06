@@ -2,9 +2,6 @@
 	<keyword> class </keyword>
 	<identifier> SquareGame </identifier>
 	<symbol> { </symbol>
-	<keyword> class </keyword>
-	<identifier> SquareGame </identifier>
-	<symbol> { </symbol>
 	<keyword> field </keyword>
 	<identifier> Square </identifier>
 	<identifier> square </identifier>

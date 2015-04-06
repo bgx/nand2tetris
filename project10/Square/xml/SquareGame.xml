@@ -1,312 +1,353 @@
-IDENTIFIER SquareGame
-SYMBOL {
-KEYWORD field
-IDENTIFIER Square
-IDENTIFIER square
-SYMBOL ;
-KEYWORD field
-KEYWORD int
-IDENTIFIER direction
-SYMBOL ;
-KEYWORD constructor
-IDENTIFIER SquareGame
-IDENTIFIER new
-SYMBOL (
-SYMBOL )
-SYMBOL {
-KEYWORD let
-IDENTIFIER square
-SYMBOL =
-IDENTIFIER Square
-SYMBOL .
-IDENTIFIER new
-SYMBOL (
-INT_CONST 0
-SYMBOL ,
-INT_CONST 0
-SYMBOL ,
-INT_CONST 30
-SYMBOL )
-SYMBOL ;
-KEYWORD let
-IDENTIFIER direction
-SYMBOL =
-INT_CONST 0
-SYMBOL ;
-KEYWORD return
-KEYWORD this
-SYMBOL ;
-SYMBOL }
-KEYWORD method
-KEYWORD void
-IDENTIFIER dispose
-SYMBOL (
-SYMBOL )
-SYMBOL {
-KEYWORD do
-IDENTIFIER square
-SYMBOL .
-IDENTIFIER dispose
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-KEYWORD do
-IDENTIFIER Memory
-SYMBOL .
-IDENTIFIER deAlloc
-SYMBOL (
-KEYWORD this
-SYMBOL )
-SYMBOL ;
-KEYWORD return
-SYMBOL ;
-SYMBOL }
-KEYWORD method
-KEYWORD void
-IDENTIFIER run
-SYMBOL (
-SYMBOL )
-SYMBOL {
-KEYWORD var
-KEYWORD char
-IDENTIFIER key
-SYMBOL ;
-KEYWORD var
-KEYWORD boolean
-IDENTIFIER exit
-SYMBOL ;
-KEYWORD let
-IDENTIFIER exit
-SYMBOL =
-KEYWORD false
-SYMBOL ;
-KEYWORD while
-SYMBOL (
-SYMBOL ~
-IDENTIFIER exit
-SYMBOL )
-SYMBOL {
-KEYWORD while
-SYMBOL (
-IDENTIFIER key
-SYMBOL =
-INT_CONST 0
-SYMBOL )
-SYMBOL {
-KEYWORD let
-IDENTIFIER key
-SYMBOL =
-IDENTIFIER Keyboard
-SYMBOL .
-IDENTIFIER keyPressed
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-KEYWORD do
-IDENTIFIER moveSquare
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-SYMBOL }
-KEYWORD if
-SYMBOL (
-IDENTIFIER key
-SYMBOL =
-INT_CONST 81
-SYMBOL )
-SYMBOL {
-KEYWORD let
-IDENTIFIER exit
-SYMBOL =
-KEYWORD true
-SYMBOL ;
-SYMBOL }
-KEYWORD if
-SYMBOL (
-IDENTIFIER key
-SYMBOL =
-INT_CONST 90
-SYMBOL )
-SYMBOL {
-KEYWORD do
-IDENTIFIER square
-SYMBOL .
-IDENTIFIER decSize
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-SYMBOL }
-KEYWORD if
-SYMBOL (
-IDENTIFIER key
-SYMBOL =
-INT_CONST 88
-SYMBOL )
-SYMBOL {
-KEYWORD do
-IDENTIFIER square
-SYMBOL .
-IDENTIFIER incSize
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-SYMBOL }
-KEYWORD if
-SYMBOL (
-IDENTIFIER key
-SYMBOL =
-INT_CONST 131
-SYMBOL )
-SYMBOL {
-KEYWORD let
-IDENTIFIER direction
-SYMBOL =
-INT_CONST 1
-SYMBOL ;
-SYMBOL }
-KEYWORD if
-SYMBOL (
-IDENTIFIER key
-SYMBOL =
-INT_CONST 133
-SYMBOL )
-SYMBOL {
-KEYWORD let
-IDENTIFIER direction
-SYMBOL =
-INT_CONST 2
-SYMBOL ;
-SYMBOL }
-KEYWORD if
-SYMBOL (
-IDENTIFIER key
-SYMBOL =
-INT_CONST 130
-SYMBOL )
-SYMBOL {
-KEYWORD let
-IDENTIFIER direction
-SYMBOL =
-INT_CONST 3
-SYMBOL ;
-SYMBOL }
-KEYWORD if
-SYMBOL (
-IDENTIFIER key
-SYMBOL =
-INT_CONST 132
-SYMBOL )
-SYMBOL {
-KEYWORD let
-IDENTIFIER direction
-SYMBOL =
-INT_CONST 4
-SYMBOL ;
-SYMBOL }
-KEYWORD while
-SYMBOL (
-SYMBOL ~
-SYMBOL (
-IDENTIFIER key
-SYMBOL =
-INT_CONST 0
-SYMBOL )
-SYMBOL )
-SYMBOL {
-KEYWORD let
-IDENTIFIER key
-SYMBOL =
-IDENTIFIER Keyboard
-SYMBOL .
-IDENTIFIER keyPressed
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-KEYWORD do
-IDENTIFIER moveSquare
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-SYMBOL }
-SYMBOL }
-KEYWORD return
-SYMBOL ;
-SYMBOL }
-KEYWORD method
-KEYWORD void
-IDENTIFIER moveSquare
-SYMBOL (
-SYMBOL )
-SYMBOL {
-KEYWORD if
-SYMBOL (
-IDENTIFIER direction
-SYMBOL =
-INT_CONST 1
-SYMBOL )
-SYMBOL {
-KEYWORD do
-IDENTIFIER square
-SYMBOL .
-IDENTIFIER moveUp
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-SYMBOL }
-KEYWORD if
-SYMBOL (
-IDENTIFIER direction
-SYMBOL =
-INT_CONST 2
-SYMBOL )
-SYMBOL {
-KEYWORD do
-IDENTIFIER square
-SYMBOL .
-IDENTIFIER moveDown
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-SYMBOL }
-KEYWORD if
-SYMBOL (
-IDENTIFIER direction
-SYMBOL =
-INT_CONST 3
-SYMBOL )
-SYMBOL {
-KEYWORD do
-IDENTIFIER square
-SYMBOL .
-IDENTIFIER moveLeft
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-SYMBOL }
-KEYWORD if
-SYMBOL (
-IDENTIFIER direction
-SYMBOL =
-INT_CONST 4
-SYMBOL )
-SYMBOL {
-KEYWORD do
-IDENTIFIER square
-SYMBOL .
-IDENTIFIER moveRight
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-SYMBOL }
-KEYWORD do
-IDENTIFIER Sys
-SYMBOL .
-IDENTIFIER wait
-SYMBOL (
-INT_CONST 5
-SYMBOL )
-SYMBOL ;
-KEYWORD return
-SYMBOL ;
-SYMBOL }
-SYMBOL }
+<class>
+	<keyword> class </keyword>
+	<identifier> SquareGame </identifier>
+	<symbol> { </symbol>
+	<classVarDec>
+		<keyword> field </keyword>
+		<identifier> Square </identifier>
+		<identifier> square </identifier>
+		<symbol> ; </symbol>
+	</classVarDec>
+	<classVarDec>
+		<keyword> field </keyword>
+		<keyword> int </keyword>
+		<identifier> direction </identifier>
+		<symbol> ; </symbol>
+	</classVarDec>
+	<subroutineDec>
+		<keyword> constructor </keyword>
+		<identifier> SquareGame </identifier>
+		<identifier> new </identifier>
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<keyword> let </keyword>
+				<identifier> square </identifier>
+				<symbol> = </symbol>
+				<identifier> Square </identifier>
+				<symbol> . </symbol>
+				<identifier> new </identifier>
+				<symbol> ( </symbol>
+				<integerConstant> 0 </integerConstant>
+				<symbol> , </symbol>
+				<integerConstant> 0 </integerConstant>
+				<symbol> , </symbol>
+				<integerConstant> 30 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<keyword> let </keyword>
+				<identifier> direction </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 0 </integerConstant>
+				<symbol> ; </symbol>
+				<keyword> return </keyword>
+				<keyword> this </keyword>
+				<symbol> ; </symbol>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> dispose </identifier>
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<keyword> do </keyword>
+				<identifier> square </identifier>
+				<symbol> . </symbol>
+				<identifier> dispose </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<keyword> do </keyword>
+				<identifier> Memory </identifier>
+				<symbol> . </symbol>
+				<identifier> deAlloc </identifier>
+				<symbol> ( </symbol>
+				<keyword> this </keyword>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<keyword> return </keyword>
+				<symbol> ; </symbol>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> run </identifier>
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> char </keyword>
+				<identifier> key </identifier>
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<keyword> var </keyword>
+				<keyword> boolean </keyword>
+				<identifier> exit </identifier>
+				<symbol> ; </symbol>
+				<keyword> let </keyword>
+				<identifier> exit </identifier>
+				<symbol> = </symbol>
+				<keyword> false </keyword>
+				<symbol> ; </symbol>
+				<keyword> while </keyword>
+				<symbol> ( </symbol>
+				<symbol> ~ </symbol>
+				<identifier> exit </identifier>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> while </keyword>
+				<symbol> ( </symbol>
+				<identifier> key </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 0 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> let </keyword>
+				<identifier> key </identifier>
+				<symbol> = </symbol>
+				<identifier> Keyboard </identifier>
+				<symbol> . </symbol>
+				<identifier> keyPressed </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<keyword> do </keyword>
+				<identifier> moveSquare </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<symbol> } </symbol>
+				<keyword> if </keyword>
+				<symbol> ( </symbol>
+				<identifier> key </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 81 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> let </keyword>
+				<identifier> exit </identifier>
+				<symbol> = </symbol>
+				<keyword> true </keyword>
+				<symbol> ; </symbol>
+				<symbol> } </symbol>
+				<keyword> if </keyword>
+				<symbol> ( </symbol>
+				<identifier> key </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 90 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> do </keyword>
+				<identifier> square </identifier>
+				<symbol> . </symbol>
+				<identifier> decSize </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<symbol> } </symbol>
+				<keyword> if </keyword>
+				<symbol> ( </symbol>
+				<identifier> key </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 88 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> do </keyword>
+				<identifier> square </identifier>
+				<symbol> . </symbol>
+				<identifier> incSize </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<symbol> } </symbol>
+				<keyword> if </keyword>
+				<symbol> ( </symbol>
+				<identifier> key </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 131 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> let </keyword>
+				<identifier> direction </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 1 </integerConstant>
+				<symbol> ; </symbol>
+				<symbol> } </symbol>
+				<keyword> if </keyword>
+				<symbol> ( </symbol>
+				<identifier> key </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 133 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> let </keyword>
+				<identifier> direction </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 2 </integerConstant>
+				<symbol> ; </symbol>
+				<symbol> } </symbol>
+				<keyword> if </keyword>
+				<symbol> ( </symbol>
+				<identifier> key </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 130 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> let </keyword>
+				<identifier> direction </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 3 </integerConstant>
+				<symbol> ; </symbol>
+				<symbol> } </symbol>
+				<keyword> if </keyword>
+				<symbol> ( </symbol>
+				<identifier> key </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 132 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> let </keyword>
+				<identifier> direction </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 4 </integerConstant>
+				<symbol> ; </symbol>
+				<symbol> } </symbol>
+				<keyword> while </keyword>
+				<symbol> ( </symbol>
+				<symbol> ~ </symbol>
+				<symbol> ( </symbol>
+				<identifier> key </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 0 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> let </keyword>
+				<identifier> key </identifier>
+				<symbol> = </symbol>
+				<identifier> Keyboard </identifier>
+				<symbol> . </symbol>
+				<identifier> keyPressed </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<keyword> do </keyword>
+				<identifier> moveSquare </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<symbol> } </symbol>
+				<symbol> } </symbol>
+				<keyword> return </keyword>
+				<symbol> ; </symbol>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> moveSquare </identifier>
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<keyword> if </keyword>
+				<symbol> ( </symbol>
+				<identifier> direction </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 1 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> do </keyword>
+				<identifier> square </identifier>
+				<symbol> . </symbol>
+				<identifier> moveUp </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<symbol> } </symbol>
+				<keyword> if </keyword>
+				<symbol> ( </symbol>
+				<identifier> direction </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 2 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> do </keyword>
+				<identifier> square </identifier>
+				<symbol> . </symbol>
+				<identifier> moveDown </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<symbol> } </symbol>
+				<keyword> if </keyword>
+				<symbol> ( </symbol>
+				<identifier> direction </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 3 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> do </keyword>
+				<identifier> square </identifier>
+				<symbol> . </symbol>
+				<identifier> moveLeft </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<symbol> } </symbol>
+				<keyword> if </keyword>
+				<symbol> ( </symbol>
+				<identifier> direction </identifier>
+				<symbol> = </symbol>
+				<integerConstant> 4 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> { </symbol>
+				<keyword> do </keyword>
+				<identifier> square </identifier>
+				<symbol> . </symbol>
+				<identifier> moveRight </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<symbol> } </symbol>
+				<keyword> do </keyword>
+				<identifier> Sys </identifier>
+				<symbol> . </symbol>
+				<identifier> wait </identifier>
+				<symbol> ( </symbol>
+				<integerConstant> 5 </integerConstant>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<keyword> return </keyword>
+				<symbol> ; </symbol>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<symbol> } </symbol>
+</class>

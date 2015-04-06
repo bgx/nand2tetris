@@ -1,39 +1,52 @@
-IDENTIFIER Main
-SYMBOL {
-KEYWORD function
-KEYWORD void
-IDENTIFIER main
-SYMBOL (
-SYMBOL )
-SYMBOL {
-KEYWORD var
-IDENTIFIER SquareGame
-IDENTIFIER game
-SYMBOL ;
-KEYWORD let
-IDENTIFIER game
-SYMBOL =
-IDENTIFIER SquareGame
-SYMBOL .
-IDENTIFIER new
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-KEYWORD do
-IDENTIFIER game
-SYMBOL .
-IDENTIFIER run
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-KEYWORD do
-IDENTIFIER game
-SYMBOL .
-IDENTIFIER dispose
-SYMBOL (
-SYMBOL )
-SYMBOL ;
-KEYWORD return
-SYMBOL ;
-SYMBOL }
-SYMBOL }
+<class>
+	<keyword> class </keyword>
+	<identifier> Main </identifier>
+	<symbol> { </symbol>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> void </keyword>
+		<identifier> main </identifier>
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<identifier> SquareGame </identifier>
+				<identifier> game </identifier>
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<keyword> let </keyword>
+				<identifier> game </identifier>
+				<symbol> = </symbol>
+				<identifier> SquareGame </identifier>
+				<symbol> . </symbol>
+				<identifier> new </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<keyword> do </keyword>
+				<identifier> game </identifier>
+				<symbol> . </symbol>
+				<identifier> run </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<keyword> do </keyword>
+				<identifier> game </identifier>
+				<symbol> . </symbol>
+				<identifier> dispose </identifier>
+				<symbol> ( </symbol>
+				<symbol> ) </symbol>
+				<symbol> ; </symbol>
+				<keyword> return </keyword>
+				<symbol> ; </symbol>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<symbol> } </symbol>
+</class>
