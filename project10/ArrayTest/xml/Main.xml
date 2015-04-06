@@ -1,140 +1,182 @@
-	KEYWORD class
-	IDENTIFIER Main
-	SYMBOL {
-	KEYWORD function
-	KEYWORD void
-	IDENTIFIER main
-	SYMBOL (
-	SYMBOL )
-	SYMBOL {
-	KEYWORD var
-	IDENTIFIER Array
-	IDENTIFIER a
-	SYMBOL ;
-	KEYWORD var
-	KEYWORD int
-	IDENTIFIER length
-	SYMBOL ;
-	KEYWORD var
-	KEYWORD int
-	IDENTIFIER i
-	SYMBOL ,
-	IDENTIFIER sum
-	SYMBOL ;
-	KEYWORD let
-	IDENTIFIER length
-	SYMBOL =
-	IDENTIFIER Keyboard
-	SYMBOL .
-	IDENTIFIER readInt
-	SYMBOL (
-	STRING_CONST HOW MANY NUMBERS? 
-	SYMBOL )
-	SYMBOL ;
-	KEYWORD let
-	IDENTIFIER a
-	SYMBOL =
-	IDENTIFIER Array
-	SYMBOL .
-	IDENTIFIER new
-	SYMBOL (
-	IDENTIFIER length
-	SYMBOL )
-	SYMBOL ;
-	KEYWORD let
-	IDENTIFIER i
-	SYMBOL =
-	INT_CONST 0
-	SYMBOL ;
-	KEYWORD while
-	SYMBOL (
-	IDENTIFIER i
-	SYMBOL &lt;
-	IDENTIFIER length
-	SYMBOL )
-	SYMBOL {
-	KEYWORD let
-	IDENTIFIER a
-	SYMBOL [
-	IDENTIFIER i
-	SYMBOL ]
-	SYMBOL =
-	IDENTIFIER Keyboard
-	SYMBOL .
-	IDENTIFIER readInt
-	SYMBOL (
-	STRING_CONST ENTER THE NEXT NUMBER: 
-	SYMBOL )
-	SYMBOL ;
-	KEYWORD let
-	IDENTIFIER i
-	SYMBOL =
-	IDENTIFIER i
-	SYMBOL +
-	INT_CONST 1
-	SYMBOL ;
-	SYMBOL }
-	KEYWORD let
-	IDENTIFIER i
-	SYMBOL =
-	INT_CONST 0
-	SYMBOL ;
-	KEYWORD let
-	IDENTIFIER sum
-	SYMBOL =
-	INT_CONST 0
-	SYMBOL ;
-	KEYWORD while
-	SYMBOL (
-	IDENTIFIER i
-	SYMBOL &lt;
-	IDENTIFIER length
-	SYMBOL )
-	SYMBOL {
-	KEYWORD let
-	IDENTIFIER sum
-	SYMBOL =
-	IDENTIFIER sum
-	SYMBOL +
-	IDENTIFIER a
-	SYMBOL [
-	IDENTIFIER i
-	SYMBOL ]
-	SYMBOL ;
-	KEYWORD let
-	IDENTIFIER i
-	SYMBOL =
-	IDENTIFIER i
-	SYMBOL +
-	INT_CONST 1
-	SYMBOL ;
-	SYMBOL }
-	KEYWORD do
-	IDENTIFIER Output
-	SYMBOL .
-	IDENTIFIER printString
-	SYMBOL (
-	STRING_CONST THE AVERAGE IS: 
-	SYMBOL )
-	SYMBOL ;
-	KEYWORD do
-	IDENTIFIER Output
-	SYMBOL .
-	IDENTIFIER printInt
-	SYMBOL (
-	IDENTIFIER sum
-	SYMBOL /
-	IDENTIFIER length
-	SYMBOL )
-	SYMBOL ;
-	KEYWORD do
-	IDENTIFIER Output
-	SYMBOL .
-	IDENTIFIER println
-	SYMBOL (
-	SYMBOL )
-	SYMBOL ;
-	KEYWORD return
-	SYMBOL ;
-	SYMBOL }
-	SYMBOL }
+<class>
+	<keyword> class </keyword>
+	<identifier> Main </identifier>
+	<symbol> { </symbol>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> void </keyword>
+		<identifier> main </identifier>
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<identifier> Array </identifier>
+				<identifier> a </identifier>
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> length </identifier>
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> i </identifier>
+				<symbol> , </symbol>
+				<identifier> sum </identifier>
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> length </identifier>
+					<symbol> = </symbol>
+					<identifier> Keyboard </identifier>
+					<symbol> . </symbol>
+					<identifier> readInt </identifier>
+					<symbol> ( </symbol>
+					<stringConstant> HOW MANY NUMBERS?  </stringConstant>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> a </identifier>
+					<symbol> = </symbol>
+					<identifier> Array </identifier>
+					<symbol> . </symbol>
+					<identifier> new </identifier>
+					<symbol> ( </symbol>
+					<identifier> length </identifier>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> i </identifier>
+					<symbol> = </symbol>
+					<integerConstant> 0 </integerConstant>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<identifier> i </identifier>
+					<symbol> &lt; </symbol>
+					<identifier> length </identifier>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<keyword> let </keyword>
+					<identifier> a </identifier>
+					<symbol> [ </symbol>
+					<identifier> i </identifier>
+					<symbol> ] </symbol>
+					<symbol> = </symbol>
+					<identifier> Keyboard </identifier>
+					<symbol> . </symbol>
+					<identifier> readInt </identifier>
+					<symbol> ( </symbol>
+					<stringConstant> ENTER THE NEXT NUMBER:  </stringConstant>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+					<keyword> let </keyword>
+					<identifier> i </identifier>
+					<symbol> = </symbol>
+					<identifier> i </identifier>
+					<symbol> + </symbol>
+					<integerConstant> 1 </integerConstant>
+					<symbol> ; </symbol>
+					<symbol> } </symbol>
+				</whileStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> i </identifier>
+					<symbol> = </symbol>
+					<integerConstant> 0 </integerConstant>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> sum </identifier>
+					<symbol> = </symbol>
+					<integerConstant> 0 </integerConstant>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<identifier> i </identifier>
+					<symbol> &lt; </symbol>
+					<identifier> length </identifier>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<keyword> let </keyword>
+					<identifier> sum </identifier>
+					<symbol> = </symbol>
+					<identifier> sum </identifier>
+					<symbol> + </symbol>
+					<identifier> a </identifier>
+					<symbol> [ </symbol>
+					<identifier> i </identifier>
+					<symbol> ] </symbol>
+					<symbol> ; </symbol>
+					<keyword> let </keyword>
+					<identifier> i </identifier>
+					<symbol> = </symbol>
+					<identifier> i </identifier>
+					<symbol> + </symbol>
+					<integerConstant> 1 </integerConstant>
+					<symbol> ; </symbol>
+					<symbol> } </symbol>
+				</whileStatement>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Output </identifier>
+					<symbol> . </symbol>
+					<identifier> printString </identifier>
+					<symbol> ( </symbol>
+					<stringConstant> THE AVERAGE IS:  </stringConstant>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Output </identifier>
+					<symbol> . </symbol>
+					<identifier> printInt </identifier>
+					<symbol> ( </symbol>
+					<identifier> sum </identifier>
+					<symbol> / </symbol>
+					<identifier> length </identifier>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Output </identifier>
+					<symbol> . </symbol>
+					<identifier> println </identifier>
+					<symbol> ( </symbol>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<symbol> } </symbol>
+	<symbol> } </symbol>
+	<symbol> } </symbol>
+	<symbol> } </symbol>
+	<symbol> } </symbol>
+</class>

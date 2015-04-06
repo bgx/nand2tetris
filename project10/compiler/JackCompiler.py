@@ -139,6 +139,8 @@ class JackTokenizer:
         self.xmlT = open(self.xmlT_filename, 'w')
         ####
         
+        #self.debug = open(self.xmlT_filename.split('.')[0] + 'debug.xml', 'w')
+        
         self.xmlT.write('<tokens>' + '\n')
         
         self.mlc_flag = False
@@ -196,14 +198,14 @@ class JackTokenizer:
     def rebuffer(self):
         self.line = self.jack.readline()
         self.tokenize_line()
-        while(self.line != '' and (len(self.token_list_temp) < 1) ):
+        while( (self.line != '') and (len(self.token_list_temp) < 1) ):
             self.line = self.jack.readline()
             self.tokenize_line()
         if(self.line == ''):
             self.readEOF = True
             self.token_list_k -= 1
         else:
-            self.token_list = self.token_list_temp
+            self.token_list = self.token_list_temp[:] #[:] creates a copy
             self.token_list_k = 0    
     
             
@@ -211,7 +213,7 @@ class JackTokenizer:
         if not self.readEOF:
             self.token_list_k += 1
             if (self.token_list_k >= len(self.token_list)):
-                self.rebuffer()            
+                self.rebuffer()
     
     def tokenType(self):
         return self.token_list[self.token_list_k][0]
@@ -219,11 +221,17 @@ class JackTokenizer:
     def tokenValue(self):
         return self.token_list[self.token_list_k][1]      
             
-    def printTokenBuffer(self):
-        self.xmlT.write('buffer:')  
+    def printTokenListTemp(self):
+        self.debug.write('buffer:')  
+        for pair in self.token_list_temp:
+            self.debug.write(pair[1] + ',')
+        self.debug.write('\n')  
+        
+    def printTokenList(self):
+        self.debug.write('buffer:')  
         for pair in self.token_list:
-            self.xmlT.write(pair[1] + ',')
-        self.xmlT.write('\n')    
+            self.debug.write(pair[1] + ',')
+        self.debug.write('\n')    
     
 class CompilationEngine:
 
@@ -245,15 +253,28 @@ class CompilationEngine:
     def __del__(self):
         #self.xml.write('</tokens>')
         self.xml.close()
-        
+
+    def writeXmlNonTerminal(self, s, tag_type):
+        if(tag_type == 'begin'):
+            self.xml.write('\t'*self.tabk + '<' + s + '>\n')
+            self.tabk += 1
+        elif(tag_type == 'end'):
+            self.tabk -= 1
+            self.xml.write('\t'*self.tabk + '</' + s + '>\n')
+        else:
+            self.xml.write('invalid tag_type parameter value given to writeXmlNonTerminal')
+    
+    def writeXmlTerminal(self):
+        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + 
+                       str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+    
     def compileClass(self):
-        self.xml.write('\t'*self.tabk + '<class>\n')
-        self.tabk += 1
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlNonTerminal('class','begin')
+        self.writeXmlTerminal()
         self.jt.advance()
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlTerminal()
         self.jt.advance()
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlTerminal()
         self.jt.advance()
         while( self.jt.tokenValue() != '}'):
             if(self.jt.tokenValue() in ('static', 'field')):
@@ -262,119 +283,163 @@ class CompilationEngine:
                 self.compileSubroutine()
             else:
                 print('error in compileClass()\n')
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')    
+        self.writeXmlTerminal()
         self.jt.advance()
-        self.tabk -= 1
-        self.xml.write('\t'*self.tabk + '</class>\n')
+                
+        self.writeXmlNonTerminal('class','end')
         
     def compileClassVarDec(self):
         '''.'''
-        self.xml.write('\t'*self.tabk + '<classVarDec>\n')
-        self.tabk += 1
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlNonTerminal('classVarDec','begin')
+        self.writeXmlTerminal()
         self.jt.advance()
         while(self.jt.tokenValue() != ';'):
-            self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+            self.writeXmlTerminal()
             self.jt.advance()
-            self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+            self.writeXmlTerminal()
             self.jt.advance()
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlTerminal()
         self.jt.advance()
-        self.tabk -= 1
-        self.xml.write('\t'*self.tabk + '</classVarDec>\n')
+        self.writeXmlNonTerminal('classVarDec','end')
         
         
     def compileSubroutine(self):
         '''.'''
-        self.xml.write('\t'*self.tabk + '<subroutineDec>\n')
-        self.tabk += 1
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlNonTerminal('subroutineDec','begin')
+        self.writeXmlTerminal()
         self.jt.advance()
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlTerminal()
         self.jt.advance()
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlTerminal()
         self.jt.advance()
         
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlTerminal()
         self.jt.advance()
         
         self.compileParameterList()
         
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlTerminal()
         self.jt.advance()
         
-        self.xml.write('\t'*self.tabk + '<subroutineBody>\n')
-        self.tabk += 1
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlNonTerminal('subroutineBody','begin')
+        self.writeXmlTerminal()
         self.jt.advance()
-        if(self.jt.tokenValue() == 'var'):
+        while(self.jt.tokenValue() == 'var'):
             self.compileVarDec()
         if(self.jt.tokenValue() != '}'):
             self.compileStatements()
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlTerminal()
         self.jt.advance()
-        self.tabk -= 1
-        self.xml.write('\t'*self.tabk + '</subroutineBody>\n')
+        self.writeXmlNonTerminal('subroutineBody','end')
         
-        self.tabk -= 1
-        self.xml.write('\t'*self.tabk + '</subroutineDec>\n')
+        self.writeXmlNonTerminal('subroutineDec','end')
         
     def compileParameterList(self):
         '''.'''
-        self.xml.write('\t'*self.tabk + '<parameterList>\n')
-        self.tabk += 1
+        self.writeXmlNonTerminal('parameterList','begin')
         while(self.jt.tokenValue() != ')'):
-            self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+            self.writeXmlTerminal()
             self.jt.advance()
-        self.tabk -= 1
-        self.xml.write('\t'*self.tabk + '</parameterList>\n')
+        self.writeXmlNonTerminal('parameterList','end')
         
     def compileVarDec(self):
         '''.'''
-        self.xml.write('\t'*self.tabk + '<varDec>\n')
-        self.tabk += 1
+        self.writeXmlNonTerminal('varDec','begin')
         
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlTerminal()
         self.jt.advance()
         while(self.jt.tokenValue() != ';'):
-            self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+            self.writeXmlTerminal()
             self.jt.advance()
-            self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+            self.writeXmlTerminal()
             self.jt.advance()
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.writeXmlTerminal()
         self.jt.advance()
             
-        self.tabk -= 1
-        self.xml.write('\t'*self.tabk + '</varDec>\n')
+        self.writeXmlNonTerminal('varDec','end')
         
     def compileStatements(self):
         '''.'''
-        self.xml.write('\t'*self.tabk + '<statements>\n')
-        self.tabk += 1
+        self.writeXmlNonTerminal('statements','begin')
         
-        while(self.jt.tokenValue() != 'return'):
-            self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
-            self.jt.advance()
-        while(self.jt.tokenValue() != ';'):
-            self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
-            self.jt.advance()
-        
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + str(self.jt.tokenValue()) + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
-        self.jt.advance()
-        
-        self.tabk -= 1
-        self.xml.write('\t'*self.tabk + '</statements>\n')
+        while(self.jt.tokenValue() != '}'):
+            if(self.jt.tokenValue() == 'let'):
+                self.compileLet()
+            elif(self.jt.tokenValue() == 'if'):
+                self.compileIf()
+            elif(self.jt.tokenValue() == 'while'):
+                self.compileWhile()
+            elif(self.jt.tokenValue() == 'do'):
+                self.compileDo()
+            elif(self.jt.tokenValue() == 'return'):
+                self.compileReturn()
+                        
+        self.writeXmlNonTerminal('statements','end')
         
     def compileDo(self):
         '''.'''
+        self.writeXmlNonTerminal('doStatement','begin')
+                
+        while(self.jt.tokenValue() != ';'):
+            self.writeXmlTerminal()
+            self.jt.advance()
+        self.writeXmlTerminal()
+        self.jt.advance()
+        
+        self.writeXmlNonTerminal('doStatement','end')
+        
     def compileLet(self):
         '''.'''
+        self.writeXmlNonTerminal('letStatement','begin')
+                
+        while(self.jt.tokenValue() != ';'):
+            self.writeXmlTerminal()
+            self.jt.advance()
+        self.writeXmlTerminal()
+        self.jt.advance()
+        
+        self.writeXmlNonTerminal('letStatement','end')
+        
     def compileWhile(self):
         '''.'''
+        self.writeXmlNonTerminal('whileStatement','begin')
+                
+        while(self.jt.tokenValue() != '}'):
+            self.writeXmlTerminal()
+            self.jt.advance()
+        self.writeXmlTerminal()
+        self.jt.advance()
+        
+        self.writeXmlNonTerminal('whileStatement','end')
+        
     def compileReturn(self):
         '''.'''
+        self.writeXmlNonTerminal('returnStatement','begin')
+                
+        while(self.jt.tokenValue() != ';'):
+            self.writeXmlTerminal()
+            self.jt.advance()
+        self.writeXmlTerminal()
+        self.jt.advance()
+        
+        self.writeXmlNonTerminal('returnStatement','end')
+        
     def compileIf(self):
         '''.'''
+        self.writeXmlNonTerminal('ifStatement','begin')
+                
+        last_if_token = False
+        while(not last_if_token):
+            self.writeXmlTerminal()
+            if(self.jt.tokenValue() == '}'):
+                self.jt.advance()
+                if(self.jt.tokenValue() != 'else'):
+                    last_if_token = True
+            else:
+                self.jt.advance()
+        
+        self.writeXmlNonTerminal('ifStatement','end')
+        
     def compileExpression(self):
         '''.'''
     def compileTerm(self):
