@@ -35,29 +35,47 @@
 		<subroutineBody>
 			<symbol> { </symbol>
 			<statements>
-				<keyword> let </keyword>
-				<identifier> x </identifier>
-				<symbol> = </symbol>
-				<identifier> Ax </identifier>
-				<symbol> ; </symbol>
-				<keyword> let </keyword>
-				<identifier> y </identifier>
-				<symbol> = </symbol>
-				<identifier> Ay </identifier>
-				<symbol> ; </symbol>
-				<keyword> let </keyword>
-				<identifier> size </identifier>
-				<symbol> = </symbol>
-				<identifier> Asize </identifier>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> draw </identifier>
-				<symbol> ( </symbol>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> return </keyword>
-				<keyword> this </keyword>
-				<symbol> ; </symbol>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> x </identifier>
+					<symbol> = </symbol>
+					<expression>
+						<identifier> Ax </identifier>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> y </identifier>
+					<symbol> = </symbol>
+					<expression>
+						<identifier> Ay </identifier>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> size </identifier>
+					<symbol> = </symbol>
+					<expression>
+						<identifier> Asize </identifier>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> draw </identifier>
+					<symbol> ( </symbol>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<keyword> this </keyword>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
 			</statements>
 			<symbol> } </symbol>
 		</subroutineBody>
@@ -73,16 +91,20 @@
 		<subroutineBody>
 			<symbol> { </symbol>
 			<statements>
-				<keyword> do </keyword>
-				<identifier> Memory </identifier>
-				<symbol> . </symbol>
-				<identifier> deAlloc </identifier>
-				<symbol> ( </symbol>
-				<keyword> this </keyword>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> return </keyword>
-				<symbol> ; </symbol>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Memory </identifier>
+					<symbol> . </symbol>
+					<identifier> deAlloc </identifier>
+					<symbol> ( </symbol>
+					<keyword> this </keyword>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
 			</statements>
 			<symbol> } </symbol>
 		</subroutineBody>
@@ -98,34 +120,40 @@
 		<subroutineBody>
 			<symbol> { </symbol>
 			<statements>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> setColor </identifier>
-				<symbol> ( </symbol>
-				<keyword> true </keyword>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> drawRectangle </identifier>
-				<symbol> ( </symbol>
-				<identifier> x </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> , </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> return </keyword>
-				<symbol> ; </symbol>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Screen </identifier>
+					<symbol> . </symbol>
+					<identifier> setColor </identifier>
+					<symbol> ( </symbol>
+					<keyword> true </keyword>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Screen </identifier>
+					<symbol> . </symbol>
+					<identifier> drawRectangle </identifier>
+					<symbol> ( </symbol>
+					<identifier> x </identifier>
+					<symbol> , </symbol>
+					<identifier> y </identifier>
+					<symbol> , </symbol>
+					<identifier> x </identifier>
+					<symbol> + </symbol>
+					<identifier> size </identifier>
+					<symbol> , </symbol>
+					<identifier> y </identifier>
+					<symbol> + </symbol>
+					<identifier> size </identifier>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
 			</statements>
 			<symbol> } </symbol>
 		</subroutineBody>
@@ -141,34 +169,40 @@
 		<subroutineBody>
 			<symbol> { </symbol>
 			<statements>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> setColor </identifier>
-				<symbol> ( </symbol>
-				<keyword> false </keyword>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> drawRectangle </identifier>
-				<symbol> ( </symbol>
-				<identifier> x </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> , </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> return </keyword>
-				<symbol> ; </symbol>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Screen </identifier>
+					<symbol> . </symbol>
+					<identifier> setColor </identifier>
+					<symbol> ( </symbol>
+					<keyword> false </keyword>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Screen </identifier>
+					<symbol> . </symbol>
+					<identifier> drawRectangle </identifier>
+					<symbol> ( </symbol>
+					<identifier> x </identifier>
+					<symbol> , </symbol>
+					<identifier> y </identifier>
+					<symbol> , </symbol>
+					<identifier> x </identifier>
+					<symbol> + </symbol>
+					<identifier> size </identifier>
+					<symbol> , </symbol>
+					<identifier> y </identifier>
+					<symbol> + </symbol>
+					<identifier> size </identifier>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
 			</statements>
 			<symbol> } </symbol>
 		</subroutineBody>
@@ -184,49 +218,73 @@
 		<subroutineBody>
 			<symbol> { </symbol>
 			<statements>
-				<keyword> if </keyword>
-				<symbol> ( </symbol>
-				<symbol> ( </symbol>
-				<symbol> ( </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> &lt; </symbol>
-				<integerConstant> 254 </integerConstant>
-				<symbol> ) </symbol>
-				<symbol> &amp; </symbol>
-				<symbol> ( </symbol>
-				<symbol> ( </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> &lt; </symbol>
-				<integerConstant> 510 </integerConstant>
-				<symbol> ) </symbol>
-				<symbol> ) </symbol>
-				<symbol> { </symbol>
-				<keyword> do </keyword>
-				<identifier> erase </identifier>
-				<symbol> ( </symbol>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> let </keyword>
-				<identifier> size </identifier>
-				<symbol> = </symbol>
-				<identifier> size </identifier>
-				<symbol> + </symbol>
-				<integerConstant> 2 </integerConstant>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> draw </identifier>
-				<symbol> ( </symbol>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<symbol> } </symbol>
-				<keyword> return </keyword>
-				<symbol> ; </symbol>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<symbol> ( </symbol>
+						<expression>
+							<symbol> ( </symbol>
+							<expression>
+								<identifier> y </identifier>
+								<symbol> + </symbol>
+								<identifier> size </identifier>
+							</expression>
+							<symbol> ) </symbol>
+							<symbol> &lt; </symbol>
+							<integerConstant> 254 </integerConstant>
+						</expression>
+						<symbol> ) </symbol>
+						<symbol> &amp; </symbol>
+						<symbol> ( </symbol>
+						<expression>
+							<symbol> ( </symbol>
+							<expression>
+								<identifier> x </identifier>
+								<symbol> + </symbol>
+								<identifier> size </identifier>
+							</expression>
+							<symbol> ) </symbol>
+							<symbol> &lt; </symbol>
+							<integerConstant> 510 </integerConstant>
+						</expression>
+						<symbol> ) </symbol>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> erase </identifier>
+							<symbol> ( </symbol>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> size </identifier>
+							<symbol> = </symbol>
+							<expression>
+								<identifier> size </identifier>
+								<symbol> + </symbol>
+								<integerConstant> 2 </integerConstant>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> draw </identifier>
+							<symbol> ( </symbol>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
 			</statements>
 			<symbol> } </symbol>
 		</subroutineBody>
@@ -242,33 +300,49 @@
 		<subroutineBody>
 			<symbol> { </symbol>
 			<statements>
-				<keyword> if </keyword>
-				<symbol> ( </symbol>
-				<identifier> size </identifier>
-				<symbol> &gt; </symbol>
-				<integerConstant> 2 </integerConstant>
-				<symbol> ) </symbol>
-				<symbol> { </symbol>
-				<keyword> do </keyword>
-				<identifier> erase </identifier>
-				<symbol> ( </symbol>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> let </keyword>
-				<identifier> size </identifier>
-				<symbol> = </symbol>
-				<identifier> size </identifier>
-				<symbol> - </symbol>
-				<integerConstant> 2 </integerConstant>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> draw </identifier>
-				<symbol> ( </symbol>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<symbol> } </symbol>
-				<keyword> return </keyword>
-				<symbol> ; </symbol>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<identifier> size </identifier>
+						<symbol> &gt; </symbol>
+						<integerConstant> 2 </integerConstant>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> erase </identifier>
+							<symbol> ( </symbol>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> size </identifier>
+							<symbol> = </symbol>
+							<expression>
+								<identifier> size </identifier>
+								<symbol> - </symbol>
+								<integerConstant> 2 </integerConstant>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> draw </identifier>
+							<symbol> ( </symbol>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
 			</statements>
 			<symbol> } </symbol>
 		</subroutineBody>
@@ -284,81 +358,101 @@
 		<subroutineBody>
 			<symbol> { </symbol>
 			<statements>
-				<keyword> if </keyword>
-				<symbol> ( </symbol>
-				<identifier> y </identifier>
-				<symbol> &gt; </symbol>
-				<integerConstant> 1 </integerConstant>
-				<symbol> ) </symbol>
-				<symbol> { </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> setColor </identifier>
-				<symbol> ( </symbol>
-				<keyword> false </keyword>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> drawRectangle </identifier>
-				<symbol> ( </symbol>
-				<identifier> x </identifier>
-				<symbol> , </symbol>
-				<symbol> ( </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> - </symbol>
-				<integerConstant> 1 </integerConstant>
-				<symbol> , </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> let </keyword>
-				<identifier> y </identifier>
-				<symbol> = </symbol>
-				<identifier> y </identifier>
-				<symbol> - </symbol>
-				<integerConstant> 2 </integerConstant>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> setColor </identifier>
-				<symbol> ( </symbol>
-				<keyword> true </keyword>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> drawRectangle </identifier>
-				<symbol> ( </symbol>
-				<identifier> x </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> , </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<integerConstant> 1 </integerConstant>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<symbol> } </symbol>
-				<keyword> return </keyword>
-				<symbol> ; </symbol>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<identifier> y </identifier>
+						<symbol> &gt; </symbol>
+						<integerConstant> 1 </integerConstant>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> setColor </identifier>
+							<symbol> ( </symbol>
+							<keyword> false </keyword>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> drawRectangle </identifier>
+							<symbol> ( </symbol>
+							<identifier> x </identifier>
+							<symbol> , </symbol>
+							<symbol> ( </symbol>
+							<identifier> y </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> ) </symbol>
+							<symbol> - </symbol>
+							<integerConstant> 1 </integerConstant>
+							<symbol> , </symbol>
+							<identifier> x </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> y </identifier>
+							<symbol> = </symbol>
+							<expression>
+								<identifier> y </identifier>
+								<symbol> - </symbol>
+								<integerConstant> 2 </integerConstant>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> setColor </identifier>
+							<symbol> ( </symbol>
+							<keyword> true </keyword>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> drawRectangle </identifier>
+							<symbol> ( </symbol>
+							<identifier> x </identifier>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> , </symbol>
+							<identifier> x </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> + </symbol>
+							<integerConstant> 1 </integerConstant>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
 			</statements>
 			<symbol> } </symbol>
 		</subroutineBody>
@@ -374,85 +468,107 @@
 		<subroutineBody>
 			<symbol> { </symbol>
 			<statements>
-				<keyword> if </keyword>
-				<symbol> ( </symbol>
-				<symbol> ( </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> &lt; </symbol>
-				<integerConstant> 254 </integerConstant>
-				<symbol> ) </symbol>
-				<symbol> { </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> setColor </identifier>
-				<symbol> ( </symbol>
-				<keyword> false </keyword>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> drawRectangle </identifier>
-				<symbol> ( </symbol>
-				<identifier> x </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> , </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<integerConstant> 1 </integerConstant>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> let </keyword>
-				<identifier> y </identifier>
-				<symbol> = </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<integerConstant> 2 </integerConstant>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> setColor </identifier>
-				<symbol> ( </symbol>
-				<keyword> true </keyword>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> drawRectangle </identifier>
-				<symbol> ( </symbol>
-				<identifier> x </identifier>
-				<symbol> , </symbol>
-				<symbol> ( </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> - </symbol>
-				<integerConstant> 1 </integerConstant>
-				<symbol> , </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<symbol> } </symbol>
-				<keyword> return </keyword>
-				<symbol> ; </symbol>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<symbol> ( </symbol>
+						<expression>
+							<identifier> y </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+						</expression>
+						<symbol> ) </symbol>
+						<symbol> &lt; </symbol>
+						<integerConstant> 254 </integerConstant>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> setColor </identifier>
+							<symbol> ( </symbol>
+							<keyword> false </keyword>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> drawRectangle </identifier>
+							<symbol> ( </symbol>
+							<identifier> x </identifier>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> , </symbol>
+							<identifier> x </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> + </symbol>
+							<integerConstant> 1 </integerConstant>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> y </identifier>
+							<symbol> = </symbol>
+							<expression>
+								<identifier> y </identifier>
+								<symbol> + </symbol>
+								<integerConstant> 2 </integerConstant>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> setColor </identifier>
+							<symbol> ( </symbol>
+							<keyword> true </keyword>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> drawRectangle </identifier>
+							<symbol> ( </symbol>
+							<identifier> x </identifier>
+							<symbol> , </symbol>
+							<symbol> ( </symbol>
+							<identifier> y </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> ) </symbol>
+							<symbol> - </symbol>
+							<integerConstant> 1 </integerConstant>
+							<symbol> , </symbol>
+							<identifier> x </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
 			</statements>
 			<symbol> } </symbol>
 		</subroutineBody>
@@ -468,81 +584,101 @@
 		<subroutineBody>
 			<symbol> { </symbol>
 			<statements>
-				<keyword> if </keyword>
-				<symbol> ( </symbol>
-				<identifier> x </identifier>
-				<symbol> &gt; </symbol>
-				<integerConstant> 1 </integerConstant>
-				<symbol> ) </symbol>
-				<symbol> { </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> setColor </identifier>
-				<symbol> ( </symbol>
-				<keyword> false </keyword>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> drawRectangle </identifier>
-				<symbol> ( </symbol>
-				<symbol> ( </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> - </symbol>
-				<integerConstant> 1 </integerConstant>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> , </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> let </keyword>
-				<identifier> x </identifier>
-				<symbol> = </symbol>
-				<identifier> x </identifier>
-				<symbol> - </symbol>
-				<integerConstant> 2 </integerConstant>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> setColor </identifier>
-				<symbol> ( </symbol>
-				<keyword> true </keyword>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> drawRectangle </identifier>
-				<symbol> ( </symbol>
-				<identifier> x </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> , </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<integerConstant> 1 </integerConstant>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<symbol> } </symbol>
-				<keyword> return </keyword>
-				<symbol> ; </symbol>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<identifier> x </identifier>
+						<symbol> &gt; </symbol>
+						<integerConstant> 1 </integerConstant>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> setColor </identifier>
+							<symbol> ( </symbol>
+							<keyword> false </keyword>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> drawRectangle </identifier>
+							<symbol> ( </symbol>
+							<symbol> ( </symbol>
+							<identifier> x </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> ) </symbol>
+							<symbol> - </symbol>
+							<integerConstant> 1 </integerConstant>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> , </symbol>
+							<identifier> x </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> x </identifier>
+							<symbol> = </symbol>
+							<expression>
+								<identifier> x </identifier>
+								<symbol> - </symbol>
+								<integerConstant> 2 </integerConstant>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> setColor </identifier>
+							<symbol> ( </symbol>
+							<keyword> true </keyword>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> drawRectangle </identifier>
+							<symbol> ( </symbol>
+							<identifier> x </identifier>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> , </symbol>
+							<identifier> x </identifier>
+							<symbol> + </symbol>
+							<integerConstant> 1 </integerConstant>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
 			</statements>
 			<symbol> } </symbol>
 		</subroutineBody>
@@ -558,85 +694,107 @@
 		<subroutineBody>
 			<symbol> { </symbol>
 			<statements>
-				<keyword> if </keyword>
-				<symbol> ( </symbol>
-				<symbol> ( </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> &lt; </symbol>
-				<integerConstant> 510 </integerConstant>
-				<symbol> ) </symbol>
-				<symbol> { </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> setColor </identifier>
-				<symbol> ( </symbol>
-				<keyword> false </keyword>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> drawRectangle </identifier>
-				<symbol> ( </symbol>
-				<identifier> x </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> , </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<integerConstant> 1 </integerConstant>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> let </keyword>
-				<identifier> x </identifier>
-				<symbol> = </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<integerConstant> 2 </integerConstant>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> setColor </identifier>
-				<symbol> ( </symbol>
-				<keyword> true </keyword>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> Screen </identifier>
-				<symbol> . </symbol>
-				<identifier> drawRectangle </identifier>
-				<symbol> ( </symbol>
-				<symbol> ( </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> - </symbol>
-				<integerConstant> 1 </integerConstant>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> , </symbol>
-				<identifier> x </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> , </symbol>
-				<identifier> y </identifier>
-				<symbol> + </symbol>
-				<identifier> size </identifier>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<symbol> } </symbol>
-				<keyword> return </keyword>
-				<symbol> ; </symbol>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<symbol> ( </symbol>
+						<expression>
+							<identifier> x </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+						</expression>
+						<symbol> ) </symbol>
+						<symbol> &lt; </symbol>
+						<integerConstant> 510 </integerConstant>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> setColor </identifier>
+							<symbol> ( </symbol>
+							<keyword> false </keyword>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> drawRectangle </identifier>
+							<symbol> ( </symbol>
+							<identifier> x </identifier>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> , </symbol>
+							<identifier> x </identifier>
+							<symbol> + </symbol>
+							<integerConstant> 1 </integerConstant>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> x </identifier>
+							<symbol> = </symbol>
+							<expression>
+								<identifier> x </identifier>
+								<symbol> + </symbol>
+								<integerConstant> 2 </integerConstant>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> setColor </identifier>
+							<symbol> ( </symbol>
+							<keyword> true </keyword>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							<symbol> . </symbol>
+							<identifier> drawRectangle </identifier>
+							<symbol> ( </symbol>
+							<symbol> ( </symbol>
+							<identifier> x </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> ) </symbol>
+							<symbol> - </symbol>
+							<integerConstant> 1 </integerConstant>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> , </symbol>
+							<identifier> x </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> , </symbol>
+							<identifier> y </identifier>
+							<symbol> + </symbol>
+							<identifier> size </identifier>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
 			</statements>
 			<symbol> } </symbol>
 		</subroutineBody>

@@ -19,31 +19,43 @@
 				<symbol> ; </symbol>
 			</varDec>
 			<statements>
-				<keyword> let </keyword>
-				<identifier> game </identifier>
-				<symbol> = </symbol>
-				<identifier> SquareGame </identifier>
-				<symbol> . </symbol>
-				<identifier> new </identifier>
-				<symbol> ( </symbol>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> game </identifier>
-				<symbol> . </symbol>
-				<identifier> run </identifier>
-				<symbol> ( </symbol>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> do </keyword>
-				<identifier> game </identifier>
-				<symbol> . </symbol>
-				<identifier> dispose </identifier>
-				<symbol> ( </symbol>
-				<symbol> ) </symbol>
-				<symbol> ; </symbol>
-				<keyword> return </keyword>
-				<symbol> ; </symbol>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> game </identifier>
+					<symbol> = </symbol>
+					<expression>
+						<identifier> SquareGame </identifier>
+						<symbol> . </symbol>
+						<identifier> new </identifier>
+						<symbol> ( </symbol>
+						<expression>
+						</expression>
+						<symbol> ) </symbol>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> game </identifier>
+					<symbol> . </symbol>
+					<identifier> run </identifier>
+					<symbol> ( </symbol>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> game </identifier>
+					<symbol> . </symbol>
+					<identifier> dispose </identifier>
+					<symbol> ( </symbol>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
 			</statements>
 			<symbol> } </symbol>
 		</subroutineBody>
