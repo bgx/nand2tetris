@@ -12,7 +12,7 @@ The objective of Project 10 is to build a syntax analyzer without any implementa
 
 Brian Grady
 
-Passed all project10 tests on ___
+Passed all project10 tests on 2015.04.08
 '''
 
 import sys
@@ -110,7 +110,7 @@ class JackTokenizer:
         
         self.xmlT.write('<tokens>' + '\n')
         
-        self.mlc_flag = False
+        self.mlc_flag = False #multi line comment (/* comment */)
         self.readEOF = False
         self.token_list = []
         self.token_list_temp = []
@@ -122,12 +122,35 @@ class JackTokenizer:
         self.xmlT.write('</tokens>')
         self.xmlT.close()
         
+    def getTokenType(self):
+        return self.token_list[self.token_list_k][0]
         
-    def tokenize_line(self):
+    def getTokenValue(self):
+        return self.token_list[self.token_list_k][1]      
+        
+    def advance(self):
+        if not self.readEOF:
+            self.token_list_k += 1
+            if (self.token_list_k >= len(self.token_list)):
+                self.rebuffer()
+                                
+    def rebuffer(self):
+        self.line = self.jack.readline()
+        self.tokenizeLine()
+        while( (self.line != '') and (len(self.token_list_temp) < 1) ):
+            self.line = self.jack.readline()
+            self.tokenizeLine()
+        if(self.line == ''):
+            self.readEOF = True
+            self.token_list_k -= 1
+        else:
+            self.token_list = self.token_list_temp[:] #[:] creates a copy
+            self.token_list_k = 0    
+       
+    def tokenizeLine(self):
         self.token_list_temp.clear()
-        slc_flag = False;
+        slc_flag = False; #single line comment (//comment)
         for mo in re.finditer(self.tok_regex,self.line):
-            xml_value = ''
             tokenType = mo.lastgroup
             value = mo.group(tokenType)
             if self.mlc_flag:
@@ -148,47 +171,23 @@ class JackTokenizer:
                             tokenType = 'SYMBOL'
                         else:
                             tokenType = 'MISMATCH'
-                            
-                    xml_value = str(value)
-                    if(xml_value in ('<','>','&')):
-                        if xml_value == '<':
-                            xml_value = '&lt;'
-                        elif xml_value == '>':
-                            xml_value = '&gt;'
-                        else:
-                            xml_value = '&amp;'
-                            
-                    xml = '\t<' + self.xml_translate[tokenType] + '> ' + xml_value + ' </' + self.xml_translate[tokenType] + '>\n'
-                    self.xmlT.write(xml)
+                    self.writeTokenXml(tokenType,value)        
                     self.token_list_temp.append((tokenType,value))
-                    
-                                
-    def rebuffer(self):
-        self.line = self.jack.readline()
-        self.tokenize_line()
-        while( (self.line != '') and (len(self.token_list_temp) < 1) ):
-            self.line = self.jack.readline()
-            self.tokenize_line()
-        if(self.line == ''):
-            self.readEOF = True
-            self.token_list_k -= 1
-        else:
-            self.token_list = self.token_list_temp[:] #[:] creates a copy
-            self.token_list_k = 0    
-    
-            
-    def advance(self):
-        if not self.readEOF:
-            self.token_list_k += 1
-            if (self.token_list_k >= len(self.token_list)):
-                self.rebuffer()
-    
-    def tokenType(self):
-        return self.token_list[self.token_list_k][0]
         
-    def tokenValue(self):
-        return self.token_list[self.token_list_k][1]      
-            
+    def writeTokenXml(self, tokenType, value):
+        xml_value = str(value)
+        if(xml_value in ('<','>','&')):
+            if xml_value == '<':
+                xml_value = '&lt;'
+            elif xml_value == '>':
+                xml_value = '&gt;'
+            else:
+                xml_value = '&amp;'
+                
+        xml = '\t<' + self.xml_translate[tokenType] + '> ' + xml_value + ' </' + self.xml_translate[tokenType] + '>\n'
+        self.xmlT.write(xml)
+    
+    ### thrown together for quick debugging    
     def printTokenListTemp(self):
         self.debug.write('buffer:')  
         for pair in self.token_list_temp:
@@ -213,13 +212,12 @@ class CompilationEngine:
                 
         self.tabk = 0
         
-        if(self.jt.tokenValue() == 'class'):
+        if(self.jt.getTokenValue() == 'class'):
             self.compileClass()
         else:
             print('invalid syntax in init')
         
     def __del__(self):
-        #self.xml.write('</tokens>')
         self.xml.close()
 
     def writeXmlNonTerminal(self, s, tag_type):
@@ -233,7 +231,7 @@ class CompilationEngine:
             self.xml.write('invalid tag_type parameter value given to writeXmlNonTerminal')
     
     def writeXmlTerminal(self):
-        xml_value = str(self.jt.tokenValue())
+        xml_value = str(self.jt.getTokenValue())
         if(xml_value in ('<','>','&')):
             if xml_value == '<':
                 xml_value = '&lt;'
@@ -241,11 +239,11 @@ class CompilationEngine:
                 xml_value = '&gt;'
             else:
                 xml_value = '&amp;'
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.tokenType()] + '> ' + 
-                       xml_value + ' </' + self.jt.xml_translate[self.jt.tokenType()] + '>\n')
+        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.getTokenType()] + '> ' + 
+                       xml_value + ' </' + self.jt.xml_translate[self.jt.getTokenType()] + '>\n')
                        
     def expectTokenType(self, *token_type):
-        if(self.jt.tokenType() not in token_type):
+        if(self.jt.getTokenType() not in token_type):
             print('syntax error: expected tokenType in ' + str(token_type) + ' in routine ' + sys._getframe().f_back.f_code.co_name)
             print('source line: ', end='')  
             for pair in self.jt.token_list:
@@ -254,7 +252,7 @@ class CompilationEngine:
             sys.exit(1)
             
     def expectTokenValue(self, *token_value):  
-        if(self.jt.tokenValue() not in token_value):
+        if(self.jt.getTokenValue() not in token_value):
             print('syntax error: expected tokenValue in ' + str(token_value) + ' in routine ' + sys._getframe().f_back.f_code.co_name)
             print('source line: ', end='')  
             for pair in self.jt.token_list:
@@ -262,32 +260,34 @@ class CompilationEngine:
             print('\ntoken index: ' + str(self.jt.token_list_k))
             sys.exit(1)
     
+    def processTokenExpectingType(self, *token_type):
+        self.expectTokenType(*token_type)
+        self.writeXmlTerminal()
+        self.jt.advance()
+    
+    def processTokenExpectingValue(self, *token_value):
+        self.expectTokenValue(*token_value)
+        self.writeXmlTerminal()
+        self.jt.advance()
+    
     def compileClass(self):
         '''.'''
         self.writeXmlNonTerminal('class','begin')
         
-        self.expectTokenValue('class')
-        self.writeXmlTerminal()
-        self.jt.advance()
-        self.expectTokenType('IDENTIFIER')
-        self.writeXmlTerminal()
-        self.jt.advance()
-        self.expectTokenValue('{')
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue('class')
+        self.processTokenExpectingType('IDENTIFIER')
+        self.processTokenExpectingValue('{')
         
-        while( self.jt.tokenValue() != '}'):
-            if(self.jt.tokenValue() in ('static', 'field')):
+        while( self.jt.getTokenValue() != '}'):
+            if(self.jt.getTokenValue() in ('static', 'field')):
                 self.compileClassVarDec()
-            elif(self.jt.tokenValue() in ('constructor', 'function', 'method')):
+            elif(self.jt.getTokenValue() in ('constructor', 'function', 'method')):
                 self.compileSubroutine()
             else:
                 print('error in compileClass()\n')
                 sys.exit(1)
         
-        self.expectTokenValue('}')
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue('}')
                 
         self.writeXmlNonTerminal('class','end')
         
@@ -295,27 +295,22 @@ class CompilationEngine:
         '''.'''
         self.writeXmlNonTerminal('classVarDec','begin')
         
-        #static or field
+        # static or field
         self.writeXmlTerminal()
         self.jt.advance()
         
         self.expectTokenType('IDENTIFIER','KEYWORD')
-        if(self.jt.tokenType() == 'KEYWORD'):
+        if(self.jt.getTokenType() == 'KEYWORD'):
             self.expectTokenValue('int','char','boolean')
         self.writeXmlTerminal()
         self.jt.advance()
-        self.expectTokenType('IDENTIFIER')
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingType('IDENTIFIER')
         
-        while(self.jt.tokenValue() != ';'):
-            self.expectTokenValue(',')
-            self.writeXmlTerminal()
-            self.jt.advance()
-            self.expectTokenType('IDENTIFIER')
-            self.writeXmlTerminal()
-            self.jt.advance()
+        while(self.jt.getTokenValue() != ';'):
+            self.processTokenExpectingValue(',')
+            self.processTokenExpectingType('IDENTIFIER')
             
+        # ;
         self.writeXmlTerminal()
         self.jt.advance()
         
@@ -331,37 +326,28 @@ class CompilationEngine:
         self.jt.advance()
         
         self.expectTokenType('IDENTIFIER','KEYWORD')
-        if(self.jt.tokenType() == 'KEYWORD'):
+        if(self.jt.getTokenType() == 'KEYWORD'):
             self.expectTokenValue('void','int','char','boolean')
         self.writeXmlTerminal()
         self.jt.advance()
-        self.expectTokenType('IDENTIFIER')
-        self.writeXmlTerminal()
-        self.jt.advance()
-        self.expectTokenValue('(')
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingType('IDENTIFIER')
+        self.processTokenExpectingValue('(')
         
         self.compileParameterList()
         
-        self.expectTokenValue(')')
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue(')')
         
         self.writeXmlNonTerminal('subroutineBody','begin')
         
-        self.expectTokenValue('{')
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue('{')
         
-        while(self.jt.tokenValue() == 'var'):
+        while(self.jt.getTokenValue() == 'var'):
             self.compileVarDec()
-        if(self.jt.tokenValue() != '}'):
+        
+        if(self.jt.getTokenValue() != '}'):
             self.compileStatements()
         
-        self.expectTokenValue('}')
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue('}')
         
         self.writeXmlNonTerminal('subroutineBody','end')
         
@@ -371,27 +357,21 @@ class CompilationEngine:
         '''.'''
         self.writeXmlNonTerminal('parameterList','begin')
         
-        while(self.jt.tokenValue() != ')'):
+        while(self.jt.getTokenValue() != ')'):
             self.expectTokenType('IDENTIFIER','KEYWORD')
-            if(self.jt.tokenType() == 'KEYWORD'):
+            if(self.jt.getTokenType() == 'KEYWORD'):
                 self.expectTokenValue('void','int','char','boolean')
             self.writeXmlTerminal()
             self.jt.advance()
-            self.expectTokenType('IDENTIFIER')
-            self.writeXmlTerminal()
-            self.jt.advance()
-            while(self.jt.tokenValue() != ')'):
-                self.expectTokenValue(',')
-                self.writeXmlTerminal()
-                self.jt.advance()
+            self.processTokenExpectingType('IDENTIFIER')
+            while(self.jt.getTokenValue() != ')'):
+                self.processTokenExpectingValue(',')
                 self.expectTokenType('IDENTIFIER','KEYWORD')
-                if(self.jt.tokenType() == 'KEYWORD'):
+                if(self.jt.getTokenType() == 'KEYWORD'):
                     self.expectTokenValue('void','int','char','boolean')
                 self.writeXmlTerminal()
                 self.jt.advance()
-                self.expectTokenType('IDENTIFIER')
-                self.writeXmlTerminal()
-                self.jt.advance()
+                self.processTokenExpectingType('IDENTIFIER')
             
         self.writeXmlNonTerminal('parameterList','end')
         
@@ -404,22 +384,17 @@ class CompilationEngine:
         self.jt.advance()
         
         self.expectTokenType('IDENTIFIER','KEYWORD')
-        if(self.jt.tokenType() == 'KEYWORD'):
+        if(self.jt.getTokenType() == 'KEYWORD'):
             self.expectTokenValue('int','char','boolean')
         self.writeXmlTerminal()
         self.jt.advance()
-        self.expectTokenType('IDENTIFIER')
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingType('IDENTIFIER')
         
-        while(self.jt.tokenValue() != ';'):
-            self.expectTokenValue(',')
-            self.writeXmlTerminal()
-            self.jt.advance()
-            self.expectTokenType('IDENTIFIER')
-            self.writeXmlTerminal()
-            self.jt.advance()
+        while(self.jt.getTokenValue() != ';'):
+            self.processTokenExpectingValue(',')
+            self.processTokenExpectingType('IDENTIFIER')
             
+        # ;
         self.writeXmlTerminal()
         self.jt.advance()            
         
@@ -429,16 +404,16 @@ class CompilationEngine:
         '''.'''
         self.writeXmlNonTerminal('statements','begin')
         
-        while(self.jt.tokenValue() != '}'):
-            if(self.jt.tokenValue() == 'let'):
+        while(self.jt.getTokenValue() != '}'):
+            if(self.jt.getTokenValue() == 'let'):
                 self.compileLet()
-            elif(self.jt.tokenValue() == 'if'):
+            elif(self.jt.getTokenValue() == 'if'):
                 self.compileIf()
-            elif(self.jt.tokenValue() == 'while'):
+            elif(self.jt.getTokenValue() == 'while'):
                 self.compileWhile()
-            elif(self.jt.tokenValue() == 'do'):
+            elif(self.jt.getTokenValue() == 'do'):
                 self.compileDo()
-            elif(self.jt.tokenValue() == 'return'):
+            elif(self.jt.getTokenValue() == 'return'):
                 self.compileReturn()
             else:
                 print('error in compileStatements()\n')
@@ -456,9 +431,7 @@ class CompilationEngine:
                
         self.compileSubroutineCall()       
         
-        self.expectTokenValue(';')        
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue(';')        
                 
         self.writeXmlNonTerminal('doStatement','end')
         
@@ -470,27 +443,21 @@ class CompilationEngine:
         self.writeXmlTerminal()
         self.jt.advance()
         
-        self.expectTokenType('IDENTIFIER')
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingType('IDENTIFIER')
         
         self.expectTokenValue('[','=')
-        if(self.jt.tokenValue() == '['):
+        if(self.jt.getTokenValue() == '['):
             self.writeXmlTerminal()
             self.jt.advance()
             self.compileExpression()
-            self.expectTokenValue(']')
-            self.writeXmlTerminal()
-            self.jt.advance()
+            self.processTokenExpectingValue(']')
             
         self.writeXmlTerminal()
         self.jt.advance()
         
         self.compileExpression()
         
-        self.expectTokenValue(';')    
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue(';')    
         
         self.writeXmlNonTerminal('letStatement','end')
         
@@ -502,25 +469,17 @@ class CompilationEngine:
         self.writeXmlTerminal()
         self.jt.advance()
         
-        self.expectTokenValue('(')    
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue('(')    
         
         self.compileExpression()
         
-        self.expectTokenValue(')')    
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue(')')    
         
-        self.expectTokenValue('{')    
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue('{')    
         
         self.compileStatements()
         
-        self.expectTokenValue('}')    
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue('}')    
                         
         self.writeXmlNonTerminal('whileStatement','end')
         
@@ -532,12 +491,10 @@ class CompilationEngine:
         self.writeXmlTerminal()
         self.jt.advance()
                 
-        if(self.jt.tokenValue() != ';'):
+        if(self.jt.getTokenValue() != ';'):
             self.compileExpression()
             
-        self.expectTokenValue(';')    
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue(';')    
         
         self.writeXmlNonTerminal('returnStatement','end')
         
@@ -549,38 +506,26 @@ class CompilationEngine:
         self.writeXmlTerminal()
         self.jt.advance()
         
-        self.expectTokenValue('(')    
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue('(')    
         
         self.compileExpression()
         
-        self.expectTokenValue(')')    
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue(')')    
         
-        self.expectTokenValue('{')    
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue('{')    
         
         self.compileStatements()
         
-        self.expectTokenValue('}')    
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue('}')    
                 
-        if(self.jt.tokenValue() == 'else'):
+        if(self.jt.getTokenValue() == 'else'):
             self.writeXmlTerminal()
             self.jt.advance()
-            self.expectTokenValue('{')    
-            self.writeXmlTerminal()
-            self.jt.advance()
+            self.processTokenExpectingValue('{')    
             
             self.compileStatements()
             
-            self.expectTokenValue('}')    
-            self.writeXmlTerminal()
-            self.jt.advance()
+            self.processTokenExpectingValue('}')    
         
         self.writeXmlNonTerminal('ifStatement','end')
         
@@ -590,59 +535,42 @@ class CompilationEngine:
         
         self.compileTerm()     
         
-        while(self.jt.tokenValue() in ('+','-','*','/','&','|','<','>','=')):
+        while(self.jt.getTokenValue() in ('+','-','*','/','&','|','<','>','=')):
             self.writeXmlTerminal()
             self.jt.advance()
             self.compileTerm()
-        
-        # #placeholder
-        # while(self.jt.tokenValue() not in (';',']',')')):
-            # if(self.jt.tokenValue() in ('[','(')):
-                # self.writeXmlTerminal()
-                # self.jt.advance()
-                # self.compileExpression()
-                # self.writeXmlTerminal()
-                # self.jt.advance()
-            # else:
-                # self.writeXmlTerminal()
-                # self.jt.advance()
-            
-        
+                
         self.writeXmlNonTerminal('expression','end')
         
     def compileTerm(self):
         '''.'''
         self.writeXmlNonTerminal('term','begin')
 
-        if(self.jt.tokenType() == 'IDENTIFIER'):
-            holdName = self.jt.tokenValue()
+        if(self.jt.getTokenType() == 'IDENTIFIER'):
+            holdName = self.jt.getTokenValue()
             self.jt.advance()
             
-            if(self.jt.tokenValue() in ('(','.')):
+            if(self.jt.getTokenValue() in ('(','.')):
                 self.compileSubroutineCall(holdName)
-            elif(self.jt.tokenValue() == '['):
+            elif(self.jt.getTokenValue() == '['):
                 self.xml.write('\t'*self.tabk + '<identifier> ' + str(holdName) + ' </identifier>\n')
                 self.writeXmlTerminal()
                 self.jt.advance()
                 self.compileExpression()
-                self.expectTokenValue(']')
-                self.writeXmlTerminal()
-                self.jt.advance()
+                self.processTokenExpectingValue(']')
             else:
                 self.xml.write('\t'*self.tabk + '<identifier> ' + str(holdName) + ' </identifier>\n')
                 
-        elif(self.jt.tokenType() == 'SYMBOL'):
-            if(self.jt.tokenValue() in ('-','~')):
+        elif(self.jt.getTokenType() == 'SYMBOL'):
+            if(self.jt.getTokenValue() in ('-','~')):
                 self.writeXmlTerminal()
                 self.jt.advance()
                 self.compileTerm()
-            elif(self.jt.tokenValue() == '('):
+            elif(self.jt.getTokenValue() == '('):
                 self.writeXmlTerminal()
                 self.jt.advance()
                 self.compileExpression()
-                self.expectTokenValue(')')
-                self.writeXmlTerminal()
-                self.jt.advance()
+                self.processTokenExpectingValue(')')
         else:
             self.writeXmlTerminal()
             self.jt.advance()
@@ -656,30 +584,24 @@ class CompilationEngine:
         else:
             self.writeXmlTerminal()
             self.jt.advance()
-        if(self.jt.tokenValue() == '.'):
+        
+        if(self.jt.getTokenValue() == '.'):
             self.writeXmlTerminal()
             self.jt.advance()
-            self.expectTokenType('IDENTIFIER')
-            self.writeXmlTerminal()
-            self.jt.advance()
-        self.expectTokenValue('(')
-        self.writeXmlTerminal()
-        self.jt.advance()
+            self.processTokenExpectingType('IDENTIFIER')
+        
+        self.processTokenExpectingValue('(')
         self.compileExpressionList()
-        self.expectTokenValue(')')
-        self.writeXmlTerminal()
-        self.jt.advance()
+        self.processTokenExpectingValue(')')
         
     def compileExpressionList(self):
         '''.'''
         self.writeXmlNonTerminal('expressionList','begin')
         
-        if(self.jt.tokenValue() != ')'):
+        if(self.jt.getTokenValue() != ')'):
             self.compileExpression()
-            while(self.jt.tokenValue() != ')'):
-                self.expectTokenValue(',')
-                self.writeXmlTerminal()
-                self.jt.advance()
+            while(self.jt.getTokenValue() != ')'):
+                self.processTokenExpectingValue(',')
                 self.compileExpression()
             
         self.writeXmlNonTerminal('expressionList','end')

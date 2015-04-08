@@ -37,8 +37,8 @@ project09 - High-Level Language
     prepare for writing a Jack compiler and the Jack operating system
     
 project10 - Compiler I
-    Write the first part of a Jack compiler, a syntax analyzer
-    (tokenizing and parsing)
+    Write the first part of a Jack compiler: a syntax analyzer
+    that tokenizes the source and generates an XML parse tree
     
 project11 - Compiler II
     (Code Generation)
