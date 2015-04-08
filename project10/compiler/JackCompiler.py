@@ -24,91 +24,58 @@ import re
 def main():
     '''Main entry point for the script.'''
     
-    #### parse command line to get path names and flag values
-    commandline_args = parse_commandline()
-
-    path = get_path(commandline_args)
-    if path == 'exit':
-        return
+    commandline = CommandLineInterpreter()
     
-    jack_filenames = get_jack_filenames(path) 
-    ####
-    
-    #### write to file for each .jack file
-    for file in jack_filenames:
-        print(file + '\n')
+    for file in commandline.jack_filenames:
         jt = JackTokenizer(file)
         ce = CompilationEngine(jt)
-        
-        #ce = CompilationEngine(file)
-        
-        # xml = get_xml_filename(file)
-        
-        # with open(xml, 'w') as xml_output:
-        
-            # while(jt.advance()):
-                    # xml_text = jt.tokenType() + ' ' + str(jt.tokenValue())
-                    # if not xml_text:
-                        # oline = ''
-                    # else:
-                        # oline = xml_text + '\n'
-                    # xml_output.write(oline)
         del ce    
         del jt    
         
        
-# functions to collect information from command line call of JackCompiler.py
-def parse_commandline():
-    '''parse command line arguments to get directory name or file name'''
-    
-    parser = argparse.ArgumentParser()
-    
-    parser.add_argument('inputargument', nargs='?')
-    
-    args = parser.parse_args()
-    
-    return args
-                    
-def get_path(args):
-    '''parse command line arguments to get directory name or file name'''
-    
-    if(args.inputargument is None):
-        print('JackCompiler.py must have a directory name or file name argument.  Type a directory path or .jack file name path as an argument.')
-        return 'exit'
-        
-    path = os.path.abspath(args.inputargument)
+class CommandLineInterpreter:
 
-    if(not os.path.exists(path)):
-        print("The directory or file to translate does not exist.  Try another directory or file path.")
-        return 'exit'
-        
-    return path
+    def __init__(self):
+        self.commandline_args = self.parse_commandline()
+        self.path = self.get_path(self.commandline_args)
+        self.jack_filenames = self.get_jack_filenames(self.path)            
     
-def get_jack_filenames(path):
-    '''create a list of filenames to move through'''
-    jack_filenames = []
-    if(os.path.isdir(path)):
-        for file in os.listdir(path):
-            if file.endswith(".jack"):
-                jack_filenames.append(os.path.join(path, file))
-        if not jack_filenames:
-            print("If a directory is used as an argument it must contain at least one .jack file.  Try another directory or file path.")
-            return
-    else:
-        if not path.endswith(".jack"):
-            print("JackCompiler.py only works on .jack files.  Try another path argument.")
-            return
+    def parse_commandline(self):
+        '''parse command line arguments to get directory name or file name'''
+        parser = argparse.ArgumentParser()
+        parser.add_argument('inputargument', nargs='?')
+        args = parser.parse_args()
+        return args
+                    
+    def get_path(self,args):
+        '''parse command line arguments to get directory name or file name'''
+        if(args.inputargument is None):
+            print('JackCompiler.py must have a directory name or file name argument.  Type a directory path or .jack file name path as an argument.')
+            sys.exit(1)
+        path = os.path.abspath(args.inputargument)
+        if(not os.path.exists(path)):
+            print("The directory or file to translate does not exist.  Try another directory or file path.")
+            sys.exit(1)
+        return path
+    
+    def get_jack_filenames(self,path):
+        '''create a list of filenames to move through'''
+        jack_filenames = []
+        if(os.path.isdir(path)):
+            for file in os.listdir(path):
+                if file.endswith(".jack"):
+                    jack_filenames.append(os.path.join(path, file))
+            if not jack_filenames:
+                print("If a directory is used as an argument it must contain at least one .jack file.  Try another directory or file path.")
+                sys.exit(1)
         else:
-            jack_filenames.append(path)
-    return jack_filenames
-    
-def get_xml_filename(jack_filename):
-    ''' returns xml filename for a given jack_filename '''
-    xml_filename = os.path.dirname(jack_filename) + '\\xml\\' + (os.path.split(jack_filename)[1]).split('.')[0] + '.xml'
-    if not os.path.exists(os.path.dirname(xml_filename)):
-        os.makedirs(os.path.dirname(xml_filename))
-    return xml_filename
-    
+            if not path.endswith(".jack"):
+                print("JackCompiler.py only works on .jack files.  Try another path argument.")
+                sys.exit(1)
+            else:
+                jack_filenames.append(path)
+        return jack_filenames
+        
 class JackTokenizer:
     
     def __init__(self,jack_filename):
@@ -716,6 +683,14 @@ class CompilationEngine:
                 self.compileExpression()
             
         self.writeXmlNonTerminal('expressionList','end')
+   
+def get_xml_filename(jack_filename):
+    ''' returns xml filename for a given jack_filename '''
+    xml_filename = os.path.dirname(jack_filename) + '\\xml\\' + (os.path.split(jack_filename)[1]).split('.')[0] + '.xml'
+    if not os.path.exists(os.path.dirname(xml_filename)):
+        os.makedirs(os.path.dirname(xml_filename))
+    return xml_filename
+
    
 if __name__ == '__main__':
     sys.exit(main())
