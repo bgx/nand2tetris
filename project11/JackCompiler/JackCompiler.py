@@ -602,7 +602,58 @@ class CompilationEngine:
                 self.compileExpression()
             
         self.writeXmlNonTerminal('expressionList','end')
-   
+
+class SymbolTable:
+
+    def __init__(self):
+        self.class_table = {}
+        self.subroutine_table = {}
+        self.var_count = {'static':0,'field':0,'arg':0,'var':0}
+        
+    def startSubroutine(self):
+        self.subroutine_table = {}
+        
+    def define(self,name,type,kind):
+        '''.'''
+        if kind in ('static','field'):
+            self.class_table[name] = (type,kind,self.varCount(kind))
+            self.var_count[kind] += 1
+        elif kind in ('arg','var'):
+            self.subroutine_table[name] = (type,kind,self.varCount(kind))
+            self.var_count[kind] += 1
+        else:
+            print('error in SymbolTable.define() for name: ' + name)
+            sys.exit(1)
+        
+    def varCount(self,kind):
+        '''.'''
+        if kind in self.var_count:
+            return self.var_count[kind]
+        else:
+            print('error in SymbolTable.varCount() for kind: ' + kind)
+            sys.exit(1)
+        
+    def kindOf(self,name):
+        '''.'''
+        if name in self.subroutine_table:
+            return self.subroutine_table[name][1]
+        elif name in self.class_table:
+            return self.class_table[name][1]
+        
+    def typeOf(self,name):
+        '''.'''
+        if name in self.subroutine_table:
+            return self.subroutine_table[name][0]
+        elif name in self.class_table:
+            return self.class_table[name][0]
+        
+    def indexOf(self,name):
+        '''.'''
+        if name in self.subroutine_table:
+            return self.subroutine_table[name][2]
+        elif name in self.class_table:
+            return self.class_table[name][2]
+        
 def get_xml_filename(jack_filename):
     ''' returns xml filename for a given jack_filename '''
     xml_filename = os.path.dirname(jack_filename) + '\\xml\\' + (os.path.split(jack_filename)[1]).split('.')[0] + '.xml'
