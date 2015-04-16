@@ -209,6 +209,11 @@ class CompilationEngine:
                 
         self.tabk = 0
         
+        self.symbol_table = SymbolTable()
+        self.identifier_category = ''
+        self.identifier_type = ''
+        self.identifier_context = ''
+        
         if(self.jt.getTokenValue() == 'class'):
             self.compileClass()
         else:
@@ -216,6 +221,15 @@ class CompilationEngine:
         
     def __del__(self):
         self.xml.close()
+        
+    def setIdentifierCategory(self, category):
+        self.identifier_category = category
+        
+    def setIdentifierType(self, type):
+        self.identifier_type = type
+    
+    def setIdentifierContext(self, context):
+        self.identifier_context = context
 
     def writeXmlNonTerminal(self, s, tag_type):
         if(tag_type == 'begin'):
@@ -238,6 +252,22 @@ class CompilationEngine:
                 xml_value = '&amp;'
         self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.getTokenType()] + '> ' + 
                        xml_value + ' </' + self.jt.xml_translate[self.jt.getTokenType()] + '>\n')
+        if(self.jt.getTokenType() == 'IDENTIFIER'):
+            self.writeXmlTerminalIdentifier()    
+            
+    def writeXmlTerminalIdentifier(self, token_value = None):
+        if not token_value:
+            token_value = self.jt.getTokenValue()
+        self.xml.write('\t'*self.tabk + self.identifier_category + ' : ' + self.identifier_context)
+        if self.identifier_category in ('var','argument','static','field'):
+            if self.identifier_category in ('var','argument'):
+                if token_value not in self.symbol_table.subroutine_table:
+                    self.symbol_table.define(token_value, self.identifier_type, self.identifier_category)
+            elif self.identifier_category in ('static','field'):
+                if token_value not in self.symbol_table.class_table:
+                    self.symbol_table.define(token_value, self.identifier_type, self.identifier_category)
+            self.xml.write(' : ' + self.symbol_table.kindOf(token_value) + ' ' + str(self.symbol_table.indexOf(token_value)))
+        self.xml.write('\n')    
                        
     def expectTokenType(self, *token_type):
         if(self.jt.getTokenType() not in token_type):
@@ -266,12 +296,16 @@ class CompilationEngine:
         self.expectTokenValue(*token_value)
         self.writeXmlTerminal()
         self.jt.advance()
+        
+        
     
     def compileClass(self):
         '''.'''
         self.writeXmlNonTerminal('class','begin')
         
         self.processTokenExpectingValue('class')
+        self.setIdentifierCategory('class')
+        self.setIdentifierContext('defined')
         self.processTokenExpectingType('IDENTIFIER')
         self.processTokenExpectingValue('{')
         
@@ -293,14 +327,20 @@ class CompilationEngine:
         self.writeXmlNonTerminal('classVarDec','begin')
         
         # static or field
+        category = self.jt.getTokenValue()
         self.writeXmlTerminal()
         self.jt.advance()
         
         self.expectTokenType('IDENTIFIER','KEYWORD')
         if(self.jt.getTokenType() == 'KEYWORD'):
             self.expectTokenValue('int','char','boolean')
+        self.setIdentifierCategory('class')
+        self.setIdentifierContext('used')
+        self.setIdentifierType(self.jt.getTokenValue())
         self.writeXmlTerminal()
         self.jt.advance()
+        self.setIdentifierCategory(category)
+        self.setIdentifierContext('defined')
         self.processTokenExpectingType('IDENTIFIER')
         
         while(self.jt.getTokenValue() != ';'):
@@ -325,8 +365,13 @@ class CompilationEngine:
         self.expectTokenType('IDENTIFIER','KEYWORD')
         if(self.jt.getTokenType() == 'KEYWORD'):
             self.expectTokenValue('void','int','char','boolean')
+        self.setIdentifierCategory('class')
+        self.setIdentifierContext('used')
+        self.setIdentifierType(self.jt.getTokenValue())
         self.writeXmlTerminal()
         self.jt.advance()
+        self.setIdentifierCategory('subroutine')
+        self.setIdentifierContext('defined')
         self.processTokenExpectingType('IDENTIFIER')
         self.processTokenExpectingValue('(')
         
@@ -354,20 +399,28 @@ class CompilationEngine:
         '''.'''
         self.writeXmlNonTerminal('parameterList','begin')
         
-        while(self.jt.getTokenValue() != ')'):
+        if(self.jt.getTokenValue() != ')'):
+            self.setIdentifierContext('used')
+            self.setIdentifierCategory('class')
             self.expectTokenType('IDENTIFIER','KEYWORD')
             if(self.jt.getTokenType() == 'KEYWORD'):
                 self.expectTokenValue('void','int','char','boolean')
+            self.setIdentifierType(self.jt.getTokenValue())
             self.writeXmlTerminal()
             self.jt.advance()
+            self.setIdentifierContext('defined')
+            self.setIdentifierCategory('argument')
             self.processTokenExpectingType('IDENTIFIER')
             while(self.jt.getTokenValue() != ')'):
                 self.processTokenExpectingValue(',')
+                self.setIdentifierCategory('class')
                 self.expectTokenType('IDENTIFIER','KEYWORD')
                 if(self.jt.getTokenType() == 'KEYWORD'):
                     self.expectTokenValue('void','int','char','boolean')
                 self.writeXmlTerminal()
                 self.jt.advance()
+                self.setIdentifierContext('defined')
+                self.setIdentifierCategory('argument')
                 self.processTokenExpectingType('IDENTIFIER')
             
         self.writeXmlNonTerminal('parameterList','end')
@@ -377,14 +430,19 @@ class CompilationEngine:
         self.writeXmlNonTerminal('varDec','begin')
                 
         #var
+        category = self.jt.getTokenValue()
         self.writeXmlTerminal()
         self.jt.advance()
         
         self.expectTokenType('IDENTIFIER','KEYWORD')
         if(self.jt.getTokenType() == 'KEYWORD'):
             self.expectTokenValue('int','char','boolean')
+        self.setIdentifierCategory('class')
+        self.setIdentifierContext('used')
         self.writeXmlTerminal()
         self.jt.advance()
+        self.setIdentifierCategory(category)
+        self.setIdentifierContext('defined')
         self.processTokenExpectingType('IDENTIFIER')
         
         while(self.jt.getTokenValue() != ';'):
@@ -400,6 +458,8 @@ class CompilationEngine:
     def compileStatements(self):
         '''.'''
         self.writeXmlNonTerminal('statements','begin')
+        
+        self.setIdentifierContext('used')
         
         while(self.jt.getTokenValue() != '}'):
             if(self.jt.getTokenValue() == 'let'):
@@ -440,6 +500,7 @@ class CompilationEngine:
         self.writeXmlTerminal()
         self.jt.advance()
         
+        self.setIdentifierCategory(self.symbol_table.kindOf(self.jt.getTokenValue()))
         self.processTokenExpectingType('IDENTIFIER')
         
         self.expectTokenValue('[','=')
@@ -529,7 +590,9 @@ class CompilationEngine:
     def compileExpression(self):
         '''.'''
         self.writeXmlNonTerminal('expression','begin')
-        
+
+        self.setIdentifierCategory('var') 
+
         self.compileTerm()     
         
         while(self.jt.getTokenValue() in ('+','-','*','/','&','|','<','>','=')):
@@ -551,12 +614,16 @@ class CompilationEngine:
                 self.compileSubroutineCall(holdName)
             elif(self.jt.getTokenValue() == '['):
                 self.xml.write('\t'*self.tabk + '<identifier> ' + str(holdName) + ' </identifier>\n')
+                self.setIdentifierCategory(self.symbol_table.kindOf(holdName))
+                self.writeXmlTerminalIdentifier(holdName)
                 self.writeXmlTerminal()
                 self.jt.advance()
                 self.compileExpression()
                 self.processTokenExpectingValue(']')
             else:
                 self.xml.write('\t'*self.tabk + '<identifier> ' + str(holdName) + ' </identifier>\n')
+                self.setIdentifierCategory(self.symbol_table.kindOf(holdName))
+                self.writeXmlTerminalIdentifier(holdName)
                 
         elif(self.jt.getTokenType() == 'SYMBOL'):
             if(self.jt.getTokenValue() in ('-','~')):
@@ -576,17 +643,29 @@ class CompilationEngine:
         
     def compileSubroutineCall(self, subroutineName = None):
         '''.'''
+        self.setIdentifierCategory('subroutine')
+        self.setIdentifierContext('used')
         if(subroutineName):
-            self.xml.write('\t'*self.tabk + '<identifier> ' + str(subroutineName) + ' </identifier>\n')
+            holdName = subroutineName
         else:
-            self.writeXmlTerminal()
+            holdName = self.jt.getTokenValue()
             self.jt.advance()
         
         if(self.jt.getTokenValue() == '.'):
-            self.writeXmlTerminal()
+            self.xml.write('\t'*self.tabk + '<identifier> ' + str(holdName) + ' </identifier>\n')
+            if((holdName in self.symbol_table.subroutine_table) or (holdName in self.symbol_table.class_table)):
+                self.setIdentifierCategory(self.symbol_table.kindOf(holdName))
+            else:
+                self.setIdentifierCategory('class')
+            self.writeXmlTerminalIdentifier(holdName)
+            self.writeXmlTerminal()    
             self.jt.advance()
+            self.setIdentifierCategory('subroutine')
             self.processTokenExpectingType('IDENTIFIER')
-        
+        else:
+            self.xml.write('\t'*self.tabk + '<identifier> ' + str(holdName) + ' </identifier>\n')
+            self.writeXmlTerminalIdentifier(holdName)    
+
         self.processTokenExpectingValue('(')
         self.compileExpressionList()
         self.processTokenExpectingValue(')')
@@ -608,7 +687,7 @@ class SymbolTable:
     def __init__(self):
         self.class_table = {}
         self.subroutine_table = {}
-        self.var_count = {'static':0,'field':0,'arg':0,'var':0}
+        self.var_count = {'static':0,'field':0,'argument':0,'var':0}
         
     def startSubroutine(self):
         self.subroutine_table = {}
@@ -618,7 +697,7 @@ class SymbolTable:
         if kind in ('static','field'):
             self.class_table[name] = (type,kind,self.varCount(kind))
             self.var_count[kind] += 1
-        elif kind in ('arg','var'):
+        elif kind in ('argument','var'):
             self.subroutine_table[name] = (type,kind,self.varCount(kind))
             self.var_count[kind] += 1
         else:
