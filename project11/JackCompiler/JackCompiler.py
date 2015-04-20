@@ -23,9 +23,9 @@ def main():
     
     commandline = CommandLineInterpreter()
     
-    for file in commandline.jack_filenames:
-        jt = JackTokenizer(file)
-        ce = CompilationEngine(jt)
+    for filename in commandline.jack_filenames:
+        jt = JackTokenizer(filename)
+        ce = CompilationEngine(filename, jt)
         del ce    
         del jt    
         
@@ -199,7 +199,7 @@ class JackTokenizer:
     
 class CompilationEngine:
 
-    def __init__(self, jt):
+    def __init__(self, filename, jt):
         self.jt = jt
         
         self.xml_filename = self.jt.xmlT_filename.split('T.')[0] + '.xml'
@@ -213,6 +213,8 @@ class CompilationEngine:
         self.identifier_category = ''
         self.identifier_type = ''
         self.identifier_context = ''
+        
+        self.vm_writer = VMWriter(filename)
         
         if(self.jt.getTokenValue() == 'class'):
             self.compileClass()
@@ -322,15 +324,14 @@ class CompilationEngine:
                 
         self.writeXmlNonTerminal('class','end')
         
-    def compileClassVarDec(self):
+    def compileVarDecCommon(self):
         '''.'''
-        self.writeXmlNonTerminal('classVarDec','begin')
-        
-        # static or field
+        #var or static or field
         category = self.jt.getTokenValue()
         self.writeXmlTerminal()
         self.jt.advance()
         
+        # expecting type
         self.expectTokenType('IDENTIFIER','KEYWORD')
         if(self.jt.getTokenType() == 'KEYWORD'):
             self.expectTokenValue('int','char','boolean')
@@ -349,10 +350,19 @@ class CompilationEngine:
             
         # ;
         self.writeXmlTerminal()
-        self.jt.advance()
+        self.jt.advance()            
         
+    def compileClassVarDec(self):
+        '''.'''
+        self.writeXmlNonTerminal('classVarDec','begin')
+        self.compileVarDecCommon()
         self.writeXmlNonTerminal('classVarDec','end')
         
+    def compileVarDec(self):
+        '''.'''
+        self.writeXmlNonTerminal('varDec','begin')
+        self.compileVarDecCommon()
+        self.writeXmlNonTerminal('varDec','end')        
         
     def compileSubroutine(self):
         '''.'''
@@ -362,6 +372,7 @@ class CompilationEngine:
         self.writeXmlTerminal()
         self.jt.advance()
         
+        # expecting type
         self.expectTokenType('IDENTIFIER','KEYWORD')
         if(self.jt.getTokenType() == 'KEYWORD'):
             self.expectTokenValue('void','int','char','boolean')
@@ -402,6 +413,7 @@ class CompilationEngine:
         if(self.jt.getTokenValue() != ')'):
             self.setIdentifierContext('used')
             self.setIdentifierCategory('class')
+            # expecting type
             self.expectTokenType('IDENTIFIER','KEYWORD')
             if(self.jt.getTokenType() == 'KEYWORD'):
                 self.expectTokenValue('void','int','char','boolean')
@@ -414,6 +426,7 @@ class CompilationEngine:
             while(self.jt.getTokenValue() != ')'):
                 self.processTokenExpectingValue(',')
                 self.setIdentifierCategory('class')
+                # expecting type
                 self.expectTokenType('IDENTIFIER','KEYWORD')
                 if(self.jt.getTokenType() == 'KEYWORD'):
                     self.expectTokenValue('void','int','char','boolean')
@@ -424,37 +437,7 @@ class CompilationEngine:
                 self.processTokenExpectingType('IDENTIFIER')
             
         self.writeXmlNonTerminal('parameterList','end')
-        
-    def compileVarDec(self):
-        '''.'''
-        self.writeXmlNonTerminal('varDec','begin')
                 
-        #var
-        category = self.jt.getTokenValue()
-        self.writeXmlTerminal()
-        self.jt.advance()
-        
-        self.expectTokenType('IDENTIFIER','KEYWORD')
-        if(self.jt.getTokenType() == 'KEYWORD'):
-            self.expectTokenValue('int','char','boolean')
-        self.setIdentifierCategory('class')
-        self.setIdentifierContext('used')
-        self.writeXmlTerminal()
-        self.jt.advance()
-        self.setIdentifierCategory(category)
-        self.setIdentifierContext('defined')
-        self.processTokenExpectingType('IDENTIFIER')
-        
-        while(self.jt.getTokenValue() != ';'):
-            self.processTokenExpectingValue(',')
-            self.processTokenExpectingType('IDENTIFIER')
-            
-        # ;
-        self.writeXmlTerminal()
-        self.jt.advance()            
-        
-        self.writeXmlNonTerminal('varDec','end')
-        
     def compileStatements(self):
         '''.'''
         self.writeXmlNonTerminal('statements','begin')
@@ -732,14 +715,44 @@ class SymbolTable:
             return self.subroutine_table[name][2]
         elif name in self.class_table:
             return self.class_table[name][2]
-        
-def get_xml_filename(jack_filename):
-    ''' returns xml filename for a given jack_filename '''
-    xml_filename = os.path.dirname(jack_filename) + '\\xml\\' + (os.path.split(jack_filename)[1]).split('.')[0] + '.xml'
-    if not os.path.exists(os.path.dirname(xml_filename)):
-        os.makedirs(os.path.dirname(xml_filename))
-    return xml_filename
+            
+class VMWriter:
 
+    def __init__(self, filename):
+        '''.'''
+        self.vm_filename = filename.split('.')[0] + '.vm'
+        self.vm_file = open(self.vm_filename, 'w')
+
+    def writePush(self, segment, index):
+        '''.'''
+    
+    def writePop(self, segment, index):
+        '''.'''
+    
+    def writeArithmetic(self, command):
+        '''.'''
+    
+    def writeLabel(self, label):
+        '''.'''
+    
+    def writeGoTo(self, label):
+        '''.'''
+    
+    def writeIf(self, label):
+        '''.'''
+    
+    def writeCall(self, name, nArgs):
+        '''.'''
+    
+    def writeFunction(self, name, nLocals):
+        '''.'''
+    
+    def writeReturn(self):
+        '''.'''
+    
+    def close(self):
+        '''.'''
+        self.vm_file.close()
    
 if __name__ == '__main__':
     sys.exit(main())
