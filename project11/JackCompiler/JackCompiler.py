@@ -213,6 +213,10 @@ class CompilationEngine:
         self.identifier_category = ''
         self.identifier_type = ''
         self.identifier_context = ''
+        self.current_class = ''
+        self.current_subroutine = ''
+        self.subroutine_locals = 0
+        self.subroutine_args = 0
         
         self.vm_writer = VMWriter(filename)
         
@@ -223,6 +227,8 @@ class CompilationEngine:
         
     def __del__(self):
         self.xml.close()
+        del self.symbol_table
+        del self.vm_writer
         
     def setIdentifierCategory(self, category):
         self.identifier_category = category
@@ -232,6 +238,9 @@ class CompilationEngine:
     
     def setIdentifierContext(self, context):
         self.identifier_context = context
+
+    def setCurrentClass(self):
+        self.current_class = self.jt.getTokenValue()
 
     def writeXmlNonTerminal(self, s, tag_type):
         if(tag_type == 'begin'):
@@ -306,6 +315,7 @@ class CompilationEngine:
         self.writeXmlNonTerminal('class','begin')
         
         self.processTokenExpectingValue('class')
+        self.setCurrentClass()
         self.setIdentifierCategory('class')
         self.setIdentifierContext('defined')
         self.processTokenExpectingType('IDENTIFIER')
@@ -368,6 +378,10 @@ class CompilationEngine:
         '''.'''
         self.writeXmlNonTerminal('subroutineDec','begin')
         
+        self.symbol_table.startSubroutine()
+        self.symbol_table.define('this',self.current_class,'argument')
+        self.subroutine_locals = 0
+        
         #constructor or function or method
         self.writeXmlTerminal()
         self.jt.advance()
@@ -383,12 +397,17 @@ class CompilationEngine:
         self.jt.advance()
         self.setIdentifierCategory('subroutine')
         self.setIdentifierContext('defined')
-        self.processTokenExpectingType('IDENTIFIER')
+        self.expectTokenType('IDENTIFIER')
+        self.writeXmlTerminal()
+        self.current_subroutine = self.jt.getTokenValue()
+        self.jt.advance()
         self.processTokenExpectingValue('(')
         
         self.compileParameterList()
         
         self.processTokenExpectingValue(')')
+        
+        self.vm_writer.writeFunction(self.current_class + '.' + self.current_subroutine, self.subroutine_locals)
         
         self.writeXmlNonTerminal('subroutineBody','begin')
         
@@ -423,6 +442,7 @@ class CompilationEngine:
             self.setIdentifierContext('defined')
             self.setIdentifierCategory('argument')
             self.processTokenExpectingType('IDENTIFIER')
+            self.subroutine_locals += 1
             while(self.jt.getTokenValue() != ')'):
                 self.processTokenExpectingValue(',')
                 self.setIdentifierCategory('class')
@@ -435,6 +455,7 @@ class CompilationEngine:
                 self.setIdentifierContext('defined')
                 self.setIdentifierCategory('argument')
                 self.processTokenExpectingType('IDENTIFIER')
+                self.subroutine_locals += 1
             
         self.writeXmlNonTerminal('parameterList','end')
                 
@@ -535,7 +556,11 @@ class CompilationEngine:
         if(self.jt.getTokenValue() != ';'):
             self.compileExpression()
             
-        self.processTokenExpectingValue(';')    
+        self.expectTokenValue(';')
+        self.writeXmlTerminal()
+        self.jt.advance()
+        
+        self.vm_writer.writeReturn()    
         
         self.writeXmlNonTerminal('returnStatement','end')
         
@@ -579,9 +604,18 @@ class CompilationEngine:
         self.compileTerm()     
         
         while(self.jt.getTokenValue() in ('+','-','*','/','&','|','<','>','=')):
+            op_postfix = self.jt.getTokenValue()
             self.writeXmlTerminal()
             self.jt.advance()
             self.compileTerm()
+            if(op_postfix == '*'):
+                self.vm_writer.writeCall('Math.multiply', 2)
+            elif(op_postfix == '/'):
+                self.vm_writer.writeCall('Math.divide', 2)
+            else:
+                op_translate = {'+':'add','-':'sub','=':'eq','>':'gt','<':'lt','&':'and','|':'or'}
+                self.vm_writer.writeArithmetic(op_translate[op_postfix])
+            
                 
         self.writeXmlNonTerminal('expression','end')
         
@@ -618,6 +652,10 @@ class CompilationEngine:
                 self.jt.advance()
                 self.compileExpression()
                 self.processTokenExpectingValue(')')
+        elif(self.jt.getTokenType() == 'INT_CONST'):
+            self.vm_writer.writePush('constant',self.jt.getTokenValue())
+            self.writeXmlTerminal()
+            self.jt.advance()
         else:
             self.writeXmlTerminal()
             self.jt.advance()
@@ -626,6 +664,8 @@ class CompilationEngine:
         
     def compileSubroutineCall(self, subroutineName = None):
         '''.'''
+        self.subroutine_args = 0
+        subroutine_call_name = ''
         self.setIdentifierCategory('subroutine')
         self.setIdentifierContext('used')
         if(subroutineName):
@@ -633,6 +673,7 @@ class CompilationEngine:
         else:
             holdName = self.jt.getTokenValue()
             self.jt.advance()
+        subroutine_call_name = holdName    
         
         if(self.jt.getTokenValue() == '.'):
             self.xml.write('\t'*self.tabk + '<identifier> ' + str(holdName) + ' </identifier>\n')
@@ -643,6 +684,7 @@ class CompilationEngine:
             self.writeXmlTerminalIdentifier(holdName)
             self.writeXmlTerminal()    
             self.jt.advance()
+            subroutine_call_name = subroutine_call_name + '.' + self.jt.getTokenValue()
             self.setIdentifierCategory('subroutine')
             self.processTokenExpectingType('IDENTIFIER')
         else:
@@ -653,15 +695,19 @@ class CompilationEngine:
         self.compileExpressionList()
         self.processTokenExpectingValue(')')
         
+        self.vm_writer.writeCall(subroutine_call_name,self.subroutine_args)
+        
     def compileExpressionList(self):
         '''.'''
         self.writeXmlNonTerminal('expressionList','begin')
         
         if(self.jt.getTokenValue() != ')'):
             self.compileExpression()
+            self.subroutine_args += 1
             while(self.jt.getTokenValue() != ')'):
                 self.processTokenExpectingValue(',')
                 self.compileExpression()
+                self.subroutine_args += 1
             
         self.writeXmlNonTerminal('expressionList','end')
 
@@ -722,15 +768,48 @@ class VMWriter:
         '''.'''
         self.vm_filename = filename.split('.')[0] + '.vm'
         self.vm_file = open(self.vm_filename, 'w')
+        
+        self.segment_names = ['constant','argument','local','static','this','that','pointer','temp']
+        self.command_names = ['add','sub','neg','eq','gt','lt','and','or','not']
 
     def writePush(self, segment, index):
         '''.'''
+        if(isinstance(segment,str)):
+            segment.lower()
+            if(segment not in self.segment_names):
+                print('error in writePush: segment name not legal')
+                sys.exit(1)
+        else:
+            print('error in writePush: segment not a string')
+            sys.exit(1)    
+            
+        self.vm_file.write('push ' + segment + ' ' + index + '\n')
     
     def writePop(self, segment, index):
         '''.'''
+        if(isinstance(segment,str)):
+            segment.lower()
+            if(segment not in self.segment_names):
+                print('error in writePush: segment name not legal')
+                sys.exit(1)
+        else:
+            print('error in writePush: segment not a string')
+            sys.exit(1)    
+            
+        self.vm_file.write('pop ' + segment + ' ' + index + '\n')
     
     def writeArithmetic(self, command):
         '''.'''
+        if(isinstance(command,str)):
+            command.lower()
+            if(command not in self.command_names):
+                print('error in writeArithmetic: command name not legal')
+                sys.exit(1)
+        else:
+            print('error in writeArithmetic: command not a string')
+            sys.exit(1)    
+        
+        self.vm_file.write(command + '\n')
     
     def writeLabel(self, label):
         '''.'''
@@ -743,12 +822,15 @@ class VMWriter:
     
     def writeCall(self, name, nArgs):
         '''.'''
+        self.vm_file.write('call ' + name + ' ' + str(nArgs) + '\n')
     
     def writeFunction(self, name, nLocals):
         '''.'''
+        self.vm_file.write('function ' + name + ' ' + str(nLocals) + '\n')
     
     def writeReturn(self):
         '''.'''
+        self.vm_file.write('return')
     
     def close(self):
         '''.'''
