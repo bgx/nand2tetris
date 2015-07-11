@@ -323,7 +323,7 @@ class CompilationEngine:
         
         while( self.jt.getTokenValue() != '}'):
             if(self.jt.getTokenValue() in ('static', 'field')):
-                self.compileClassVarDec()
+                self.compileVarDec('class')
             elif(self.jt.getTokenValue() in ('constructor', 'function', 'method')):
                 self.compileSubroutine()
             else:
@@ -334,8 +334,17 @@ class CompilationEngine:
                 
         self.writeXmlNonTerminal('class','end')
         
-    def compileVarDecCommon(self):
+    def compileVarDec(self,varScope):
         '''.'''
+        if(varScope not in ['class','subroutine']):
+            print('error in compileVarDec()\n')
+            sys.exit(1)
+            
+        if(varScope == 'class'):
+            self.writeXmlNonTerminal('classVarDec','begin')
+        else:
+            self.writeXmlNonTerminal('varDec','begin')
+        
         #var or static or field
         category = self.jt.getTokenValue()
         self.writeXmlTerminal()
@@ -353,26 +362,23 @@ class CompilationEngine:
         self.setIdentifierCategory(category)
         self.setIdentifierContext('defined')
         self.processTokenExpectingType('IDENTIFIER')
+        if(varScope == 'subroutine'):
+            self.subroutine_locals += 1;
         
         while(self.jt.getTokenValue() != ';'):
             self.processTokenExpectingValue(',')
             self.processTokenExpectingType('IDENTIFIER')
+            if(varScope == 'subroutine'):
+                self.subroutine_locals += 1;
             
         # ;
         self.writeXmlTerminal()
-        self.jt.advance()            
-        
-    def compileClassVarDec(self):
-        '''.'''
-        self.writeXmlNonTerminal('classVarDec','begin')
-        self.compileVarDecCommon()
-        self.writeXmlNonTerminal('classVarDec','end')
-        
-    def compileVarDec(self):
-        '''.'''
-        self.writeXmlNonTerminal('varDec','begin')
-        self.compileVarDecCommon()
-        self.writeXmlNonTerminal('varDec','end')        
+        self.jt.advance() 
+
+        if(varScope == 'class'):
+            self.writeXmlNonTerminal('classVarDec','end')
+        else:
+            self.writeXmlNonTerminal('varDec','end')       
         
     def compileSubroutine(self):
         '''.'''
@@ -406,16 +412,16 @@ class CompilationEngine:
         self.compileParameterList()
         
         self.processTokenExpectingValue(')')
-        
-        self.vm_writer.writeFunction(self.current_class + '.' + self.current_subroutine, self.subroutine_locals)
-        
+                
         self.writeXmlNonTerminal('subroutineBody','begin')
         
         self.processTokenExpectingValue('{')
         
         while(self.jt.getTokenValue() == 'var'):
-            self.compileVarDec()
-        
+            self.compileVarDec('subroutine')
+
+        self.vm_writer.writeFunction(self.current_class + '.' + self.current_subroutine, self.subroutine_locals)
+
         if(self.jt.getTokenValue() != '}'):
             self.compileStatements()
         
@@ -442,7 +448,6 @@ class CompilationEngine:
             self.setIdentifierContext('defined')
             self.setIdentifierCategory('argument')
             self.processTokenExpectingType('IDENTIFIER')
-            self.subroutine_locals += 1
             while(self.jt.getTokenValue() != ')'):
                 self.processTokenExpectingValue(',')
                 self.setIdentifierCategory('class')
@@ -455,7 +460,6 @@ class CompilationEngine:
                 self.setIdentifierContext('defined')
                 self.setIdentifierCategory('argument')
                 self.processTokenExpectingType('IDENTIFIER')
-                self.subroutine_locals += 1
             
         self.writeXmlNonTerminal('parameterList','end')
                 
@@ -830,7 +834,7 @@ class VMWriter:
     
     def writeReturn(self):
         '''.'''
-        self.vm_file.write('return')
+        self.vm_file.write('return' + '\n')
     
     def close(self):
         '''.'''
