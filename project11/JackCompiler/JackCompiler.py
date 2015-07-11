@@ -378,7 +378,7 @@ class CompilationEngine:
         if(varScope == 'class'):
             self.writeXmlNonTerminal('classVarDec','end')
         else:
-            self.writeXmlNonTerminal('varDec','end')       
+            self.writeXmlNonTerminal('varDec','end')
         
     def compileSubroutine(self):
         '''.'''
@@ -508,6 +508,7 @@ class CompilationEngine:
         self.writeXmlTerminal()
         self.jt.advance()
         
+        nameOfVariableBeingAssignedTo = self.jt.getTokenValue()
         self.setIdentifierCategory(self.symbol_table.kindOf(self.jt.getTokenValue()))
         self.processTokenExpectingType('IDENTIFIER')
         
@@ -523,7 +524,9 @@ class CompilationEngine:
         
         self.compileExpression()
         
-        self.processTokenExpectingValue(';')    
+        self.processTokenExpectingValue(';')  
+
+        self.vm_writer.writePop(self.symbol_table.kindOf(nameOfVariableBeingAssignedTo), self.symbol_table.indexOf(nameOfVariableBeingAssignedTo))        
         
         self.writeXmlNonTerminal('letStatement','end')
         
@@ -643,6 +646,7 @@ class CompilationEngine:
                 self.processTokenExpectingValue(']')
             else:
                 self.xml.write('\t'*self.tabk + '<identifier> ' + str(holdName) + ' </identifier>\n')
+                self.vm_writer.writePush(self.symbol_table.kindOf(holdName),self.symbol_table.indexOf(holdName))
                 self.setIdentifierCategory(self.symbol_table.kindOf(holdName))
                 self.writeXmlTerminalIdentifier(holdName)
                 
@@ -658,6 +662,14 @@ class CompilationEngine:
                 self.processTokenExpectingValue(')')
         elif(self.jt.getTokenType() == 'INT_CONST'):
             self.vm_writer.writePush('constant',self.jt.getTokenValue())
+            self.writeXmlTerminal()
+            self.jt.advance()
+        elif(self.jt.getTokenType() == 'KEYWORD'):
+            if(self.jt.getTokenValue() in ('null','false')):
+                self.vm_writer.writePush('constant',0)
+            elif(self.jt.getTokenValue() in ('true')):
+                self.vm_writer.writePush('constant',1)
+                self.vm_writer.writeArithmetic('neg')
             self.writeXmlTerminal()
             self.jt.advance()
         else:
@@ -724,6 +736,8 @@ class SymbolTable:
         
     def startSubroutine(self):
         self.subroutine_table = {}
+        self.var_count['argument']=0
+        self.var_count['var']=0
         
     def define(self,name,type,kind):
         '''.'''
@@ -775,9 +789,13 @@ class VMWriter:
         
         self.segment_names = ['constant','argument','local','static','this','that','pointer','temp']
         self.command_names = ['add','sub','neg','eq','gt','lt','and','or','not']
+        
+        self.symboltablekindtovmwritersegment = {'static':'static','field':'this','argument':'argument','var':'local'}
 
     def writePush(self, segment, index):
         '''.'''
+        if(segment in self.symboltablekindtovmwritersegment):
+            segment = self.symboltablekindtovmwritersegment[segment]
         if(isinstance(segment,str)):
             segment.lower()
             if(segment not in self.segment_names):
@@ -787,10 +805,12 @@ class VMWriter:
             print('error in writePush: segment not a string')
             sys.exit(1)    
             
-        self.vm_file.write('push ' + segment + ' ' + index + '\n')
+        self.vm_file.write('push ' + segment + ' ' + str(index) + '\n')
     
     def writePop(self, segment, index):
         '''.'''
+        if(segment in self.symboltablekindtovmwritersegment):
+            segment = self.symboltablekindtovmwritersegment[segment]
         if(isinstance(segment,str)):
             segment.lower()
             if(segment not in self.segment_names):
@@ -800,7 +820,7 @@ class VMWriter:
             print('error in writePush: segment not a string')
             sys.exit(1)    
             
-        self.vm_file.write('pop ' + segment + ' ' + index + '\n')
+        self.vm_file.write('pop ' + segment + ' ' + str(index) + '\n')
     
     def writeArithmetic(self, command):
         '''.'''
@@ -839,6 +859,9 @@ class VMWriter:
     def close(self):
         '''.'''
         self.vm_file.close()
+        
+    def writeDebug(self,arg):
+        self.vm_file.write(arg + '\n')
    
 if __name__ == '__main__':
     sys.exit(main())
