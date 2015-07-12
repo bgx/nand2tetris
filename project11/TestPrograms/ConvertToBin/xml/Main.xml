@@ -27,6 +27,30 @@
 			<statements>
 				<doStatement>
 					<keyword> do </keyword>
+					<identifier> Memory </identifier>
+					class : used
+					<symbol> . </symbol>
+					<identifier> poke </identifier>
+					subroutine : used
+					<symbol> ( </symbol>
+					<expressionList>
+						<expression>
+							<term>
+								<integerConstant> 8000 </integerConstant>
+							</term>
+						</expression>
+						<symbol> , </symbol>
+						<expression>
+							<term>
+								<integerConstant> 127 </integerConstant>
+							</term>
+						</expression>
+					</expressionList>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<doStatement>
+					<keyword> do </keyword>
 					<identifier> Main </identifier>
 					class : used
 					<symbol> . </symbol>
@@ -119,7 +143,7 @@
 		<parameterList>
 			<keyword> int </keyword>
 			<identifier> value </identifier>
-			argument : defined : argument 1
+			argument : defined : argument 0
 		</parameterList>
 		<symbol> ) </symbol>
 		<subroutineBody>
@@ -278,7 +302,7 @@
 														<expression>
 															<term>
 																<identifier> value </identifier>
-																argument : used : argument 1
+																argument : used : argument 0
 															</term>
 															<symbol> &amp; </symbol>
 															<term>
@@ -406,7 +430,7 @@
 		<parameterList>
 			<keyword> int </keyword>
 			<identifier> mask </identifier>
-			argument : defined : argument 1
+			argument : defined : argument 0
 		</parameterList>
 		<symbol> ) </symbol>
 		<subroutineBody>
@@ -418,7 +442,7 @@
 					<expression>
 						<term>
 							<identifier> mask </identifier>
-							argument : used : argument 1
+							argument : used : argument 0
 						</term>
 						<symbol> = </symbol>
 						<term>
@@ -447,7 +471,7 @@
 							<expression>
 								<term>
 									<identifier> mask </identifier>
-									argument : used : argument 1
+									argument : used : argument 0
 								</term>
 								<symbol> * </symbol>
 								<term>
@@ -472,15 +496,15 @@
 		<parameterList>
 			<keyword> int </keyword>
 			<identifier> startAddress </identifier>
-			argument : defined : argument 1
+			argument : defined : argument 0
 			<symbol> , </symbol>
 			<keyword> int </keyword>
 			<identifier> length </identifier>
-			argument : defined : argument 2
+			argument : defined : argument 1
 			<symbol> , </symbol>
 			<keyword> int </keyword>
 			<identifier> value </identifier>
-			argument : defined : argument 3
+			argument : defined : argument 2
 		</parameterList>
 		<symbol> ) </symbol>
 		<subroutineBody>
@@ -492,7 +516,7 @@
 					<expression>
 						<term>
 							<identifier> length </identifier>
-							argument : used : argument 2
+							argument : used : argument 1
 						</term>
 						<symbol> &gt; </symbol>
 						<term>
@@ -514,14 +538,14 @@
 								<expression>
 									<term>
 										<identifier> startAddress </identifier>
-										argument : used : argument 1
+										argument : used : argument 0
 									</term>
 								</expression>
 								<symbol> , </symbol>
 								<expression>
 									<term>
 										<identifier> value </identifier>
-										argument : used : argument 3
+										argument : used : argument 2
 									</term>
 								</expression>
 							</expressionList>
@@ -531,12 +555,12 @@
 						<letStatement>
 							<keyword> let </keyword>
 							<identifier> length </identifier>
-							argument : used : argument 2
+							argument : used : argument 1
 							<symbol> = </symbol>
 							<expression>
 								<term>
 									<identifier> length </identifier>
-									argument : used : argument 2
+									argument : used : argument 1
 								</term>
 								<symbol> - </symbol>
 								<term>
@@ -548,12 +572,12 @@
 						<letStatement>
 							<keyword> let </keyword>
 							<identifier> startAddress </identifier>
-							argument : used : argument 1
+							argument : used : argument 0
 							<symbol> = </symbol>
 							<expression>
 								<term>
 									<identifier> startAddress </identifier>
-									argument : used : argument 1
+									argument : used : argument 0
 								</term>
 								<symbol> + </symbol>
 								<term>

@@ -219,6 +219,8 @@ class CompilationEngine:
         self.subroutine_args = 0
         
         self.vm_writer = VMWriter(filename)
+
+        self.controlstatementlabeltag = 0
         
         if(self.jt.getTokenValue() == 'class'):
             self.compileClass()
@@ -241,6 +243,17 @@ class CompilationEngine:
 
     def setCurrentClass(self):
         self.current_class = self.jt.getTokenValue()
+        
+    def setCurrentSubroutine(self):
+        self.current_subroutine = self.jt.getTokenValue()
+        
+    def getControlStatementLabelTag(self):
+        tag = self.controlstatementlabeltag
+        self.controlstatementlabeltag += 1
+        return tag
+        
+    def resetControlStatementLabelTag(self):
+        self.controlstatementlabeltag = 0
 
     def writeXmlNonTerminal(self, s, tag_type):
         if(tag_type == 'begin'):
@@ -385,8 +398,9 @@ class CompilationEngine:
         self.writeXmlNonTerminal('subroutineDec','begin')
         
         self.symbol_table.startSubroutine()
-        self.symbol_table.define('this',self.current_class,'argument')
+        # self.symbol_table.define('this',self.current_class,'argument')
         self.subroutine_locals = 0
+        self.resetControlStatementLabelTag()
         
         #constructor or function or method
         self.writeXmlTerminal()
@@ -405,7 +419,7 @@ class CompilationEngine:
         self.setIdentifierContext('defined')
         self.expectTokenType('IDENTIFIER')
         self.writeXmlTerminal()
-        self.current_subroutine = self.jt.getTokenValue()
+        self.setCurrentSubroutine()
         self.jt.advance()
         self.processTokenExpectingValue('(')
         
@@ -494,7 +508,8 @@ class CompilationEngine:
         self.writeXmlTerminal()
         self.jt.advance()
                
-        self.compileSubroutineCall()       
+        self.compileSubroutineCall()
+        self.vm_writer.writePop('temp',0)
         
         self.processTokenExpectingValue(';')        
                 
@@ -534,21 +549,28 @@ class CompilationEngine:
         '''.'''
         self.writeXmlNonTerminal('whileStatement','begin')
         
+        L1 = self.current_class + self.current_subroutine + str(self.getControlStatementLabelTag())
+        L2 = self.current_class + self.current_subroutine + str(self.getControlStatementLabelTag())
+        
         #while
         self.writeXmlTerminal()
         self.jt.advance()
         
-        self.processTokenExpectingValue('(')    
+        self.vm_writer.writeLabel(L1)
         
+        self.processTokenExpectingValue('(')
         self.compileExpression()
+        self.processTokenExpectingValue(')')
         
-        self.processTokenExpectingValue(')')    
+        self.vm_writer.writeArithmetic('not')
+        self.vm_writer.writeIf(L2)
         
         self.processTokenExpectingValue('{')    
-        
         self.compileStatements()
-        
-        self.processTokenExpectingValue('}')    
+        self.processTokenExpectingValue('}')  
+
+        self.vm_writer.writeGoTo(L1)
+        self.vm_writer.writeLabel(L2)
                         
         self.writeXmlNonTerminal('whileStatement','end')
         
@@ -575,30 +597,36 @@ class CompilationEngine:
         '''.'''
         self.writeXmlNonTerminal('ifStatement','begin')
         
+        L1 = self.current_class + self.current_subroutine + str(self.getControlStatementLabelTag())
+        L2 = self.current_class + self.current_subroutine + str(self.getControlStatementLabelTag())
+        
         #if
         self.writeXmlTerminal()
         self.jt.advance()
         
         self.processTokenExpectingValue('(')    
-        
         self.compileExpression()
-        
-        self.processTokenExpectingValue(')')    
+        self.processTokenExpectingValue(')') 
+
+        self.vm_writer.writeArithmetic('not')
+        self.vm_writer.writeIf(L1)
         
         self.processTokenExpectingValue('{')    
-        
         self.compileStatements()
+        self.processTokenExpectingValue('}')
+
+        self.vm_writer.writeGoTo(L2)
+        self.vm_writer.writeLabel(L1)
         
-        self.processTokenExpectingValue('}')    
-                
         if(self.jt.getTokenValue() == 'else'):
             self.writeXmlTerminal()
             self.jt.advance()
+            
             self.processTokenExpectingValue('{')    
-            
             self.compileStatements()
-            
             self.processTokenExpectingValue('}')    
+        
+        self.vm_writer.writeLabel(L2)
         
         self.writeXmlNonTerminal('ifStatement','end')
         
@@ -651,10 +679,16 @@ class CompilationEngine:
                 self.writeXmlTerminalIdentifier(holdName)
                 
         elif(self.jt.getTokenType() == 'SYMBOL'):
-            if(self.jt.getTokenValue() in ('-','~')):
+            if(self.jt.getTokenValue() == ('-')):
                 self.writeXmlTerminal()
                 self.jt.advance()
                 self.compileTerm()
+                self.vm_writer.writeArithmetic('neg')
+            elif(self.jt.getTokenValue() == ('~')):
+                self.writeXmlTerminal()
+                self.jt.advance()
+                self.compileTerm()
+                self.vm_writer.writeArithmetic('not')
             elif(self.jt.getTokenValue() == '('):
                 self.writeXmlTerminal()
                 self.jt.advance()
@@ -837,12 +871,15 @@ class VMWriter:
     
     def writeLabel(self, label):
         '''.'''
+        self.vm_file.write('label ' + label + '\n')
     
     def writeGoTo(self, label):
         '''.'''
+        self.vm_file.write('goto ' + label + '\n')
     
     def writeIf(self, label):
         '''.'''
+        self.vm_file.write('if-goto ' + label + '\n')
     
     def writeCall(self, name, nArgs):
         '''.'''

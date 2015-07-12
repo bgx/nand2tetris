@@ -1,22 +1,29 @@
-{'result': ('int', 'var', 0), 'this': ('Main', 'argument', 0), 'value': ('int', 'var', 1)}
 function Main.main 2
+push constant 8000
+push constant 127
+call Memory.poke 2
+pop temp 0
 push constant 8001
 push constant 16
 push constant 1
+neg
 call Main.fillMemory 3
+pop temp 0
 push constant 8000
 call Memory.peek 1
 pop local 1
 push local 1
 call Main.convert 1
+pop temp 0
 return
-{'mask': ('int', 'var', 0), 'this': ('Main', 'argument', 0), 'position': ('int', 'var', 1), 'value': ('int', 'argument', 1)}
-{'mask': ('int', 'var', 0), 'this': ('Main', 'argument', 0), 'loop': ('boolean', 'var', 2), 'position': ('int', 'var', 1), 'value': ('int', 'argument', 1)}
 function Main.convert 3
 push constant 1
 neg
 pop local 2
+label Mainconvert0
 push local 2
+not
+if-goto Mainconvert1
 push local 1
 push constant 1
 add
@@ -29,50 +36,78 @@ push local 1
 add
 push local 0
 call Memory.poke 2
+pop temp 0
 push local 1
 push constant 16
 gt
-push argument 1
+not
+not
+if-goto Mainconvert2
+push argument 0
 push local 0
 and
 push constant 0
 eq
+not
+not
+if-goto Mainconvert4
 push constant 8000
 push local 1
 add
 push constant 1
 call Memory.poke 2
+pop temp 0
+goto Mainconvert5
+label Mainconvert4
 push constant 8000
 push local 1
 add
 push constant 0
 call Memory.poke 2
+pop temp 0
+label Mainconvert5
+goto Mainconvert3
+label Mainconvert2
 push constant 0
 pop local 2
+label Mainconvert3
+goto Mainconvert0
+label Mainconvert1
 return
 function Main.nextMask 0
-push argument 1
+push argument 0
 push constant 0
 eq
+not
+if-goto MainnextMask0
 push constant 1
 return
-push argument 1
+goto MainnextMask1
+label MainnextMask0
+push argument 0
 push constant 2
 call Math.multiply 2
 return
+label MainnextMask1
 function Main.fillMemory 0
-push argument 2
+label MainfillMemory0
+push argument 1
 push constant 0
 gt
-push argument 1
-push argument 3
-call Memory.poke 2
+not
+if-goto MainfillMemory1
+push argument 0
 push argument 2
+call Memory.poke 2
+pop temp 0
+push argument 1
 push constant 1
 sub
-pop argument 2
-push argument 1
+pop argument 1
+push argument 0
 push constant 1
 add
-pop argument 1
+pop argument 0
+goto MainfillMemory0
+label MainfillMemory1
 return
