@@ -42,7 +42,10 @@
 						<symbol> , </symbol>
 						<expression>
 							<term>
-								<integerConstant> 127 </integerConstant>
+								<symbol> - </symbol>
+								<term>
+									<integerConstant> 11 </integerConstant>
+								</term>
 							</term>
 						</expression>
 					</expressionList>

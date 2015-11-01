@@ -30,15 +30,15 @@
 		<parameterList>
 			<keyword> int </keyword>
 			<identifier> Ax </identifier>
-			argument : used : argument 0
+			argument : defined : argument 0
 			<symbol> , </symbol>
 			<keyword> int </keyword>
 			<identifier> Ay </identifier>
-			argument : used : argument 1
+			argument : defined : argument 1
 			<symbol> , </symbol>
 			<keyword> int </keyword>
 			<identifier> Asize </identifier>
-			argument : used : argument 2
+			argument : defined : argument 2
 		</parameterList>
 		<symbol> ) </symbol>
 		<subroutineBody>

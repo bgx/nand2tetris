@@ -243,7 +243,7 @@ class CompilationEngine:
 
     def setCurrentClass(self):
         self.current_class = self.jt.getTokenValue()
-        
+    
     def setCurrentSubroutine(self):
         self.current_subroutine = self.jt.getTokenValue()
         
@@ -256,6 +256,13 @@ class CompilationEngine:
         self.controlstatementlabeltag = 0
 
     def writeXmlNonTerminal(self, s, tag_type):
+        '''
+        Writes an xml tag (<tag> or </tag>) for a non-terminal language element
+        Note that a terminal language element can signal the start of a non-terminal language element
+        (because the terminal is the first terminal within the non-terminal)
+        For example: the terminal element 'constructor' signals the start of the non-terminal language element 'subroutineDec'
+        And the terminal element 'class' signals the start of the non-terminal language element 'class'
+        '''
         if(tag_type == 'begin'):
             self.xml.write('\t'*self.tabk + '<' + s + '>\n')
             self.tabk += 1
@@ -265,33 +272,51 @@ class CompilationEngine:
         else:
             self.xml.write('invalid tag_type parameter value given to writeXmlNonTerminal')
     
-    def writeXmlTerminal(self):
-        xml_value = str(self.jt.getTokenValue())
-        if(xml_value in ('<','>','&')):
-            if xml_value == '<':
-                xml_value = '&lt;'
-            elif xml_value == '>':
-                xml_value = '&gt;'
+    def writeXmlTerminal(self, tokenType = None, tokenValue = None):
+        ''' One of the five lexical elements of Jack: 
+        KEYWORD, SYMBOL, INT_CONST, STRING_CONST, or IDENTIFIER'''
+        
+        if not tokenType:
+            tokenType = self.jt.xml_translate[self.jt.getTokenType()]
+        if not tokenValue:
+            tokenValue = str(self.jt.getTokenValue())
+        
+        
+        # these symbols have their own meaning in xml, so we must format them
+        if(tokenValue in ('<','>','&')):
+            if tokenValue == '<':
+                tokenValue = '&lt;'
+            elif tokenValue == '>':
+                tokenValue = '&gt;'
             else:
-                xml_value = '&amp;'
-        self.xml.write('\t'*self.tabk + '<' + self.jt.xml_translate[self.jt.getTokenType()] + '> ' + 
-                       xml_value + ' </' + self.jt.xml_translate[self.jt.getTokenType()] + '>\n')
-        if(self.jt.getTokenType() == 'IDENTIFIER'):
-            self.writeXmlTerminalIdentifier()    
+                tokenValue = '&amp;'
+        
+        self.xml.write('\t'*self.tabk + '<' + tokenType + '> ' + tokenValue + ' </' + tokenType + '>\n')  
             
-    def writeXmlTerminalIdentifier(self, token_value = None):
+    def processTerminal(self):
+        self.writeXmlTerminal()
+        if(self.jt.getTokenType() == 'IDENTIFIER'):
+            self.updateSymbolTable()
+            
+    def updateSymbolTable(self, token_value = None):
         if not token_value:
             token_value = self.jt.getTokenValue()
-        self.xml.write('\t'*self.tabk + self.identifier_category + ' : ' + self.identifier_context)
+                    
         if self.identifier_category in ('var','argument','static','field'):
             if self.identifier_category in ('var','argument'):
                 if token_value not in self.symbol_table.subroutine_table:
                     self.symbol_table.define(token_value, self.identifier_type, self.identifier_category)
             elif self.identifier_category in ('static','field'):
                 if token_value not in self.symbol_table.class_table:
-                    self.symbol_table.define(token_value, self.identifier_type, self.identifier_category)
-            self.xml.write(' : ' + self.symbol_table.kindOf(token_value) + ' ' + str(self.symbol_table.indexOf(token_value)))
-        self.xml.write('\n')    
+                    self.symbol_table.define(token_value, self.identifier_type, self.identifier_category)                           
+            
+        self.writeIdentifierInfo(token_value)
+    
+    def writeIdentifierInfo(self, token_value):
+        xml_string = '\t'*self.tabk + self.identifier_category + ' : ' + self.identifier_context
+        if self.identifier_category in ('var','argument','static','field'):
+            xml_string = xml_string + ' : ' + self.symbol_table.kindOf(token_value) + ' ' + str(self.symbol_table.indexOf(token_value))
+        self.xml.write(xml_string + '\n')
                        
     def expectTokenType(self, *token_type):
         if(self.jt.getTokenType() not in token_type):
@@ -313,12 +338,12 @@ class CompilationEngine:
     
     def processTokenExpectingType(self, *token_type):
         self.expectTokenType(*token_type)
-        self.writeXmlTerminal()
+        self.processTerminal()
         self.jt.advance()
     
     def processTokenExpectingValue(self, *token_value):
         self.expectTokenValue(*token_value)
-        self.writeXmlTerminal()
+        self.processTerminal()
         self.jt.advance()
         
         
@@ -360,17 +385,19 @@ class CompilationEngine:
         
         #var or static or field
         category = self.jt.getTokenValue()
-        self.writeXmlTerminal()
+        self.processTerminal()
         self.jt.advance()
         
         # expecting type
         self.expectTokenType('IDENTIFIER','KEYWORD')
         if(self.jt.getTokenType() == 'KEYWORD'):
             self.expectTokenValue('int','char','boolean')
-        self.setIdentifierCategory('class')
-        self.setIdentifierContext('used')
-        self.setIdentifierType(self.jt.getTokenValue())
-        self.writeXmlTerminal()
+        else:
+            self.setIdentifierCategory('class')
+            self.setIdentifierContext('used')
+            self.setIdentifierType(self.jt.getTokenValue())
+        
+        self.processTerminal()
         self.jt.advance()
         self.setIdentifierCategory(category)
         self.setIdentifierContext('defined')
@@ -385,7 +412,7 @@ class CompilationEngine:
                 self.subroutine_locals += 1;
             
         # ;
-        self.writeXmlTerminal()
+        self.processTerminal()
         self.jt.advance() 
 
         if(varScope == 'class'):
@@ -398,12 +425,12 @@ class CompilationEngine:
         self.writeXmlNonTerminal('subroutineDec','begin')
         
         self.symbol_table.startSubroutine()
-        # self.symbol_table.define('this',self.current_class,'argument')
         self.subroutine_locals = 0
         self.resetControlStatementLabelTag()
-        
+                    
         #constructor or function or method
-        self.writeXmlTerminal()
+        subroutineType = self.jt.getTokenValue()
+        self.processTerminal()
         self.jt.advance()
         
         # expecting type
@@ -413,12 +440,12 @@ class CompilationEngine:
         self.setIdentifierCategory('class')
         self.setIdentifierContext('used')
         self.setIdentifierType(self.jt.getTokenValue())
-        self.writeXmlTerminal()
+        self.processTerminal()
         self.jt.advance()
         self.setIdentifierCategory('subroutine')
         self.setIdentifierContext('defined')
         self.expectTokenType('IDENTIFIER')
-        self.writeXmlTerminal()
+        self.processTerminal()
         self.setCurrentSubroutine()
         self.jt.advance()
         self.processTokenExpectingValue('(')
@@ -435,6 +462,21 @@ class CompilationEngine:
             self.compileVarDec('subroutine')
 
         self.vm_writer.writeFunction(self.current_class + '.' + self.current_subroutine, self.subroutine_locals)
+        
+        if(subroutineType == 'constructor'):
+            # allocate memory for object with Memory.alloc(size), where size = number of fields
+            # pointer[0] (aka THIS aka RAM[3]) points to the base of the current this segment (within the heap)
+            # Memory.alloc returns the base address of the new object - set pointer[0] to that reference
+            self.vm_writer.writePush('constant',self.symbol_table.varCount('field'))
+            self.vm_writer.writeCall('Memory.alloc',1)
+            self.vm_writer.writePop('pointer',0)
+        elif(subroutineType == 'method'):
+            self.symbol_table.define('this',self.current_class,'argument')
+            # the first argument should a reference to the object on which the method is supposed to operate
+            # set pointer[0] to that reference
+            self.vm_writer.writePush('argument',0)
+            self.vm_writer.writePop('pointer',0)
+        # else: ('function', don't need to do anything extra here)    
 
         if(self.jt.getTokenValue() != '}'):
             self.compileStatements()
@@ -457,7 +499,7 @@ class CompilationEngine:
             if(self.jt.getTokenType() == 'KEYWORD'):
                 self.expectTokenValue('void','int','char','boolean')
             self.setIdentifierType(self.jt.getTokenValue())
-            self.writeXmlTerminal()
+            self.processTerminal()
             self.jt.advance()
             self.setIdentifierContext('defined')
             self.setIdentifierCategory('argument')
@@ -469,7 +511,7 @@ class CompilationEngine:
                 self.expectTokenType('IDENTIFIER','KEYWORD')
                 if(self.jt.getTokenType() == 'KEYWORD'):
                     self.expectTokenValue('void','int','char','boolean')
-                self.writeXmlTerminal()
+                self.processTerminal()
                 self.jt.advance()
                 self.setIdentifierContext('defined')
                 self.setIdentifierCategory('argument')
@@ -505,10 +547,13 @@ class CompilationEngine:
         self.writeXmlNonTerminal('doStatement','begin')
                
         #do
-        self.writeXmlTerminal()
+        self.processTerminal()
         self.jt.advance()
                
         self.compileSubroutineCall()
+        # there may need to be something like this in compileSubroutineCall
+        # itself, in case a function is called with a function query as a parameter
+        # e.g. do funca(funcb(2)); (not sure this is tested with sample programs)
         self.vm_writer.writePop('temp',0)
         
         self.processTokenExpectingValue(';')        
@@ -520,7 +565,7 @@ class CompilationEngine:
         self.writeXmlNonTerminal('letStatement','begin')
         
         #let
-        self.writeXmlTerminal()
+        self.processTerminal()
         self.jt.advance()
         
         nameOfVariableBeingAssignedTo = self.jt.getTokenValue()
@@ -529,12 +574,12 @@ class CompilationEngine:
         
         self.expectTokenValue('[','=')
         if(self.jt.getTokenValue() == '['):
-            self.writeXmlTerminal()
+            self.processTerminal()
             self.jt.advance()
             self.compileExpression()
             self.processTokenExpectingValue(']')
             
-        self.writeXmlTerminal()
+        self.processTerminal()
         self.jt.advance()
         
         self.compileExpression()
@@ -553,7 +598,7 @@ class CompilationEngine:
         L2 = self.current_class + self.current_subroutine + str(self.getControlStatementLabelTag())
         
         #while
-        self.writeXmlTerminal()
+        self.processTerminal()
         self.jt.advance()
         
         self.vm_writer.writeLabel(L1)
@@ -579,14 +624,14 @@ class CompilationEngine:
         self.writeXmlNonTerminal('returnStatement','begin')
         
         #return
-        self.writeXmlTerminal()
+        self.processTerminal()
         self.jt.advance()
                 
         if(self.jt.getTokenValue() != ';'):
             self.compileExpression()
             
         self.expectTokenValue(';')
-        self.writeXmlTerminal()
+        self.processTerminal()
         self.jt.advance()
         
         self.vm_writer.writeReturn()    
@@ -601,7 +646,7 @@ class CompilationEngine:
         L2 = self.current_class + self.current_subroutine + str(self.getControlStatementLabelTag())
         
         #if
-        self.writeXmlTerminal()
+        self.processTerminal()
         self.jt.advance()
         
         self.processTokenExpectingValue('(')    
@@ -619,7 +664,7 @@ class CompilationEngine:
         self.vm_writer.writeLabel(L1)
         
         if(self.jt.getTokenValue() == 'else'):
-            self.writeXmlTerminal()
+            self.processTerminal()
             self.jt.advance()
             
             self.processTokenExpectingValue('{')    
@@ -640,7 +685,7 @@ class CompilationEngine:
         
         while(self.jt.getTokenValue() in ('+','-','*','/','&','|','<','>','=')):
             op_postfix = self.jt.getTokenValue()
-            self.writeXmlTerminal()
+            self.processTerminal()
             self.jt.advance()
             self.compileTerm()
             if(op_postfix == '*'):
@@ -665,38 +710,38 @@ class CompilationEngine:
             if(self.jt.getTokenValue() in ('(','.')):
                 self.compileSubroutineCall(holdName)
             elif(self.jt.getTokenValue() == '['):
-                self.xml.write('\t'*self.tabk + '<identifier> ' + str(holdName) + ' </identifier>\n')
+                self.writeXmlTerminal('identifier',str(holdName))
                 self.setIdentifierCategory(self.symbol_table.kindOf(holdName))
-                self.writeXmlTerminalIdentifier(holdName)
-                self.writeXmlTerminal()
+                self.updateSymbolTable(holdName)
+                self.processTerminal()
                 self.jt.advance()
                 self.compileExpression()
                 self.processTokenExpectingValue(']')
             else:
-                self.xml.write('\t'*self.tabk + '<identifier> ' + str(holdName) + ' </identifier>\n')
+                self.writeXmlTerminal('identifier',str(holdName))
                 self.vm_writer.writePush(self.symbol_table.kindOf(holdName),self.symbol_table.indexOf(holdName))
                 self.setIdentifierCategory(self.symbol_table.kindOf(holdName))
-                self.writeXmlTerminalIdentifier(holdName)
+                self.updateSymbolTable(holdName)
                 
         elif(self.jt.getTokenType() == 'SYMBOL'):
             if(self.jt.getTokenValue() == ('-')):
-                self.writeXmlTerminal()
+                self.processTerminal()
                 self.jt.advance()
                 self.compileTerm()
                 self.vm_writer.writeArithmetic('neg')
             elif(self.jt.getTokenValue() == ('~')):
-                self.writeXmlTerminal()
+                self.processTerminal()
                 self.jt.advance()
                 self.compileTerm()
                 self.vm_writer.writeArithmetic('not')
             elif(self.jt.getTokenValue() == '('):
-                self.writeXmlTerminal()
+                self.processTerminal()
                 self.jt.advance()
                 self.compileExpression()
                 self.processTokenExpectingValue(')')
         elif(self.jt.getTokenType() == 'INT_CONST'):
             self.vm_writer.writePush('constant',self.jt.getTokenValue())
-            self.writeXmlTerminal()
+            self.processTerminal()
             self.jt.advance()
         elif(self.jt.getTokenType() == 'KEYWORD'):
             if(self.jt.getTokenValue() in ('null','false')):
@@ -704,10 +749,12 @@ class CompilationEngine:
             elif(self.jt.getTokenValue() in ('true')):
                 self.vm_writer.writePush('constant',1)
                 self.vm_writer.writeArithmetic('neg')
-            self.writeXmlTerminal()
+            elif(self.jt.getTokenValue() in ('this')):
+                self.vm_writer.writePush('pointer',0) #reference to this[0]
+            self.processTerminal()
             self.jt.advance()
         else:
-            self.writeXmlTerminal()
+            self.processTerminal()
             self.jt.advance()
                 
         self.writeXmlNonTerminal('term','end')
@@ -716,35 +763,64 @@ class CompilationEngine:
         '''.'''
         self.subroutine_args = 0
         subroutine_call_name = ''
-        self.setIdentifierCategory('subroutine')
+        
         self.setIdentifierContext('used')
+        
+        # holdName will contain first IDENTIFIER of subroutine call whether this method is called in do or compileTerm
         if(subroutineName):
             holdName = subroutineName
         else:
             holdName = self.jt.getTokenValue()
-            self.jt.advance()
-        subroutine_call_name = holdName    
+            self.jt.advance()     
         
+        # holdName is either className or varName    
         if(self.jt.getTokenValue() == '.'):
-            self.xml.write('\t'*self.tabk + '<identifier> ' + str(holdName) + ' </identifier>\n')
+            # holdName is varName
             if((holdName in self.symbol_table.subroutine_table) or (holdName in self.symbol_table.class_table)):
+                # Xml writing (symbol table does not need to be updated because variables are always declared before they are used in Jack)
+                self.writeXmlTerminal('identifier',str(holdName))
                 self.setIdentifierCategory(self.symbol_table.kindOf(holdName))
+                self.writeIdentifierInfo(holdName)
+                # Setting up a Jack method call (as opposed to function call), so must push object
+                self.vm_writer.writePush(self.symbol_table.kindOf(holdName),self.symbol_table.indexOf(holdName))
+                self.subroutine_args += 1
+                # advance tokenizer past '.'
+                self.processTerminal()    
+                self.jt.advance()
+                # set up subroutine_call_name for writeCall() below ([object type].whatever())
+                subroutine_call_name = self.symbol_table.typeOf(holdName) + '.' + self.jt.getTokenValue()
+            # holdName is className
             else:
+                # Xml writing
+                self.writeXmlTerminal('identifier',str(holdName))
                 self.setIdentifierCategory('class')
-            self.writeXmlTerminalIdentifier(holdName)
-            self.writeXmlTerminal()    
-            self.jt.advance()
-            subroutine_call_name = subroutine_call_name + '.' + self.jt.getTokenValue()
+                self.writeIdentifierInfo(holdName)
+                # advance tokenizer past '.'
+                self.processTerminal()    
+                self.jt.advance()
+                # set up subroutine_call_name for writeCall() below
+                subroutine_call_name = holdName + '.' + self.jt.getTokenValue()
+            # process token
             self.setIdentifierCategory('subroutine')
             self.processTokenExpectingType('IDENTIFIER')
+            
+        # holdName is subroutineName  
+        # means a method m() is being called in the code of the class (push object as arg, and call class.m() )        
         else:
-            self.xml.write('\t'*self.tabk + '<identifier> ' + str(holdName) + ' </identifier>\n')
-            self.writeXmlTerminalIdentifier(holdName)    
-
+            # Xml writing
+            self.writeXmlTerminal('identifier',str(holdName))
+            self.setIdentifierCategory('subroutine')
+            self.writeIdentifierInfo(str(holdName))
+            # push reference to this (which will be represented as argument 0 inside the method)
+            self.vm_writer.writePush('pointer',0)
+            self.subroutine_args += 1
+            # set up subroutine_call_name for writeCall() below
+            subroutine_call_name = self.current_class + '.' + holdName
+            
         self.processTokenExpectingValue('(')
         self.compileExpressionList()
         self.processTokenExpectingValue(')')
-        
+                
         self.vm_writer.writeCall(subroutine_call_name,self.subroutine_args)
         
     def compileExpressionList(self):
@@ -848,10 +924,10 @@ class VMWriter:
         if(isinstance(segment,str)):
             segment.lower()
             if(segment not in self.segment_names):
-                print('error in writePush: segment name not legal')
+                print('error in writePop: segment name not legal')
                 sys.exit(1)
         else:
-            print('error in writePush: segment not a string')
+            print('error in writePop: segment not a string')
             sys.exit(1)    
             
         self.vm_file.write('pop ' + segment + ' ' + str(index) + '\n')

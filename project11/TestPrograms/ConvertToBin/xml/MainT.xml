@@ -21,7 +21,8 @@
 	<symbol> ( </symbol>
 	<integerConstant> 8000 </integerConstant>
 	<symbol> , </symbol>
-	<integerConstant> 127 </integerConstant>
+	<symbol> - </symbol>
+	<integerConstant> 11 </integerConstant>
 	<symbol> ) </symbol>
 	<symbol> ; </symbol>
 	<keyword> do </keyword>
