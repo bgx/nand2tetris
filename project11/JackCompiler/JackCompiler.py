@@ -568,25 +568,32 @@ class CompilationEngine:
         self.processTerminal()
         self.jt.advance()
         
-        nameOfVariableBeingAssignedTo = self.jt.getTokenValue()
-        self.setIdentifierCategory(self.symbol_table.kindOf(self.jt.getTokenValue()))
+        holdName = self.jt.getTokenValue()
+        self.setIdentifierCategory(self.symbol_table.kindOf(holdName))
         self.processTokenExpectingType('IDENTIFIER')
         
         self.expectTokenValue('[','=')
-        if(self.jt.getTokenValue() == '['):
+        
+        isArray = (self.jt.getTokenValue() == '[')
+        if(isArray):
             self.processTerminal()
             self.jt.advance()
             self.compileExpression()
             self.processTokenExpectingValue(']')
-            
-        self.processTerminal()
-        self.jt.advance()
+            # the index of the array is sitting on the stack
+            # remember, the symbol table segments store references to objects allocated on the heap
+            self.vm_writer.writePush(self.symbol_table.kindOf(holdName),self.symbol_table.indexOf(holdName))
+            self.vm_writer.writeArithmetic('add')
+            self.vm_writer.writePop('pointer',1)
         
-        self.compileExpression()
-        
+        self.processTokenExpectingValue('=')        
+        self.compileExpression()        
         self.processTokenExpectingValue(';')  
 
-        self.vm_writer.writePop(self.symbol_table.kindOf(nameOfVariableBeingAssignedTo), self.symbol_table.indexOf(nameOfVariableBeingAssignedTo))        
+        if(isArray):
+            self.vm_writer.writePop('that',0)
+        else:
+            self.vm_writer.writePop(self.symbol_table.kindOf(holdName), self.symbol_table.indexOf(holdName))
         
         self.writeXmlNonTerminal('letStatement','end')
         
@@ -710,18 +717,28 @@ class CompilationEngine:
             if(self.jt.getTokenValue() in ('(','.')):
                 self.compileSubroutineCall(holdName)
             elif(self.jt.getTokenValue() == '['):
+                # Xml writing
                 self.writeXmlTerminal('identifier',str(holdName))
                 self.setIdentifierCategory(self.symbol_table.kindOf(holdName))
-                self.updateSymbolTable(holdName)
-                self.processTerminal()
-                self.jt.advance()
+                self.writeIdentifierInfo(holdName)
+                
+                self.processTokenExpectingValue('[')
                 self.compileExpression()
                 self.processTokenExpectingValue(']')
-            else:
-                self.writeXmlTerminal('identifier',str(holdName))
+                
+                # the index of the array is sitting on the stack
+                # remember, the symbol table segments store references to objects allocated on the heap
                 self.vm_writer.writePush(self.symbol_table.kindOf(holdName),self.symbol_table.indexOf(holdName))
+                self.vm_writer.writeArithmetic('add')
+                self.vm_writer.writePop('pointer',1)
+                self.vm_writer.writePush('that',0)
+            else:
+                # Xml writing
+                self.writeXmlTerminal('identifier',str(holdName))
                 self.setIdentifierCategory(self.symbol_table.kindOf(holdName))
-                self.updateSymbolTable(holdName)
+                self.writeIdentifierInfo(holdName)
+                
+                self.vm_writer.writePush(self.symbol_table.kindOf(holdName),self.symbol_table.indexOf(holdName))
                 
         elif(self.jt.getTokenType() == 'SYMBOL'):
             if(self.jt.getTokenValue() == ('-')):
@@ -751,6 +768,16 @@ class CompilationEngine:
                 self.vm_writer.writeArithmetic('neg')
             elif(self.jt.getTokenValue() in ('this')):
                 self.vm_writer.writePush('pointer',0) #reference to this[0]
+            self.processTerminal()
+            self.jt.advance()
+        elif(self.jt.getTokenType() == 'STRING_CONST'):
+            s = self.jt.getTokenValue()
+            maxLength = len(s)
+            self.vm_writer.writePush('constant',maxLength)
+            self.vm_writer.writeCall('String.new',1)
+            for j in range(0,maxLength-1):
+                self.vm_writer.writePush('constant',ord(s[j]))
+                self.vm_writer.writeCall('String.appendChar',2)
             self.processTerminal()
             self.jt.advance()
         else:

@@ -36,12 +36,12 @@ call String.appendChar 2
 push constant 63
 call String.appendChar 2
 call Keyboard.readInt 1
-pop that 0
+pop local 1
 push local 1
 call Array.new 1
-pop that 0
+pop local 0
 push constant 0
-pop that 0
+pop local 2
 label Mainmain0
 push local 2
 push local 1
@@ -103,13 +103,13 @@ pop that 0
 push local 2
 push constant 1
 add
-pop that 0
+pop local 2
 goto Mainmain0
 label Mainmain1
 push constant 0
-pop that 0
+pop local 2
 push constant 0
-pop that 0
+pop local 3
 label Mainmain2
 push local 2
 push local 1
@@ -123,11 +123,11 @@ add
 pop pointer 1
 push that 0
 add
-pop that 0
+pop local 3
 push local 2
 push constant 1
 add
-pop that 0
+pop local 2
 goto Mainmain2
 label Mainmain3
 push constant 16
