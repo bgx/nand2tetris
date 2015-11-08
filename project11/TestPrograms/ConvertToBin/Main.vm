@@ -16,6 +16,7 @@ pop local 1
 push local 1
 call Main.convert 1
 pop temp 0
+push constant 0
 return
 function Main.convert 3
 push constant 1
@@ -74,6 +75,7 @@ pop local 2
 label Mainconvert3
 goto Mainconvert0
 label Mainconvert1
+push constant 0
 return
 function Main.nextMask 0
 push argument 0
@@ -111,4 +113,5 @@ add
 pop argument 0
 goto MainfillMemory0
 label MainfillMemory1
+push constant 0
 return

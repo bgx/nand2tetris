@@ -20,6 +20,7 @@ pop temp 0
 push pointer 0
 call Memory.deAlloc 1
 pop temp 0
+push constant 0
 return
 function SquareGame.run 2
 push argument 0
@@ -133,6 +134,7 @@ goto SquareGamerun18
 label SquareGamerun19
 goto SquareGamerun0
 label SquareGamerun1
+push constant 0
 return
 function SquareGame.moveSquare 0
 push argument 0
@@ -184,4 +186,5 @@ label SquareGamemoveSquare7
 push constant 5
 call Sys.wait 1
 pop temp 0
+push constant 0
 return

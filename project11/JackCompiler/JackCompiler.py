@@ -217,6 +217,7 @@ class CompilationEngine:
         self.current_subroutine = ''
         self.subroutine_locals = 0
         self.subroutine_args = 0
+        self.void_return = False;
         
         self.vm_writer = VMWriter(filename)
 
@@ -427,6 +428,7 @@ class CompilationEngine:
         self.symbol_table.startSubroutine()
         self.subroutine_locals = 0
         self.resetControlStatementLabelTag()
+        self.void_return = False;
                     
         #constructor or function or method
         subroutineType = self.jt.getTokenValue()
@@ -437,6 +439,8 @@ class CompilationEngine:
         self.expectTokenType('IDENTIFIER','KEYWORD')
         if(self.jt.getTokenType() == 'KEYWORD'):
             self.expectTokenValue('void','int','char','boolean')
+        if(self.jt.getTokenValue() == 'void'):
+            self.void_return = True;
         self.setIdentifierCategory('class')
         self.setIdentifierContext('used')
         self.setIdentifierType(self.jt.getTokenValue())
@@ -448,10 +452,13 @@ class CompilationEngine:
         self.processTerminal()
         self.setCurrentSubroutine()
         self.jt.advance()
+        
+        # need to add to the symbol table before the method parameters get added
+        if(subroutineType == 'method'):
+            self.symbol_table.define('this',self.current_class,'argument')
+        
         self.processTokenExpectingValue('(')
-        
         self.compileParameterList()
-        
         self.processTokenExpectingValue(')')
                 
         self.writeXmlNonTerminal('subroutineBody','begin')
@@ -471,7 +478,6 @@ class CompilationEngine:
             self.vm_writer.writeCall('Memory.alloc',1)
             self.vm_writer.writePop('pointer',0)
         elif(subroutineType == 'method'):
-            self.symbol_table.define('this',self.current_class,'argument')
             # the first argument should a reference to the object on which the method is supposed to operate
             # set pointer[0] to that reference
             self.vm_writer.writePush('argument',0)
@@ -641,6 +647,8 @@ class CompilationEngine:
         self.processTerminal()
         self.jt.advance()
         
+        if(self.void_return):
+            self.vm_writer.writePush('constant',0)
         self.vm_writer.writeReturn()    
         
         self.writeXmlNonTerminal('returnStatement','end')
@@ -775,7 +783,7 @@ class CompilationEngine:
             maxLength = len(s)
             self.vm_writer.writePush('constant',maxLength)
             self.vm_writer.writeCall('String.new',1)
-            for j in range(0,maxLength-1):
+            for j in range(0,maxLength):
                 self.vm_writer.writePush('constant',ord(s[j]))
                 self.vm_writer.writeCall('String.appendChar',2)
             self.processTerminal()
