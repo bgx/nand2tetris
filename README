@@ -41,7 +41,6 @@ project10 - Compiler I
     that tokenizes the source and generates an XML parse tree
     
 project11 - Compiler II
-    (Code Generation)
     Extend the syntax analyzer from project10 into a full-scale Jack
     compiler that generates executable VM code
 
