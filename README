@@ -42,6 +42,8 @@ project10 - Compiler I
     
 project11 - Compiler II
     (Code Generation)
+    Extend the syntax analyzer from project10 into a full-scale Jack
+    compiler that generates executable VM code
 
 project12 - Operating System
     ()

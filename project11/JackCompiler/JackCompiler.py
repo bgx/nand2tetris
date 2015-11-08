@@ -9,7 +9,7 @@ Writing of compiler broken into 5 modules:
 
 Brian Grady
 
-Passed all project11 tests on ____
+Passed all project11 tests on 2015.11.08
 '''
 
 import sys
@@ -84,7 +84,7 @@ class JackTokenizer:
             ('MLC_START',    r'\/\*'),                  # Multi-line comment start
             ('MLC_FINISH',   r'\*\/'),                  # Multi-line comment finish
             ('SLC_START',    r'\/{2}'),                 # Single line comment start
-            ('IDENTIFIER',   r'[a-zA-Z_][A-Za-z\d]*'),  # Identifiers
+            ('IDENTIFIER',   r'[a-zA-Z_][A-Za-z_\d]*'), # Identifiers
             ('INT_CONST',    r'\d+'),                   # Integer constants
             ('STRING_CONST', r'\".+\"'),                # String constants
             ('OTHER',        r'[^\s]'),                 # Other
@@ -590,13 +590,19 @@ class CompilationEngine:
             # remember, the symbol table segments store references to objects allocated on the heap
             self.vm_writer.writePush(self.symbol_table.kindOf(holdName),self.symbol_table.indexOf(holdName))
             self.vm_writer.writeArithmetic('add')
-            self.vm_writer.writePop('pointer',1)
+            # put address into a temp variable, to use after compiling the expression
+            # use temp 1 since temp 0 is used to pop off the return value from void functions and methods
+            self.vm_writer.writePop('temp',1)
         
         self.processTokenExpectingValue('=')        
         self.compileExpression()        
         self.processTokenExpectingValue(';')  
 
         if(isArray):
+            # restore pointer 1 to the address that will be written to
+            self.vm_writer.writePush('temp',1)
+            self.vm_writer.writePop('pointer',1)
+            # pop the result of the expression into the correct address
             self.vm_writer.writePop('that',0)
         else:
             self.vm_writer.writePop(self.symbol_table.kindOf(holdName), self.symbol_table.indexOf(holdName))
