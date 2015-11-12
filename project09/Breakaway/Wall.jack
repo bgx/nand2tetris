@@ -24,6 +24,7 @@ class Wall {
     }
 
     method void dispose() {
+        do bricks.dispose();
         do Memory.deAlloc(this);
         return;
     }

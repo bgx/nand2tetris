@@ -34,6 +34,7 @@ class Brick {
     }
 
     method void dispose() {
+        do hitbox.dispose();
         do Memory.deAlloc(this);
         return;
     }

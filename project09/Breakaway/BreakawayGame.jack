@@ -66,6 +66,7 @@ class BreakawayGame {
                         do render();
                         do Sys.wait(55);
                     }
+                    do disposeComponents();
                 }
                 else {
             // Lost a Life; state = 2    
@@ -79,14 +80,12 @@ class BreakawayGame {
                         if (state = 3) {
                             do printGameOver();
                             do waitSpacePressed();
-                            do waitSpaceReleased();
                         }
                         else {
             // You Win; state = 4            
                             if (state = 4) {
                                 do printYouWin();
                                 do waitSpacePressed();
-                                do waitSpaceReleased();
                             }
                         }    
                     }
@@ -98,20 +97,21 @@ class BreakawayGame {
 	}
     
     method void waitSpacePressed() {
+        // loop until pressed
         while (~(Keyboard.keyPressed() = 32)) {
         }
+        
         if ((state = 0) | (state = 2)) {
             let state = 1;
         }
         else {
             let state = 0;
-        }    
-        return;
-    }
-    
-    method void waitSpaceReleased() {
+        }
+        
+        // loop until released
         while ((Keyboard.keyPressed() = 32)) {
         }
+        
         return;
     }
     
@@ -136,6 +136,13 @@ class BreakawayGame {
         let ball = Ball.new(250, 100, 2, 3, 6);   // x,y,size,delta_x,delta_y
         let paddle = Paddle.new(255, 220, 25, 7); // x,y,width,height
         do printLives();
+        return;
+    }
+    
+    method void disposeComponents() {
+        do playarea.dispose();
+        do ball.dispose();
+        do paddle.dispose();
         return;
     }
     
@@ -185,7 +192,7 @@ class BreakawayGame {
         do Output.printString(s);
         do Output.printInt(lives);
         return;
-    }    
+    }
     /****************************************************************/
 
     /** Process player input from the keyboard. */
@@ -283,7 +290,10 @@ class BreakawayGame {
         do ballh.dispose();
         do playareah.dispose();
         do paddleh.dispose();
-        do brickh.dispose();
+        
+        // do brickh.dispose();  <----NO
+        // This deallocates the hitbox of the last brick in wall
+        // This caused a bug where these memory cells were allocated to be the playarea's hitbox, but the brick was still updating the cells
         
         return;
     }

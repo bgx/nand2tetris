@@ -1,5 +1,5 @@
 function BreakawayGame.new 0
-push constant 9
+push constant 8
 call Memory.alloc 1
 pop pointer 0
 push constant 0
@@ -82,6 +82,9 @@ call Sys.wait 1
 pop temp 0
 goto WHILE_EXP1
 label WHILE_END1
+push pointer 0
+call BreakawayGame.disposeComponents 1
+pop temp 0
 goto IF_END1
 label IF_FALSE1
 push this 7
@@ -113,9 +116,6 @@ pop temp 0
 push pointer 0
 call BreakawayGame.waitSpacePressed 1
 pop temp 0
-push pointer 0
-call BreakawayGame.waitSpaceReleased 1
-pop temp 0
 goto IF_END3
 label IF_FALSE3
 push this 7
@@ -129,9 +129,6 @@ call BreakawayGame.printYouWin 1
 pop temp 0
 push pointer 0
 call BreakawayGame.waitSpacePressed 1
-pop temp 0
-push pointer 0
-call BreakawayGame.waitSpaceReleased 1
 pop temp 0
 label IF_FALSE4
 label IF_END3
@@ -171,19 +168,14 @@ label IF_FALSE0
 push constant 0
 pop this 7
 label IF_END0
-push constant 0
-return
-function BreakawayGame.waitSpaceReleased 0
-push argument 0
-pop pointer 0
-label WHILE_EXP0
+label WHILE_EXP1
 call Keyboard.keyPressed 0
 push constant 32
 eq
 not
-if-goto WHILE_END0
-goto WHILE_EXP0
-label WHILE_END0
+if-goto WHILE_END1
+goto WHILE_EXP1
+label WHILE_END1
 push constant 0
 return
 function BreakawayGame.initializeGameLoop 0
@@ -231,6 +223,20 @@ call Paddle.new 4
 pop this 2
 push pointer 0
 call BreakawayGame.printLives 1
+pop temp 0
+push constant 0
+return
+function BreakawayGame.disposeComponents 0
+push argument 0
+pop pointer 0
+push this 0
+call PlayArea.dispose 1
+pop temp 0
+push this 1
+call Ball.dispose 1
+pop temp 0
+push this 2
+call Paddle.dispose 1
 pop temp 0
 push constant 0
 return
