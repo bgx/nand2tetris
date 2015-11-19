@@ -14,3 +14,14 @@ Batch files
 XxxTest_Load    - copy Xxx.jack from myOS to XxxTest
 XxxTest_Reset   - delete Xxx.jack from XxxTest
 XxxTest_Compile - compile the XxxTest directory
+
+Memory   - passed 2015.11.18
+Array    - passed 2015.11.19
+Math     - 
+String   - 
+Output   -
+Screen   -
+Keyboard -
+Sys      - 
+
+Complete Test -  
