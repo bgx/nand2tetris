@@ -14,7 +14,6 @@ class Math {
     function void init() {
         var int i;
         var int n;
-        
         // Initialize twoToThe[] for use in bit(x,j)
         let i = 0;
         let n = 1;
