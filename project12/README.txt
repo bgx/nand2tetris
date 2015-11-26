@@ -18,7 +18,7 @@ XxxTest_Compile - compile the XxxTest directory
 Memory   - passed 2015.11.18
 Array    - passed 2015.11.19
 Math     - passed 2015.11.23
-String   - 
+String   - passed 2015.11.25
 Output   -
 Screen   -
 Keyboard -
