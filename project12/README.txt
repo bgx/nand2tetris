@@ -19,7 +19,7 @@ Memory   - passed 2015.11.18
 Array    - passed 2015.11.19
 Math     - passed 2015.11.23
 String   - passed 2015.11.25
-Output   -
+Output   - passed 2015.11.29
 Screen   -
 Keyboard -
 Sys      - 
