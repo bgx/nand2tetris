@@ -16,18 +16,20 @@
  * 255
  
  * pixel at (x,y) is mapped to the x%16 bit of memory location 16384+y*32+x/16
+ * the 512x256 screen spans memory locations [16384, 24575]
 
  */
 class Screen {
 
+    // Stores the color to be used in draw commands.
+    // white = false = 0, black = true = -1
     static boolean color;
     
     static Array twoToThe;
     
     /** Initializes the Screen. */
     function void init() {
-        var int i;
-        var int n;
+        var int i, n;
         
         // Initialize twoToThe[]
         let i = 0;
@@ -64,15 +66,16 @@ class Screen {
 
     /** Draws the (x, y) pixel. */
     function void drawPixel(int x, int y) {
-        var int address;
-        var int value;
+        var int address, value;
         
         let address = 16384 + (y*32) + (x/16);
         let value = Memory.peek(address);
         if (color) {
+            // set bit
             let value = value | twoToThe[x & 15];
         }
         else {
+            // clear bit
             let value = value & ~twoToThe[x & 15];
         }
         do Memory.poke(address, value);
@@ -82,42 +85,52 @@ class Screen {
 
     /** Draws a line from (x1, y1) to (x2, y2). */
     function void drawLine(int x1, int y1, int x2, int y2) {
-        var int dx, dy;
-        var int a, b;
-        var int eval;
-        var int address1, address2;
-        var int temp;
-        var int x1mod, x2mod;
-        var int mask;
-        var int value;
+        var int temp, dx, dy;
+        var int address1, address2, x1mod, x2mod;
+        var int mask, value;
+        var int a, b, eval;
         
+        if (x1 > x2) {
+            let temp = x1;
+            let x1 = x2;
+            let x2 = temp;
+            
+            let temp = y1;
+            let y1 = y2;
+            let y2 = temp;
+        }
+
         let dx = x2 - x1;
         let dy = y2 - y1;
-        let a = 0;
-        let b = 0;
-        let eval = 0;
-
-                
+            
+        // Horizontal line
         if (dy = 0) {
-            if (dx < 0) {
-                let temp = x2;
-                let x2 = x1;
-                let x1 = temp;
-                //let dx = -dx;
-            }
             
             let address1 = 16384 + (y1*32) + (x1/16);
             let address2 = 16384 + (y1*32) + (x2/16);
             let x1mod = x1&15;
             let x2mod = x2&15;
             
+            // Single address
             if (address1 = address2){
-                //fill in the single address
-                let mask = 0;
-                while((x1mod-1) < x2mod){
-                    let mask = mask + twoToThe[x1mod];
-                    let x1mod = x1mod + 1;
+                if (x1mod = 0){
+                    if(x2mod = 15){
+                        do Memory.poke(address1, color);
+                        return;
+                    }
+                    else{
+                        let mask = twoToThe[x2mod+1]-1;
+                    }
                 }
+                else{
+                    if(x2mod = 15){
+                        let mask = -twoToThe[x1mod];
+                    }
+                    else{
+                        let mask = (twoToThe[x2mod+1]-1) & (-twoToThe[x1mod]);
+                    }
+                }
+                
                 let value = Memory.peek(address1);
                 if (color) {
                     let value = value | mask;
@@ -126,59 +139,15 @@ class Screen {
                     let value = value & ~mask;
                 }
                 do Memory.poke(address1, value);
-
             }
+            // Multiple addresses
             else {
-                // fill in address1
-                // if(x1mod = 0){
-                    // do Memory.poke(address1, color);
-                // }
-                // else{
-                    // // could also attack from low or high here based on x1mod
-                    // let mask = 0;
-                    // while((x1mod-1) < 15){
-                        // let mask = mask + twoToThe[x1mod];
-                        // let x1mod = x1mod + 1;
-                    // }
-                    // let value = Memory.peek(address1);
-                    // if (color) {
-                        // let value = value | mask;
-                    // }
-                    // else {
-                        // let value = value & ~mask;
-                    // }
-                    // do Memory.poke(address1, value);
-                // }
-                
-                // // fill in address1
-                // if(x1mod = 0){
-                    // do Memory.poke(address1, color);
-                // }
-                // else{
-                    // // could also attack from low or high here based on x1mod
-                    // let mask = 0;
-                    // let temp = twoToThe[x1mod];
-                    // while((x1mod-1) < 15){
-                        // let mask = mask + temp;
-                        // let x1mod = x1mod + 1;
-                        // let temp = temp + temp;
-                    // }
-                    // let value = Memory.peek(address1);
-                    // if (color) {
-                        // let value = value | mask;
-                    // }
-                    // else {
-                        // let value = value & ~mask;
-                    // }
-                    // do Memory.poke(address1, value);
-                // }
                 
                 // fill in address1
                 if(x1mod = 0){
                     do Memory.poke(address1, color);
                 }
                 else{
-                    // could also attack from low or high here based on x1mod
                     let mask = -twoToThe[x1mod];
                     let value = Memory.peek(address1);
                     if (color) {
@@ -190,59 +159,13 @@ class Screen {
                     do Memory.poke(address1, value);
                 }
 
-                
-                // fill in solid addresses in between
+                // fill in solid addresses in between address1 and address2
                 let address1 = address1 + 1;
                 while(address1 < address2){
-                    // true is -1, false is 0
                     do Memory.poke(address1, color);
                     let address1 = address1 + 1;
                 }
-                
-                // fill in address2
-                // if(x2mod = 15){
-                    // do Memory.poke(address2, color);
-                // }
-                // else{
-                    // let mask = 0;
-                    // let x1mod = 0;
-                    // while((x1mod-1) < x2mod){
-                        // let mask = mask + twoToThe[x1mod];
-                        // let x1mod = x1mod + 1;
-                    // }
-                    // let value = Memory.peek(address2);
-                    // if (color) {
-                        // let value = value | mask;
-                    // }
-                    // else {
-                        // let value = value & ~mask;
-                    // }
-                    // do Memory.poke(address2, value);
-                // }
-                
-                // // fill in address2
-                // if(x2mod = 15){
-                    // do Memory.poke(address2, color);
-                // }
-                // else{
-                    // let mask = 0;
-                    // let x1mod = 0;
-                    // let temp = 1;
-                    // while((x1mod-1) < x2mod){
-                        // let mask = mask + temp;
-                        // let x1mod = x1mod + 1;
-                        // let temp = temp + temp;
-                    // }
-                    // let value = Memory.peek(address2);
-                    // if (color) {
-                        // let value = value | mask;
-                    // }
-                    // else {
-                        // let value = value & ~mask;
-                    // }
-                    // do Memory.poke(address2, value);
-                // }
-                
+                                
                 // fill in address2
                 if(x2mod = 15){
                     do Memory.poke(address2, color);
@@ -262,40 +185,26 @@ class Screen {
             return;
         }
         
-        // maybe I can set entire addresses instead of messing around with pixels
-        // if (dy = 0){
-            // if(dx>0){
-                // while (x1<x2) {
-                    // do Screen.drawPixel(x1,y1);
-                    // let x1 = x1 + 1;
-                // }
-            // }
-            // else{
-                // while (x1>x2) {
-                    // do Screen.drawPixel(x1,y1);
-                    // let x1 = x1 - 1;
-                // }
-            // }
-        // }
-        
+        // Vertical line
         if (dx = 0){
-            if(dy>0){
-                while (y1<y2) {
-                    do Screen.drawPixel(x1,y1);
-                    let y1 = y1 + 1;
-                }
+            if (dy < 0){
+                let temp = y1;
+                let y1 = y2;
+                let y2 = temp;
             }
-            else{
-                while (y1>y2) {
-                    do Screen.drawPixel(x1,y1);
-                    let y1 = y1 - 1;
-                }
+            while (y1 < y2){
+                do Screen.drawPixel(x1,y1);
+                let y1 = y1 + 1;
             }
             return;
         }
         
-        if ( (dx > 0) & (dy > 0) ){
-            while ( ((a-1)<dx) & ((b-1)<dy) ){
+        // Diagonal lines                
+        let a = 0;
+        let b = 0;
+        let eval = 0;
+        if ( dy > 0 ){
+            while ( ~( (a > dx) | (b > dy) ) ){
                 do Screen.drawPixel(x1+a, y1+b);
                 // eval = a*dy-b*dx
                 if (eval < 0){
@@ -309,61 +218,26 @@ class Screen {
             }
         }
         else{
-            if ( (dx > 0) & (dy < 0) ){
-                while ( ((a-1)<dx) & ((b+1)>dy) ){
-                    do Screen.drawPixel(x1+a, y1+b);
-                    // eval = b*dx-a*dy
-                    if (eval < 0){
-                        let a = a + 1;
-                        let eval = eval - dy;
-                    }
-                    else{
-                        let b = b - 1;
-                        let eval = eval - dx;
-                    }
-                }            
-            }
-            else{
-                if ( (dx < 0) & (dy < 0) ){
-                    while ( ((a+1)>dx) & ((b+1)>dy) ){
-                        do Screen.drawPixel(x1+a, y1+b);
-                        // eval = a*dy-b*dx
-                        if (eval < 0){
-                            let a = a - 1;
-                            let eval = eval - dy;
-                        }
-                        else{
-                            let b = b - 1;
-                            let eval = eval + dx;
-                        }
-                    }            
+            while ( ~( (a > dx) | (b < dy) ) ){
+                do Screen.drawPixel(x1+a, y1+b);
+                // eval = b*dx-a*dy
+                if (eval < 0){
+                    let a = a + 1;
+                    let eval = eval - dy;
                 }
                 else{
-                    if ( (dx < 0) & (dy > 0) ){
-                        while ( ((a+1)>dx) & ((b-1)<dy) ){
-                            do Screen.drawPixel(x1+a, y1+b);
-                            // eval = b*dx-a*dy
-                            if (eval < 0){
-                                let a = a - 1;
-                                let eval = eval + dy;
-                            }
-                            else{
-                                let b = b + 1;
-                                let eval = eval + dx;
-                            }
-                        }            
-                    }
+                    let b = b - 1;
+                    let eval = eval - dx;
                 }
-            }
+            }            
         }
+        
         return;
     }
 
     /** Draws a filled rectangle where the top left corner
      *  is (x1, y1) and the bottom right corner is (x2, y2). */
-    function void drawRectangle(int x1, int y1, int x2, int y2) {
-        var int k;
-        
+    function void drawRectangle(int x1, int y1, int x2, int y2) {        
         if(y1>y2){
             return;
         }
@@ -371,11 +245,8 @@ class Screen {
             return;
         }
         
-        // k to avoid overflow problems
-        let k = y2 - y1;
-        while ( (k+1) > 0){
+        while ( ~(y1 > y2) ){
             do Screen.drawLine(x1,y1,x2,y1);
-            let k = k - 1;
             let y1 = y1 + 1;
         }
         return;
@@ -390,12 +261,10 @@ class Screen {
         }
         
         let r2 = r*r;
-        //let r2 = (r*r) + r;
         
         let dx = r;
         let dx2 = r2;
         let dx2diff = r+r-1;
-        
         let dy = 0;
         let dy2 = 0;
         let dy2diff = 1;
@@ -408,9 +277,11 @@ class Screen {
             let r2 = 32767;
         }
         
+        // Center horizontal line
         do Screen.drawLine(cx-dx, cy, cx+dx, cy);
         
-        while ( (dy-1) < r ){
+        // While dy<=r : bring dx within circle, draw two horizontal lines, increment dy
+        while ( ~(dy > r) ){
             while ((r2 - dx2 - dy2) < 0){
                 let dx = dx - 1;
                 let dx2 = dx2 - dx2diff;
@@ -424,8 +295,6 @@ class Screen {
             let dy2 = dy2 + dy2diff;
             let dy2diff = dy2diff + 2;
         }
-        
         return;
-        
     }
 }
