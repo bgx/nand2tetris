@@ -128,8 +128,8 @@ class Math {
         }
         
         // using y-1 since there is no >= operator in Jack
-        while ( x > (y-1) ) {
-            if( x > (shiftedY[j]-1) ) {
+        while ( ~(x < y) ) {
+            if( ~(x < shiftedY[j]) ) {
                 let x = x - shiftedY[j];
                 let result = result + twoToThe[j];
             }
@@ -192,7 +192,7 @@ class Math {
             let calc0 = y + twoToThe[j];
             let calc1 = Math.multiply(calc0,calc0);
             // calc1 > 0 checks for overflow
-            if ( ((calc1-1) < x) & (calc1 > 0) ){
+            if ( (~(calc1 > x)) & (calc1 > 0) ){
                 let y = calc0;
             }
             let j = j - 1;

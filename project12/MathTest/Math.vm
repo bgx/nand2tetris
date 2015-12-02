@@ -269,9 +269,8 @@ label WHILE_END0
 label WHILE_EXP1
 push argument 0
 push argument 1
-push constant 1
-sub
-gt
+lt
+not
 not
 if-goto WHILE_END1
 push argument 0
@@ -280,9 +279,8 @@ push local 3
 add
 pop pointer 1
 push that 0
-push constant 1
-sub
-gt
+lt
+not
 if-goto IF_TRUE5
 goto IF_FALSE5
 label IF_TRUE5
@@ -395,10 +393,9 @@ push local 2
 call Math.multiply 2
 pop local 3
 push local 3
-push constant 1
-sub
 push argument 0
-lt
+gt
+not
 push local 3
 push constant 0
 gt
