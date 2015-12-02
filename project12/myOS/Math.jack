@@ -127,7 +127,6 @@ class Math {
             let advanceY = advanceY + advanceY;
         }
         
-        // using y-1 since there is no >= operator in Jack
         while ( ~(x < y) ) {
             if( ~(x < shiftedY[j]) ) {
                 let x = x - shiftedY[j];
