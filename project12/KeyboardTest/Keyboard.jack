@@ -48,12 +48,13 @@ class Keyboard {
     function char readChar() {
         var char c, key;
         
-        // (no need to initialize key)
+        let key = 0;
         while (key = 0) {
             let key = Keyboard.keyPressed();
         }
         let c = key;
-        while ( ~(Keyboard.keyPressed() = 0) ) {}
+        while (~(Keyboard.keyPressed() = 0)) {
+        }
         
         if (c = 128) {
             do Output.println();
