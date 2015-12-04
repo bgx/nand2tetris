@@ -121,7 +121,7 @@ class Math {
         let shiftedY[j] = y;
         let advanceY = y + y;
         // advanceY > 0 checks for overflow
-        while( (advanceY < x) & (advanceY > 0) ) {
+        while( (~(advanceY > x)) & (advanceY > 0) ) {
             let j = j + 1;
             let shiftedY[j] = advanceY;
             let advanceY = advanceY + advanceY;
