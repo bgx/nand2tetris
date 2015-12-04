@@ -9,6 +9,8 @@
 class Math {
 
     static Array twoToThe;
+    
+    static Array shiftedY;
 
     /** Initializes the library. */
     function void init() {
@@ -25,6 +27,8 @@ class Math {
             let i = i + 1;
         }
         
+        let shiftedY = Array.new(16);
+        
         return;
     }
 
@@ -37,15 +41,6 @@ class Math {
             return -x;
         }
         return x;
-    }
-    /** Returns true if the j-th bit of the integer x is 1 and false otherwise. */
-    function boolean bit(int x, int j) {
-        if( (x & twoToThe[j]) = 0) {
-            return false;
-        }
-        else {
-            return true;
-        }
     }
     
     /** Returns the product of x and y. */
@@ -67,14 +62,14 @@ class Math {
         
         let sum = 0;
         let shiftedX = x;
-        let j = 0;       
+        let j = 1;       
         while (y > 0) {
-            if ( Math.bit(y,j) ) {
+            if ( (y&j) = j ) {
                 let sum = sum + shiftedX;
-                let y = y - twoToThe[j];
+                let y = y - j;
             }
             let shiftedX = shiftedX + shiftedX;
-            let j = j + 1;
+            let j = j + j;
         }
 
         if (flipSign = 1) {
@@ -90,7 +85,6 @@ class Math {
         
         var int j;
         var int result;
-        var Array shiftedY;
         var int advanceY;
         
         if( y = 0 ) {
@@ -116,8 +110,6 @@ class Math {
         
         let result = 0;
         let j = 0;
-        let shiftedY = Array.new(16);
-        
         let shiftedY[j] = y;
         let advanceY = y + y;
         // advanceY > 0 checks for overflow
@@ -134,7 +126,6 @@ class Math {
             }
             let j = j - 1;
         }
-        do shiftedY.dispose();
         
         if (flipSign = 1) {
             let result = -result;
