@@ -1,0 +1,213 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Math.jack
+
+/**
+ * A basic math library.
+ */
+class Math {
+
+    static Array twoToThe;
+    
+    static Array shiftedY;
+
+    /** Initializes the library. */
+    function void init() {
+        var int i;
+        var int n;
+        
+        // Initialize twoToThe[] for use in bit(x,j)
+        let i = 0;
+        let n = 1;
+        let twoToThe = Array.new(16);
+        while(i < 16) {
+            let twoToThe[i] = n;
+            let n = n + n;
+            let i = i + 1;
+        }
+        
+        let shiftedY = Array.new(16);
+        
+        return;
+    }
+
+    /** Returns the absolute value of x. */
+    function int abs(int x) {
+        if (x < 0){
+            if (x = (32767+1)) {
+                return null;
+            }
+            return -x;
+        }
+        return x;
+    }
+    
+    /** Returns the product of x and y. */
+    function int multiply(int x, int y) {
+        var int flipSign;
+        var int sum;
+        var int shiftedX;
+        var int j;
+        
+        let flipSign = 0;
+        if ( x < 0 ) {
+            let x = -x;
+            let flipSign = flipSign + 1;
+        }
+        if ( y < 0 ) {
+            let y = -y;
+            let flipSign = flipSign + 1;
+        }
+        
+        let sum = 0;
+        let shiftedX = x;
+        let j = 1;       
+        while (y > 0) {
+            if ( (y&j) = j ) {
+                let sum = sum + shiftedX;
+                let y = y - j;
+            }
+            let shiftedX = shiftedX + shiftedX;
+            let j = j + j;
+        }
+
+        if (flipSign = 1) {
+            let sum = -sum;
+        }
+
+        return sum;
+    }
+
+    /** Returns the integer part of x/y. */
+    function int divide(int x, int y) {
+        var int flipSign;
+        
+        var int j;
+        var int result;
+        var int advanceY;
+        
+        if( y = 0 ) {
+            return null;
+        }
+        if (x = y) {
+            return 1;
+        }    
+        
+        let flipSign = 0;
+        if ( x < 0 ) {
+            let x = -x;
+            let flipSign = flipSign + 1;
+        }
+        if ( y < 0 ) {
+            let y = -y;
+            let flipSign = flipSign + 1;
+        }
+        
+        if( x < y ) {
+            return 0;
+        }
+        
+        let result = 0;
+        let j = 0;
+        let shiftedY[j] = y;
+        let advanceY = y + y;
+        // advanceY > 0 checks for overflow
+        while( (~(advanceY > x)) & (advanceY > 0) ) {
+            let j = j + 1;
+            let shiftedY[j] = advanceY;
+            let advanceY = advanceY + advanceY;
+        }
+        
+        while ( ~(x < y) ) {
+            if( ~(x < shiftedY[j]) ) {
+                let x = x - shiftedY[j];
+                let result = result + twoToThe[j];
+            }
+            let j = j - 1;
+        }
+        
+        if (flipSign = 1) {
+            let result = -result;
+        }
+
+        return result;
+    }
+
+    /** Returns the integer part of the square root of x. */
+    function int sqrt(int x) {
+        var int y;
+        var int j;
+        var int calc0;
+        var int calc1;
+        var int t;
+        
+        if (x < 0) {
+            return null;
+        }
+        
+        // Binary search
+        // 1) sqrt(x) is monotonically increasing
+        // 2) we can compute y^2
+        // 
+        // y = sqrt(x) ===> y^2 <= x < (y+1)^2
+        // let there be n such that 0 <= x < 2^n 
+        // then 0 <= sqrt(x) <= (2^(n/2) - 1)
+        // therefore, sqrt(x) is one of 2^(n/2) possible choices
+        // split at 2^j_0, split again by 2^(j_0-1), and so on
+        
+        // e.g. 0 <= sqrt(x) < 3
+        // sqrt(x) is either [0,1] or [2,3] (say it's [2,3])
+        // sqrt(x) is either [2] or [3] (say it's 2)
+        // sqrt(x) is 2
+        
+        // initialize j to j_0
+        // (2^j_0) = (2^(n/2))/2 ===> j_0 = (n/2 - 1)
+        // j_0 = (n/2 - 1)  ===> (2*j_0 + 2) = n
+        // variable t is used to ensure legal indexing of twoToThe[]
+        // (Jack doesn't have "break", so I break out if j is not equal to t;
+        // I don't know how many resources this is actually saving...)
+        let j = 0;
+        let t = 0;
+        while ( (t < 7) & (j = t) ) {
+            if ( x > twoToThe[j+j+2] ) {
+                let j = j + 1;
+            }
+            let t = t + 1;
+        }
+        
+        // binary search loop
+        let y = 0;
+        while (j > -1){
+            let calc0 = y + twoToThe[j];
+            let calc1 = Math.multiply(calc0,calc0);
+            // calc1 > 0 checks for overflow
+            if ( (~(calc1 > x)) & (calc1 > 0) ){
+                let y = calc0;
+            }
+            let j = j - 1;
+        }
+    
+        return y;
+    }
+
+    /** Returns the greater number. */
+    function int max(int a, int b) {
+        if (a > b) {
+            return a;
+        }
+        else {
+            return b;
+        }
+    }
+
+    /** Returns the smaller number. */
+    function int min(int a, int b) {
+        if (a < b) {
+            return a;
+        }
+        else {
+            return b;
+        }
+    }
+}
