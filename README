@@ -45,4 +45,7 @@ project11 - Compiler II
     compiler that generates executable VM code
 
 project12 - Operating System
-    ()
+    Write a combination of a simple OS and a standard library for the
+    Jack language, to (i) encapsulate various hardware-specific
+    services in a software-friendly way, and (ii) extend Jack with 
+    various functions and abstract data types
