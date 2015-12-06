@@ -1,0 +1,23 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux.hdl
+
+// bg 2014.7.7
+// s=sel; s'a + sb = ( (s'a)' * (sb)' )' = ( ((ss)' * a)' * (sb)' )'
+
+/** 
+ * Multiplexor. If sel==1 then out=b else out=a.
+ */
+
+CHIP Mux {
+    IN a, b, sel;
+    OUT out;
+
+    PARTS:
+    // Put your code here:
+	Nand(a=sel, b=sel, out=w1);
+	Nand(a=a, b=w1, out=w2);
+	Nand(a=sel, b=b, out=w3);
+	Nand(a=w2, b=w3, out=out);
+}
