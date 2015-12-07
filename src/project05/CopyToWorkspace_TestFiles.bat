@@ -1,0 +1,6 @@
+cd ".\Workspace"
+copy "..\TestFiles\ComputerAdd\*.*"
+copy "..\TestFiles\ComputerMax\*.*"
+copy "..\TestFiles\ComputerRect\*.*"
+copy "..\TestFiles\CPU\*.*"
+copy "..\TestFiles\Memory\*.*"

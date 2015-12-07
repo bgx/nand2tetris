@@ -1,0 +1,3 @@
+REM These are identified explicitly so that we can use this batch file in future projects to only delete the project01 chips from the workspace
+
+del ".\Workspace\And.hdl" ".\Workspace\And16.hdl" ".\Workspace\DMux.hdl" ".\Workspace\DMux4Way.hdl" ".\Workspace\DMux8Way.hdl" ".\Workspace\Mux.hdl" ".\Workspace\Mux4Way16.hdl" ".\Workspace\Mux8Way16.hdl" ".\Workspace\Mux16.hdl" ".\Workspace\Not.hdl" ".\Workspace\Not16.hdl" ".\Workspace\Or.hdl" ".\Workspace\Or8Way.hdl" ".\Workspace\Or16.hdl" ".\Workspace\Xor.hdl"

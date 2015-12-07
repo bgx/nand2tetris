@@ -1,3 +1,0 @@
-REM These are identified explicitly so that we can use this batch file in future projects to only delete the project02 chips from the workspace
-
-del "C:\Users\Brian\Documents\nand2tetris\src\project02\Workspace\Add16.hdl" "C:\Users\Brian\Documents\nand2tetris\src\project02\Workspace\ALU.hdl" "C:\Users\Brian\Documents\nand2tetris\src\project02\Workspace\FullAdder.hdl" "C:\Users\Brian\Documents\nand2tetris\src\project02\Workspace\HalfAdder.hdl" "C:\Users\Brian\Documents\nand2tetris\src\project02\Workspace\Inc16.hdl"

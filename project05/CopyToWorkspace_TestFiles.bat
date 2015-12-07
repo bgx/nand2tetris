@@ -1,6 +1,0 @@
-cd "C:\Users\Brian\Documents\nand2tetris\src\project05\Workspace"
-copy "C:\Users\Brian\Documents\nand2tetris\src\project05\TestFiles\ComputerAdd\*.*"
-copy "C:\Users\Brian\Documents\nand2tetris\src\project05\TestFiles\ComputerMax\*.*"
-copy "C:\Users\Brian\Documents\nand2tetris\src\project05\TestFiles\ComputerRect\*.*"
-copy "C:\Users\Brian\Documents\nand2tetris\src\project05\TestFiles\CPU\*.*"
-copy "C:\Users\Brian\Documents\nand2tetris\src\project05\TestFiles\Memory\*.*"

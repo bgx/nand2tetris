@@ -1,0 +1,5 @@
+cd ".\Workspace"
+copy "..\TestFiles\a\*.cmp"
+copy "..\TestFiles\a\*.tst"
+copy "..\TestFiles\b\*.cmp"
+copy "..\TestFiles\b\*.tst"

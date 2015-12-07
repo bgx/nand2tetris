@@ -1,10 +1,4 @@
-This is a repository for Elements of Computing Systems (nand2tetris)!
-
-*tools*
-The author-supplied tools
-
-*src*
-The projects
+*Project Descriptions*
 
 project01 - Boolean Logic
     build elementary logic gates out of Nand gates
