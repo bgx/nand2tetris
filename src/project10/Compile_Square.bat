@@ -1,2 +1,2 @@
-python.exe ./compiler/JackCompiler.py ./Square
+python.exe ./compiler/JackCompiler.py ./TestPrograms/Square
 pause

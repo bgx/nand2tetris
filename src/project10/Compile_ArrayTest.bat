@@ -1,2 +1,2 @@
-python.exe ./compiler/JackCompiler.py ./ArrayTest
+python.exe ./compiler/JackCompiler.py ./TestPrograms/ArrayTest
 pause
