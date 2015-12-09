@@ -216,7 +216,8 @@ class CompilationEngine:
         self.current_class = ''
         self.current_subroutine = ''
         self.subroutine_locals = 0
-        self.subroutine_args = 0
+        self.subroutine_args = []
+        self.subroutine_args_index = -1
         self.void_return = False;
         
         self.vm_writer = VMWriter(filename)
@@ -557,9 +558,7 @@ class CompilationEngine:
         self.jt.advance()
                
         self.compileSubroutineCall()
-        # there may need to be something like this in compileSubroutineCall
-        # itself, in case a function is called with a function query as a parameter
-        # e.g. do funca(funcb(2)); (not sure this is tested with sample programs)
+
         self.vm_writer.writePop('temp',0)
         
         self.processTokenExpectingValue(';')        
@@ -802,7 +801,8 @@ class CompilationEngine:
         
     def compileSubroutineCall(self, subroutineName = None):
         '''.'''
-        self.subroutine_args = 0
+        self.subroutine_args.append(0)
+        self.subroutine_args_index += 1
         subroutine_call_name = ''
         
         self.setIdentifierContext('used')
@@ -824,7 +824,7 @@ class CompilationEngine:
                 self.writeIdentifierInfo(holdName)
                 # Setting up a Jack method call (as opposed to function call), so must push object
                 self.vm_writer.writePush(self.symbol_table.kindOf(holdName),self.symbol_table.indexOf(holdName))
-                self.subroutine_args += 1
+                self.subroutine_args[self.subroutine_args_index] += 1
                 # advance tokenizer past '.'
                 self.processTerminal()    
                 self.jt.advance()
@@ -854,7 +854,7 @@ class CompilationEngine:
             self.writeIdentifierInfo(str(holdName))
             # push reference to this (which will be represented as argument 0 inside the method)
             self.vm_writer.writePush('pointer',0)
-            self.subroutine_args += 1
+            self.subroutine_args[self.subroutine_args_index] += 1
             # set up subroutine_call_name for writeCall() below
             subroutine_call_name = self.current_class + '.' + holdName
             
@@ -862,7 +862,8 @@ class CompilationEngine:
         self.compileExpressionList()
         self.processTokenExpectingValue(')')
                 
-        self.vm_writer.writeCall(subroutine_call_name,self.subroutine_args)
+        self.vm_writer.writeCall(subroutine_call_name,self.subroutine_args.pop())
+        self.subroutine_args_index -= 1
         
     def compileExpressionList(self):
         '''.'''
@@ -870,11 +871,11 @@ class CompilationEngine:
         
         if(self.jt.getTokenValue() != ')'):
             self.compileExpression()
-            self.subroutine_args += 1
+            self.subroutine_args[self.subroutine_args_index] += 1
             while(self.jt.getTokenValue() != ')'):
                 self.processTokenExpectingValue(',')
                 self.compileExpression()
-                self.subroutine_args += 1
+                self.subroutine_args[self.subroutine_args_index] += 1
             
         self.writeXmlNonTerminal('expressionList','end')
 
