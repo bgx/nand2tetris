@@ -28,7 +28,6 @@ class Brick {
         let paxmin = 255 - (paw/2) + 1;
         let paxmax = 256 + (paw/2) - 1;
         
-        do draw();
         let hitbox = Hitbox.new(x - (width/2),x + (width/2), y - (height/2), y + (height/2));
         return this;
     }

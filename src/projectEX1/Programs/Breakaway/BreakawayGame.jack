@@ -127,7 +127,6 @@ class BreakawayGame {
         // C
         //do wall.newBrickGroup(176, 50, 30, 10, 32, 12, 1, 6);
         //do wall.newBrickGroup(191, 62, 30, 10, 32, 12, 1, 6);
-        do wall.draw();
         return;
     }
     
