@@ -2,11 +2,11 @@ robocopy ".\Programs\Tests\vmtranslator" ".\Workspace" /E
 
 pause
 
-python.exe ./MyTools/vmtranslator/vmtranslator.py ./Workspace/StackArithmetic/SimpleAdd
-python.exe ./MyTools/vmtranslator/vmtranslator.py ./Workspace/StackArithmetic/StackTest
-python.exe ./MyTools/vmtranslator/vmtranslator.py ./Workspace/MemoryAccess/BasicTest
-python.exe ./MyTools/vmtranslator/vmtranslator.py ./Workspace/MemoryAccess/PointerTest
-python.exe ./MyTools/vmtranslator/vmtranslator.py ./Workspace/MemoryAccess/StaticTest
+python.exe ./MyTools/vmtranslator/vmtranslator.py ./Workspace/StackArithmetic/SimpleAdd -n
+python.exe ./MyTools/vmtranslator/vmtranslator.py ./Workspace/StackArithmetic/StackTest -n
+python.exe ./MyTools/vmtranslator/vmtranslator.py ./Workspace/MemoryAccess/BasicTest -n
+python.exe ./MyTools/vmtranslator/vmtranslator.py ./Workspace/MemoryAccess/PointerTest -n
+python.exe ./MyTools/vmtranslator/vmtranslator.py ./Workspace/MemoryAccess/StaticTest -n
 
 pause
 
