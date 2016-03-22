@@ -46,10 +46,7 @@ def main():
         if bootstrap_switch is True:
             output.write('// ********Bootstrap***\n')
             output.write(write_init())
-            
-        output.write('// ********Assembly Functions***\n')
-        output.write(write_assembly_functions())
-        
+                    
         for file in vm_filenames:
             
             filename_no_extension = os.path.splitext(os.path.basename(file))[0]
@@ -71,6 +68,9 @@ def main():
                         oline = asm + '\n'
                         output.write('// ****VM***: ' + line + '\n')
                     output.write(oline)
+
+        output.write('// ********Assembly Functions***\n')
+        output.write(write_assembly_functions())
 
 
 # functions to collect information from command line call of vmtranslator.py
@@ -215,8 +215,8 @@ def write_init():
     
 def write_assembly_functions():
     '''Writes functions for assembly code that occurs frequently'''
-    asm = ( write_call_assembly() + '\n' +
-            write_return_assembly() + '\n' )
+    asm = ( write_call_assembly() +
+            write_return_assembly() )
     return asm
 
 def start_asm_function(name):
@@ -244,7 +244,65 @@ def call_asm_function(name):
     
 def write_call_assembly():
     ''''''
-    return ''
+    # R14 and R15 are used to store return address and number of arguments.  May need to change later.
+    asm = ( start_asm_function('CALLSETUP')   +
+    
+            '@R14'  + '\n' +            # push [return address stored in R14]
+            'D=M'   + '\n' +
+            '@SP'   + '\n' +         
+            'A=M'   + '\n' +         
+            'M=D'   + '\n' +                            
+            '@SP'   + '\n' +                             
+            'M=M+1' + '\n' +
+            
+            '@LCL'  + '\n' +            # push LCL
+            'D=M'   + '\n' +
+            '@SP'   + '\n' +         
+            'A=M'   + '\n' +         
+            'M=D'   + '\n' +                             
+            '@SP'   + '\n' +                           
+            'M=M+1' + '\n' +
+            
+            '@ARG'  + '\n' +            # push ARG
+            'D=M'   + '\n' +
+            '@SP'   + '\n' +         
+            'A=M'   + '\n' +         
+            'M=D'   + '\n' +                           
+            '@SP'   + '\n' +                          
+            'M=M+1' + '\n' +
+            
+            '@THIS' + '\n' +            # push THIS
+            'D=M'   + '\n' +
+            '@SP'   + '\n' +         
+            'A=M'   + '\n' +         
+            'M=D'   + '\n' +                   
+            '@SP'   + '\n' +                       
+            'M=M+1' + '\n' +
+            
+            '@THAT' + '\n' +            # push THAT
+            'D=M'   + '\n' +
+            '@SP'   + '\n' +         
+            'A=M'   + '\n' +         
+            'M=D'   + '\n' +                           
+            '@SP'   + '\n' +                    
+            'M=M+1' + '\n' +
+            
+            '@SP'   + '\n' +            # ARG = SP - [numArgs stored in R15] - 5
+            'D=M'   + '\n' +
+            '@R15'  + '\n' +
+            'D=D-M' + '\n' +
+            '@5'    + '\n' +
+            'D=D-A' + '\n' +
+            '@ARG'  + '\n' +           
+            'M=D'   + '\n' +
+            
+            '@SP'   + '\n' +            # LCL = SP
+            'D=M'   + '\n' +
+            '@LCL'  + '\n' +           
+            'M=D'   + '\n' +
+            
+            end_asm_function() )
+    return asm
     
 def write_return_assembly():
     ''''''
@@ -655,60 +713,20 @@ def write_call(functionName, numArgs):
     if "counter" not in write_call.__dict__:
         write_call.counter = 0
     
-    asm = ( '@ReturnAddress_Call' + str(write_call.counter) + '\n' + # push return-address
-            'D=A'   + '\n' +
-            '@SP'   + '\n' +         
-            'A=M'   + '\n' +         
-            'M=D'   + '\n' +                            
-            '@SP'   + '\n' +                             
-            'M=M+1' + '\n' +
-            
-            '@LCL'  + '\n' +            # push LCL
-            'D=M'   + '\n' +
-            '@SP'   + '\n' +         
-            'A=M'   + '\n' +         
-            'M=D'   + '\n' +                             
-            '@SP'   + '\n' +                           
-            'M=M+1' + '\n' +
-            
-            '@ARG'  + '\n' +            # push ARG
-            'D=M'   + '\n' +
-            '@SP'   + '\n' +         
-            'A=M'   + '\n' +         
-            'M=D'   + '\n' +                           
-            '@SP'   + '\n' +                          
-            'M=M+1' + '\n' +
-            
-            '@THIS' + '\n' +            # push THIS
-            'D=M'   + '\n' +
-            '@SP'   + '\n' +         
-            'A=M'   + '\n' +         
-            'M=D'   + '\n' +                   
-            '@SP'   + '\n' +                       
-            'M=M+1' + '\n' +
-            
-            '@THAT' + '\n' +            # push THAT
-            'D=M'   + '\n' +
-            '@SP'   + '\n' +         
-            'A=M'   + '\n' +         
-            'M=D'   + '\n' +                           
-            '@SP'   + '\n' +                    
-            'M=M+1' + '\n' +
-            
-            '@SP'   + '\n' +           # ARG = SP - numArgs - 5
-            'D=M'   + '\n' +
+    asm = ( # store return-address in R14
+            '@ReturnAddress_Call' + str(write_call.counter) + '\n' +
+            'D=A'    + '\n' +
+            '@R14'   + '\n' +         
+            'M=D'    + '\n' +
+
+            # store numArgs in R15
             '@'     + numArgs + '\n' +
-            'D=D-A' + '\n' +
-            '@5'    + '\n' +
-            'D=D-A' + '\n' +
-            '@ARG'  + '\n' +           
+            'D=A'   + '\n' +
+            '@R15'  + '\n' +
             'M=D'   + '\n' +
-            
-            '@SP'   + '\n' +           # LCL = SP
-            'D=M'   + '\n' +
-            '@LCL'  + '\n' +           
-            'M=D'   + '\n' +
-            
+
+            call_asm_function('CALLSETUP') + '\n' +
+                        
             '@' + functionName + '\n' +   # goto functionName
             '0;JMP' + '\n' +
             

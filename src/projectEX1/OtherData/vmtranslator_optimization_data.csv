@@ -6,3 +6,4 @@ Date,Time,OS,Program,Compiler,Lines - No Labels; No Comments; No Blank Lines,VM 
 3/20/2016,10:24 PM,Brian,None,Supplied,39262,0,Initial,,
 3/20/2016,10:25 PM,Supplied,None,Brian,48241,0,Initial,,
 3/20/2016,10:58 PM,Brian,None,Brian,36343,1,added asm function 'RETURN' and make calls to it,3257,0.917752525
+3/21/2016,10:13 PM,Brian,None,Brian,29710,2,added asm function 'CALLSETUP' and make calls to it,6633,0.817488925
