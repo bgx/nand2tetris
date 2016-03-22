@@ -493,18 +493,28 @@ def write_arithmetic(command):
                'M=M+1')
     return asm
 
+def write_push_constant(index):
+    if (index in ['0','1','-1']):
+        asm = ( '@SP' + '\n' +         
+                'AM=M+1' + '\n' +
+                'A=A-1' + '\n' +          
+                'M='+index)
+        return asm
+        
+    asm = ( '@'+index + '\n' +
+            'D=A' + '\n' +
+            '@SP' + '\n' +         
+            'AM=M+1' + '\n' +
+            'A=A-1' + '\n' +          
+            'M=D')
+    return asm
+    
 def write_push(segment, index):
     '''Translates push vm command to assembly code'''
     
     # put segment[index] onto stack
     if segment == 'constant':
-        asm = ('@' + index + '\n' +   # set A to constant value
-               'D=A' + '\n' +         # D contains constant value
-               '@SP' + '\n' +         
-               'A=M' + '\n' +         
-               'M=D' + '\n' +         # set (the register being pointed to by SP) to the constant value stored in D
-               '@SP' + '\n' +         # increment stack pointer
-               'M=M+1')
+        asm = write_push_constant(index)
     elif segment == 'local':
         asm = ('@LCL'  + '\n' +           # store the contents of the memory location local+index in D
                'D=M'   + '\n' +
