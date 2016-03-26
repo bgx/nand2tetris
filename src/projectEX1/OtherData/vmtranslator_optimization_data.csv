@@ -11,3 +11,4 @@ Date,Time,OS,Program,Compiler,Lines - No Labels; No Comments; No Blank Lines,VM 
 3/26/2016,2:33 PM,Brian,None,Brian,27120,4,reduced instructions for 'push static <i>',54,0.998012806
 3/26/2016,3:07 PM,Brian,None,Brian,27003,5,push pointer' and 'push temp',117,0.995685841
 3/26/2016,3:37 PM,Brian,None,Brian,25861,6,"reduced push for {local, argument, this, that}",1142,0.957708403
+3/26/2016,7:31 PM,Brian,None,Brian,22874,7,reduced all pop commands,2987,0.884497893

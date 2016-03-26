@@ -613,105 +613,139 @@ def write_push(segment, index):
     elif segment == 'static':
         asm = write_push_static(index)
     return asm
+    
+def write_pop_local(index):
+    if (index < 8):
+        asm = ( write_pop_D() +
+                '@LCL'  + '\n' +
+                write_pop_store_from_D_2(index) )
+    else:
+        asm = ( '@LCL'  + '\n' +
+                write_pop_large_index(index) )
+    return asm
+    
+def write_pop_argument(index):
+    if (index < 8):
+        asm = ( write_pop_D() +
+                '@ARG'  + '\n' +
+                write_pop_store_from_D_2(index) )
+    else:
+        asm = ( '@ARG'  + '\n' +
+                'D=M'   + '\n' +
+                write_pop_large_index(index) )
+    return asm
+    
+def write_pop_this(index):
+    if (index < 8):
+        asm = ( write_pop_D() +
+                '@THIS'  + '\n' +
+                write_pop_store_from_D_2(index) )
+    else:
+        asm = ( '@THIS'  + '\n' +
+                'D=M'   + '\n' +
+                write_pop_large_index(index) )
+    return asm
+
+def write_pop_that(index):
+    if (index < 8):
+        asm = ( write_pop_D() +
+                '@THAT'  + '\n' +
+                write_pop_store_from_D_2(index) )
+    else:
+        asm = ( '@THAT'  + '\n' +
+                'D=M'   + '\n' +
+                write_pop_large_index(index) )
+    return asm 
+    
+def write_pop_pointer(index):
+    if (index < 8):
+        asm = ( write_pop_D() +
+                '@R3'  + '\n' +
+                write_pop_store_from_D_1(index) )
+    else:
+        asm = ( '@R3'  + '\n' +
+                'D=A'   + '\n' +
+                write_pop_large_index(index) )
+    return asm
+    
+def write_pop_temp(index):
+    if (index < 8):
+        asm = ( write_pop_D() +
+                '@R5'  + '\n' +
+                write_pop_store_from_D_1(index) )
+    else:
+        asm = ( '@R5'  + '\n' +
+                'D=A'   + '\n' +
+                write_pop_large_index(index) )
+    return asm  
+    
+def write_pop_large_index(index):
+    # using R13 as temporary storage.  may want to change later.
+    asm = ( '@'     + str(index) + '\n' +
+            'D=D+A' + '\n' +
+            '@R13'  + '\n' +
+            'M=D'   + '\n' +
+            write_pop_D()  + 
+            '@R13'  + '\n' +
+            'A=M'   + '\n' + 
+            'M=D')
+    return asm
+
+def write_pop_store_from_D_1(index):
+    if(index == 0):
+        asm = 'M=D'
+    else:
+        asm = 'A=A+1' + '\n'
+        index -= 1
+        while( index > 0 ):
+            asm = asm + 'A=A+1' + '\n'
+            index -= 1
+        asm = asm + 'M=D'
+    return asm
+
+def write_pop_store_from_D_2(index):
+    if(index == 0):
+        asm = ( 'A=M'   + '\n'
+                'M=D' )
+    else:
+        asm = 'A=M+1' + '\n'
+        index -= 1
+        while( index > 0 ):
+            asm = asm + 'A=A+1' + '\n'
+            index -= 1
+        asm = asm + 'M=D'
+    return asm
+        
+def write_pop_D():
+    asm = ( '@SP'    + '\n' +
+            'AM=M-1' + '\n' + 
+            'D=M'    + '\n' )
+    return asm
 
 def write_pop(segment, index):
     '''Translates pop vm command to assembly code'''
 
+    index = int(index, 10)
     # pull from stack and store in segment[index]
     if segment == 'constant':
         asm = ('@SP' + '\n' +             # decrement contents of SP
                'M=M-1')
     elif segment == 'local':
-        asm = ('@LCL'  + '\n' +           # store the address local+index in R13
-               'D=M'   + '\n' +
-               '@'     + index + '\n' +
-               'D=D+A' + '\n' +
-               '@R13'  + '\n' +
-               'M=D'   + '\n' +
-               '@SP'   + '\n' +           # set D to the contents of the address that SP points to
-               'M=M-1' + '\n' + 
-               'A=M'   + '\n' + 
-               'D=M'   + '\n' + 
-               '@R13'  + '\n' +           # store the contents of D in the memory location local+index
-               'A=M'   + '\n' + 
-               'M=D')
+        asm = write_pop_local(index)
     elif segment == 'argument':
-        asm = ('@ARG'  + '\n' +           # store the address argument+index in R13
-               'D=M'   + '\n' +
-               '@'     + index + '\n' +
-               'D=D+A' + '\n' +
-               '@R13'  + '\n' +
-               'M=D'   + '\n' +
-               '@SP'   + '\n' +           # set D to the contents of the address that SP points to
-               'M=M-1' + '\n' + 
-               'A=M'   + '\n' + 
-               'D=M'   + '\n' + 
-               '@R13'  + '\n' +           # store the contents of D in the memory location argument+index
-               'A=M'   + '\n' + 
-               'M=D')
+        asm = write_pop_argument(index)
     elif segment == 'this':
-        asm = ('@THIS'  + '\n' +          # store the address this+index in R13
-               'D=M'   + '\n' +
-               '@'     + index + '\n' +
-               'D=D+A' + '\n' +
-               '@R13'  + '\n' +
-               'M=D'   + '\n' +
-               '@SP'   + '\n' +           # set D to the contents of the address that SP points to
-               'M=M-1' + '\n' + 
-               'A=M'   + '\n' + 
-               'D=M'   + '\n' + 
-               '@R13'  + '\n' +           # store the contents of D in the memory location this+index
-               'A=M'   + '\n' + 
-               'M=D')
+        asm = write_pop_this(index)
     elif segment == 'that':
-        asm = ('@THAT'  + '\n' +          # store the address that+index in R13
-               'D=M'   + '\n' +
-               '@'     + index + '\n' +
-               'D=D+A' + '\n' +
-               '@R13'  + '\n' +
-               'M=D'   + '\n' +
-               '@SP'   + '\n' +           # set D to the contents of the address that SP points to
-               'M=M-1' + '\n' + 
-               'A=M'   + '\n' + 
-               'D=M'   + '\n' + 
-               '@R13'  + '\n' +           # store the contents of D in the memory location that+index
-               'A=M'   + '\n' + 
-               'M=D')
+        asm = write_pop_that(index)
     elif segment == 'pointer':
-        asm = ('@R3'  + '\n' +            # store 3+index in R13
-               'D=A'   + '\n' +
-               '@'     + index + '\n' +
-               'D=D+A' + '\n' +
-               '@R13'  + '\n' +
-               'M=D'   + '\n' +
-               '@SP'   + '\n' +           # set D to the contents of the address that SP points to
-               'M=M-1' + '\n' + 
-               'A=M'   + '\n' + 
-               'D=M'   + '\n' + 
-               '@R13'  + '\n' +           # store the contents of D in the memory location 3+index
-               'A=M'   + '\n' + 
-               'M=D')
+        asm = write_pop_pointer(index)
     elif segment == 'temp':
-        asm = ('@R5'  + '\n' +            # store 5+index in R13
-               'D=A'   + '\n' +
-               '@'     + index + '\n' +
-               'D=D+A' + '\n' +
-               '@R13'  + '\n' +
-               'M=D'   + '\n' +
-               '@SP'   + '\n' +           # set D to the contents of the address that SP points to
-               'M=M-1' + '\n' + 
-               'A=M'   + '\n' + 
-               'D=M'   + '\n' + 
-               '@R13'  + '\n' +           # store the contents of D in the memory location 5+index
-               'A=M'   + '\n' + 
-               'M=D')          
+        asm = write_pop_temp(index)          
     elif segment == 'static':
-        asm = ('@SP'   + '\n' +                                     # set D to the contents of the address that SP points to
-               'M=M-1' + '\n' + 
-               'A=M'   + '\n' + 
-               'D=M'   + '\n' + 
-               '@' + static_base + '.' + index + '\n' +           # store the contents of D in the memory location of static variable
-               'M=D')
+        asm = ( write_pop_D() + 
+                '@' + static_base + '.' + str(index) + '\n' +           # store the contents of D in the memory location of static variable
+                'M=D')
     return asm
                
 def write_label(label):
