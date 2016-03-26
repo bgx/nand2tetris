@@ -503,10 +503,93 @@ def write_push_constant(index):
         
     asm = ( '@'+index + '\n' +
             'D=A' + '\n' +
-            '@SP' + '\n' +         
-            'AM=M+1' + '\n' +
-            'A=A-1' + '\n' +          
-            'M=D')
+            write_push_D() )
+    return asm
+    
+def write_push_static(index):
+    asm = ( '@' + static_base + '.' + index + '\n' +
+            'D=M' + '\n' + 
+            write_push_D() )
+    return asm
+    
+def write_push_pointer(index):
+    asm = ( '@R3' + '\n' +
+            write_push_store_in_D_1(index) +
+            write_push_D() )
+    return asm
+    
+def write_push_temp(index):
+    asm = ( '@R5' + '\n' +
+            write_push_store_in_D_1(index) +
+            write_push_D() )
+    return asm
+    
+def write_push_local(index):
+    asm = ( '@LCL' + '\n' +
+            write_push_store_in_D_2(index) +
+            write_push_D() )
+    return asm
+    
+def write_push_argument(index):
+    asm = ( '@ARG' + '\n' +
+            write_push_store_in_D_2(index) +
+            write_push_D() )
+    return asm
+
+def write_push_this(index):
+    asm = ( '@THIS' + '\n' +
+            write_push_store_in_D_2(index) +
+            write_push_D() )
+    return asm
+
+def write_push_that(index):
+    asm = ( '@THAT' + '\n' +
+            write_push_store_in_D_2(index) +
+            write_push_D() )
+    return asm
+
+def write_push_store_in_D_1(index):
+    '''Store, in D, the contents of the cell referenced by A+index '''
+    if (index in ['0']):
+        asm = 'D=M'  + '\n'
+    elif (index in ['1']):
+        asm = ( 'A=A+1'  + '\n' +
+                'D=M' + '\n')
+    elif (index in ['2']):
+        asm = ( 'A=A+1'  + '\n' +
+                'A=A+1'  + '\n' +
+                'D=M' + '\n')
+    else:
+        asm = ( 'D=A'  + '\n' + 
+                '@'+index + '\n' +
+                'A=D+A' + '\n' +
+                'D=M' + '\n')
+    return asm
+    
+def write_push_store_in_D_2(index):
+    '''Store, in D, the contents of the cell referenced by ( (the contents of the cell referenced by A) + index ) '''
+    if (index in ['0']):
+        asm = ( 'A=M'  + '\n' +
+                'D=M'  + '\n')
+    elif (index in ['1']):
+        asm = ( 'A=M+1'   + '\n' +
+                'D=M' + '\n')
+    elif (index in ['2']):
+        asm = ( 'A=M+1'  + '\n' +
+                'A=A+1'  + '\n' +
+                'D=M' + '\n')
+    else:
+        asm = ( 'D=M'  + '\n' + 
+                '@'+index + '\n' +
+                'A=D+A' + '\n' +
+                'D=M' + '\n')
+    return asm
+    
+def write_push_D():
+    asm = ( '@SP'    + '\n' +         
+            'AM=M+1' + '\n' +  # SP_f = SP_i + 1
+            'A=A-1'  + '\n' +          
+            'M=D')             # set (the register being pointed to by SP_i) to the constant value stored in D
     return asm
     
 def write_push(segment, index):
@@ -516,79 +599,19 @@ def write_push(segment, index):
     if segment == 'constant':
         asm = write_push_constant(index)
     elif segment == 'local':
-        asm = ('@LCL'  + '\n' +           # store the contents of the memory location local+index in D
-               'D=M'   + '\n' +
-               '@'     + index + '\n' +
-               'A=D+A' + '\n' +
-               'D=M'   + '\n' +
-               '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
-               'A=M'   + '\n' + 
-               'M=D'   + '\n' +
-               '@SP'   + '\n' +           # increment contents of SP
-               'M=M+1')
+        asm = write_push_local(index)
     elif segment == 'argument':
-        asm = ('@ARG'  + '\n' +           # store the contents of the memory location argument+index in D
-               'D=M'   + '\n' +
-               '@'     + index + '\n' +
-               'A=D+A' + '\n' +
-               'D=M'   + '\n' +
-               '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
-               'A=M'   + '\n' + 
-               'M=D'   + '\n' +
-               '@SP'   + '\n' +           # increment contents of SP
-               'M=M+1')
+        asm = write_push_argument(index)
     elif segment == 'this':
-        asm = ('@THIS'  + '\n' +           # store the contents of the memory location this+index in D
-               'D=M'   + '\n' +
-               '@'     + index + '\n' +
-               'A=D+A' + '\n' +
-               'D=M'   + '\n' +
-               '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
-               'A=M'   + '\n' + 
-               'M=D'   + '\n' +
-               '@SP'   + '\n' +           # increment contents of SP
-               'M=M+1')
+        asm = write_push_this(index)
     elif segment == 'that':
-        asm = ('@THAT'  + '\n' +           # store the contents of the memory location that+index in D
-               'D=M'   + '\n' +
-               '@'     + index + '\n' +
-               'A=D+A' + '\n' +
-               'D=M'   + '\n' +
-               '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
-               'A=M'   + '\n' + 
-               'M=D'   + '\n' +
-               '@SP'   + '\n' +           # increment contents of SP
-               'M=M+1')
+        asm = write_push_that(index)
     elif segment == 'pointer':
-        asm = ('@R3'  + '\n' +            # store 3+index in D
-               'D=A'   + '\n' +
-               '@'     + index + '\n' +
-               'A=D+A' + '\n' +
-               'D=M'   + '\n' +
-               '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
-               'A=M'   + '\n' + 
-               'M=D'   + '\n' +
-               '@SP'   + '\n' +           # increment contents of SP
-               'M=M+1')
+        asm = write_push_pointer(index)
     elif segment == 'temp':
-        asm = ('@R5'  + '\n' +            # store 5+index in D
-               'D=A'   + '\n' +
-               '@'     + index + '\n' +
-               'A=D+A' + '\n' +
-               'D=M'   + '\n' +
-               '@SP'   + '\n' +           # set (the register being pointed to by SP) to the constant value stored in D
-               'A=M'   + '\n' + 
-               'M=D'   + '\n' +
-               '@SP'   + '\n' +           # increment contents of SP
-               'M=M+1')
+        asm = write_push_temp(index)
     elif segment == 'static':
-        asm = ('@' + static_base + '.' + index + '\n' + #store value of static variable register in D
-               'D=M' + '\n' +
-               '@SP' + '\n' +         
-               'A=M' + '\n' +         
-               'M=D' + '\n' +                             # set (the register being pointed to by SP) to the value stored in D
-               '@SP' + '\n' +                             # increment contents of SP
-               'M=M+1')
+        asm = write_push_static(index)
     return asm
 
 def write_pop(segment, index):
