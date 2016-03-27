@@ -9,7 +9,7 @@ Date,Time,OS,Program,Compiler,Lines - No Labels; No Comments; No Blank Lines,VM 
 3/26/2016,3:37 PM,Brian,None,Brian,25861,6,"reduced push for {local, argument, this, that}",1142,0.957708403,0.653055556
 3/26/2016,7:31 PM,Brian,None,Brian,22874,7,reduced all pop commands,2987,0.884497893,0.577626263
 3/27/2016,12:11 AM,Brian,None,Brian,22210,8,reduced arithmetic commands,664,0.970971409,0.560858586
-,,,,,,,,,,
+3/27/2016,1:31 AM,Brian,None,Brian,22134,9,reduced ifgoto,76,0.996578118,0.558939394
 ,,,,,,,,,,
 3/20/2016,10:10 PM,Brian,Pong,Brian,53401,0,Initial,,,
 3/27/2016,12:56 AM,Brian,Pong,Brian,29073,8,reduced arithmetic commands,,,0.544428007

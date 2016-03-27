@@ -341,8 +341,7 @@ def write_return_assembly():
             
             #*ARG = pop()
             '@SP'   + '\n' +
-            'M=M-1' + '\n' + 
-            'A=M'   + '\n' + 
+            'AM=M-1' + '\n' + 
             'D=M'   + '\n' + 
             '@ARG'  + '\n' +        # store the contents of D in the memory location argument points to
             'A=M'   + '\n' + 
@@ -356,32 +355,28 @@ def write_return_assembly():
             
             # THAT = *(FRAME-1)           
             '@FRAME' + '\n' +
-            'M=M-1'  + '\n' +
-            'A=M'    + '\n' +
+            'AM=M-1'  + '\n' +
             'D=M'    + '\n' +
             '@THAT'  + '\n' +
             'M=D'    + '\n' +
             
             # THIS = *(FRAME-2)            
             '@FRAME' + '\n' +
-            'M=M-1'  + '\n' +
-            'A=M'    + '\n' +
+            'AM=M-1'  + '\n' +
             'D=M'    + '\n' +
             '@THIS'  + '\n' +
             'M=D'    + '\n' +
             
             # ARG = *(FRAME-3)
             '@FRAME' + '\n' +
-            'M=M-1'  + '\n' +
-            'A=M'    + '\n' +
+            'AM=M-1'  + '\n' +
             'D=M'    + '\n' +
             '@ARG'   + '\n' +
             'M=D'    + '\n' +
             
             # LCL = *(FRAME-4)
             '@FRAME' + '\n' +
-            'M=M-1'  + '\n' +
-            'A=M'    + '\n' +
+            'AM=M-1'  + '\n' +
             'D=M'    + '\n' +
             '@LCL'   + '\n' +
             'M=D'    + '\n' +
@@ -768,8 +763,7 @@ def write_ifgoto(label):
     '''Translates if_goto vm command to assembly code'''
 
     asm = ('@SP'      + '\n' +          # pop value from stack and place in D register
-           'M=M-1'    + '\n' +
-           'A=M'      + '\n' +
+           'AM=M-1'    + '\n' +
            'D=M'      + '\n' +
            '@' + label + '\n' +          # jump to (args) if D is not zero
            'D;JNE')
