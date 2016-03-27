@@ -27,6 +27,10 @@ def main():
     # used to label static variables (find a way to not use a global variable)
     global static_base
     
+    # This is not great but I don't want to refactor right now
+    global global_assembly_functions_called
+    global_assembly_functions_called = set()
+    
     #### parse command line to get path names and flag values
     commandline_args = parse_commandline()
     
@@ -234,6 +238,9 @@ def end_asm_function():
 def call_asm_function(name):
     if "counter" not in call_asm_function.__dict__:
         call_asm_function.counter = 0
+        
+    global_assembly_functions_called.add(name)
+        
     asm = ( '@AsmReturnAddress' + str(call_asm_function.counter) +'\n'+
             'D=A'                  +'\n'+
             '@AsmFunction_' + name +'\n'+
@@ -244,6 +251,10 @@ def call_asm_function(name):
     
 def write_call_assembly():
     ''''''
+    
+    if('CALLSETUP' not in global_assembly_functions_called):
+        return ''
+    
     # R14 and R15 are used to store return address and number of arguments.  May need to change later.
     asm = ( start_asm_function('CALLSETUP')   +
     
@@ -306,6 +317,10 @@ def write_call_assembly():
     
 def write_return_assembly():
     ''''''
+    
+    if('RETURN' not in global_assembly_functions_called):
+        return ''
+        
     asm = ( start_asm_function('RETURN')   +
     
             # FRAME = LCL
@@ -391,29 +406,23 @@ def write_arithmetic(command):
         
     if command == 'add':
         asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
-               'M=M-1' + '\n' +
-               'A=M'   + '\n' +
+               'AM=M-1' + '\n' +
                'D=M'   + '\n' +
                'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
                'M=D+M')         # add the first and second operands
     elif command == 'sub':
         asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
-               'M=M-1' + '\n' +
-               'A=M'   + '\n' +
+               'AM=M-1' + '\n' +
                'D=M'   + '\n' +
                'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
                'M=M-D')         # subtract first operand from second operand
     elif command == 'neg':
         asm = ('@SP'   + '\n' +
-               'M=M-1' + '\n' +
-               'A=M'   + '\n' +
-               'M=-M'  + '\n' + # arithmetically negate the contents of the address that SP points to
-               '@SP'   + '\n' +
-               'M=M+1')
+               'A=M-1' + '\n' +
+               'M=-M' ) # arithmetically negate the contents of the address that SP points to
     elif command == 'eq':
         asm = ('@SP'      + '\n' +                              # pull first operand from stack and place in D register
-               'M=M-1'    + '\n' +
-               'A=M'      + '\n' +
+               'AM=M-1'    + '\n' +
                'D=M'      + '\n' +
                'A=A-1'    + '\n' +                              # set A to the address of the second operand, leaving SP where it needs to be
                'D=M-D'    + '\n' +                              # subtract first operand from second operand
@@ -432,8 +441,7 @@ def write_arithmetic(command):
         write_arithmetic.counter_eq += 1
     elif command == 'gt':
         asm = ('@SP'      + '\n' +                              # pull first operand from stack and place in D register
-               'M=M-1'    + '\n' +
-               'A=M'      + '\n' +
+               'AM=M-1'    + '\n' +
                'D=M'      + '\n' +
                'A=A-1'    + '\n' +                              # set A to the address of the second operand, leaving SP where it needs to be
                'D=M-D'    + '\n' +                              # subtract first operand from second operand
@@ -452,8 +460,7 @@ def write_arithmetic(command):
         write_arithmetic.counter_gt += 1
     elif command == 'lt':
         asm = ('@SP'      + '\n' +                              # pull first operand from stack and place in D register
-               'M=M-1'    + '\n' +
-               'A=M'      + '\n' +
+               'AM=M-1'    + '\n' +
                'D=M'      + '\n' +
                'A=A-1'    + '\n' +                              # set A to the address of the second operand, leaving SP where it needs to be
                'D=M-D'    + '\n' +                              # subtract first operand from second operand
@@ -472,25 +479,20 @@ def write_arithmetic(command):
         write_arithmetic.counter_lt += 1
     elif command == 'and':
         asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
-               'M=M-1' + '\n' +
-               'A=M'   + '\n' +
+               'AM=M-1' + '\n' +
                'D=M'   + '\n' +
                'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
                'M=D&M')         # bit-wise AND the two operands
     elif command == 'or':
         asm = ('@SP'   + '\n' + # pull first operand from stack and place in D register
-               'M=M-1' + '\n' +
-               'A=M'   + '\n' +
+               'AM=M-1' + '\n' +
                'D=M'   + '\n' +
                'A=A-1' + '\n' + # set A to the address of the second operand, leaving SP where it needs to be
                'M=D|M')         # bit-wise OR the two operands
     elif command == 'not':
         asm = ('@SP'   + '\n' +
-               'M=M-1' + '\n' +
-               'A=M'   + '\n' +
-               'M=!M'  + '\n' + # bit-wise NOT the contents of the address that SP points to
-               '@SP'   + '\n' +
-               'M=M+1')
+               'A=M-1' + '\n' +
+               'M=!M'  ) # bit-wise NOT the contents of the address that SP points to
     return asm
 
 def write_push_constant(index):
@@ -621,6 +623,7 @@ def write_pop_local(index):
                 write_pop_store_from_D_2(index) )
     else:
         asm = ( '@LCL'  + '\n' +
+                'D=M'   + '\n' +
                 write_pop_large_index(index) )
     return asm
     
