@@ -18,6 +18,7 @@ import sys
 import string
 import os
 import argparse
+from collections import deque
 
 static_base = ''
 
@@ -44,13 +45,15 @@ def main():
     asm_filename = get_asm_filename(vm_filenames[0])   
     ####
     
+    
     #### write to *.asm file
     with open(asm_filename, 'w') as output:
-            
-        if bootstrap_switch is True:
+
+        vm_functions_called = get_vm_functions_called(vm_filenames, 'Sys.init')
+        if vm_functions_called:
             output.write('// ********Bootstrap***\n')
             output.write(write_init())
-                    
+                
         for file in vm_filenames:
             
             filename_no_extension = os.path.splitext(os.path.basename(file))[0]
@@ -61,12 +64,25 @@ def main():
                 # static variable number j in a VM file f represented as assembly language symbol f.j
                 static_base = filename_no_extension
                 
+                is_write_enabled = True
                 for line in vm:
                     line = clean_line(line, ['//'])
                     ct = get_command_type(line)
                     args = get_arguments(line, ct)
-                    asm = translate_command(ct, args)
-                    if not line:
+                    
+                    if (vm_functions_called and ct == 'C_FUNCTION' and
+                        args[0] not in vm_functions_called
+                    ):
+                        is_write_enabled = False
+                    
+                    if is_write_enabled:
+                        asm = translate_command(ct, args)
+                    else:
+                        asm = ''
+                        if ct == 'C_RETURN':
+                            is_write_enabled = True
+                    
+                    if not asm:
                         oline = ''
                     else:
                         oline = asm + '\n'
@@ -76,7 +92,61 @@ def main():
         output.write('// ********Assembly Functions***\n')
         output.write(write_assembly_functions())
 
-
+class GraphVertice:
+    
+    def __init__(self, name):
+        self.name = name
+        self.adjacent_vertices = set()
+        self.marked = False
+        
+def get_vm_functions_called(vm_filenames, starting_function):
+    # Build graph of function calls, and traverse from starting_function to find functions that need to be written into .asm file
+    
+    vm_functions_called = set()
+    
+    vertices = create_function_graph(vm_filenames)
+    
+    if starting_function in vertices:
+        vm_functions_called = find_called_functions(vertices, starting_function)
+    
+    return vm_functions_called
+            
+def create_function_graph(vm_filenames):
+    vertices = {}
+    for file in vm_filenames:
+        with open(file, 'r') as vm:
+            vertice = GraphVertice('dummyvertice')
+            for line in vm:
+                line = clean_line(line, ['//'])
+                ct = get_command_type(line)
+                if ct == 'C_FUNCTION':
+                    vertices[vertice.name] = vertice
+                    args = get_arguments(line, ct)
+                    vertice = GraphVertice(args[0])
+                elif ct == 'C_CALL':
+                    args = get_arguments(line, ct)
+                    vertice.adjacent_vertices.add(args[0])
+            vertices[vertice.name] = vertice
+    return vertices
+    
+def find_called_functions(vertices, starting_function):
+    vm_functions_called = set()
+    queue = deque()
+    
+    vertice = vertices[starting_function]
+    vertice.marked = True
+    vm_functions_called.add(vertice.name)
+    queue.extend(vertice.adjacent_vertices)
+    
+    while(len(queue) > 0):
+        vertice = vertices[queue.popleft()]
+        if not vertice.marked:
+            vertice.marked = True
+            vm_functions_called.add(vertice.name)
+            queue.extend(vertice.adjacent_vertices)
+            
+    return vm_functions_called
+        
 # functions to collect information from command line call of vmtranslator.py
 def parse_commandline():
     '''parse command line arguments to get (1) directory name or file name, and (2) bootstrap code insertion flag/switch'''

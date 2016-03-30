@@ -13,10 +13,14 @@ Date,Time,OS,Program,Compiler,Lines - No Labels; No Comments; No Blank Lines,VM 
 ,,,,,,,,,,
 3/20/2016,10:10 PM,Brian,Pong,Brian,53401,0,Initial,,,
 3/27/2016,12:56 AM,Brian,Pong,Brian,29073,8,reduced arithmetic commands,,,0.544428007
-,,,,,,,,,,
+3/27/2016,11:48 PM,Brian,Pong,Brian,26613,10,dead vm code removal,,,0.498361454
 ,,,,,,,,,,
 ,,,,,,,,,,
 3/20/2016,10:21 PM,Brian,Breakaway,Brian,75989,0,Initial,,,
+3/27/2016,11:46 PM,Brian,Breakaway,Brian,38623,9,,,,
+3/27/2016,11:51 PM,Brian,Breakaway,Brian,34222,10,dead vm code removal,,,
+,,,,,,,,,,
+,,,,,,,,,,
 3/20/2016,10:23 PM,Supplied,None,Supplied,48241,0,Initial,,,
 3/20/2016,10:24 PM,Brian,None,Supplied,39262,0,Initial,,,
 3/20/2016,10:25 PM,Supplied,None,Brian,48241,0,Initial,,,
