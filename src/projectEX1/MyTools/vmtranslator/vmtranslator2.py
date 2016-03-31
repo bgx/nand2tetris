@@ -275,18 +275,8 @@ def translate_command(ct, args):
     elif ct == 'C_RETURN':
         asm = write_return()
     return asm
-    
-
-# functions to write assembly    
-def write_init():
-    '''Writes bootstrap assembly code'''
-    asm = ('@256' + '\n' +                      # Initialize the stack pointer to 256
-           'D=A'  + '\n' +
-           '@SP'  + '\n' +
-           'M=D'  + '\n' +
-           write_call('Sys.init','0') + '\n')   # Start executing (the translated code of) Sys.init
-    return asm
-    
+        
+# functions to write assembly functions
 def write_assembly_functions():
     '''Writes functions for assembly code that occurs frequently'''
     asm = ( write_call_assembly() +
@@ -459,6 +449,16 @@ def write_return_assembly():
             end_asm_function() )
     return asm
 
+# functions to write assembly    
+def write_init():
+    '''Writes bootstrap assembly code'''
+    asm = ('@256' + '\n' +                      # Initialize the stack pointer to 256
+           'D=A'  + '\n' +
+           '@SP'  + '\n' +
+           'M=D'  + '\n' +
+           write_call('Sys.init','0') + '\n')   # Start executing (the translated code of) Sys.init
+    return asm
+    
 def write_arithmetic(command):
     '''Translates arithmetic vm command to assembly code'''
     
@@ -832,11 +832,9 @@ def write_goto(label):
 def write_ifgoto(label):
     '''Translates if_goto vm command to assembly code'''
 
-    asm = ('@SP'      + '\n' +          # pop value from stack and place in D register
-           'AM=M-1'    + '\n' +
-           'D=M'      + '\n' +
-           '@' + label + '\n' +          # jump to (args) if D is not zero
-           'D;JNE')
+    asm = ( write_pop_D() +
+            '@' + label + '\n' +          # jump to (args) if D is not zero
+            'D;JNE')
     return asm       
                
 def write_call(functionName, numArgs):
@@ -887,13 +885,7 @@ def write_function(functionName, numLocals):
            '@' + functionName + '-LoopExit' + '\n' +
            'D;JLE' + '\n' +
             
-           '@0'    + '\n' +         # push 0
-           'D=A'   + '\n' +         
-           '@SP'   + '\n' +         
-           'A=M'   + '\n' +         
-           'M=D'   + '\n' +         
-           '@SP'   + '\n' +         
-           'M=M+1' + '\n' +
+            write_push_constant('0') + '\n' + 
            
            '@' + functionName + '-LoopCounter' + '\n' +    # decrement counter f-LoopCounter
            'M=M-1' + '\n' +
