@@ -99,6 +99,7 @@ class GraphVertice:
         self.adjacent_vertices = set()
         self.marked = False
         
+# functions to find vm functions that are called
 def get_vm_functions_called(vm_filenames, starting_function):
     # Build graph of function calls, and traverse from starting_function to find functions that need to be written into .asm file
     
@@ -276,179 +277,6 @@ def translate_command(ct, args):
         asm = write_return()
     return asm
         
-# functions to write assembly functions
-def write_assembly_functions():
-    '''Writes functions for assembly code that occurs frequently'''
-    asm = ( write_call_assembly() +
-            write_return_assembly() )
-    return asm
-
-def start_asm_function(name):
-    asm = ( '(AsmFunction_' + name + ')' +'\n'+
-            '@TemporaryStorageAddress'  +'\n'+
-            'M=D'               +'\n')
-    return asm
-
-def end_asm_function():
-    asm = ( '@TemporaryStorageAddress'  +'\n'+
-            'A=M'               +'\n'+
-            '0;JMP'             +'\n')
-    return asm
-    
-def call_asm_function(name):
-    if "counter" not in call_asm_function.__dict__:
-        call_asm_function.counter = 0
-        
-    global_assembly_functions_called.add(name)
-        
-    asm = ( '@AsmReturnAddress' + str(call_asm_function.counter) +'\n'+
-            'D=A'                  +'\n'+
-            '@AsmFunction_' + name +'\n'+
-            '0;JMP'                +'\n'+
-            '(AsmReturnAddress' + str(call_asm_function.counter) +')')
-    call_asm_function.counter += 1
-    return asm
-    
-def write_call_assembly():
-    ''''''
-    
-    if('CALLSETUP' not in global_assembly_functions_called):
-        return ''
-    
-    # R14 and R15 are used to store return address and number of arguments.  May need to change later.
-    asm = ( start_asm_function('CALLSETUP')   +
-    
-            '@R14'  + '\n' +            # push [return address stored in R14]
-            'D=M'   + '\n' +
-            '@SP'   + '\n' +         
-            'A=M'   + '\n' +         
-            'M=D'   + '\n' +                            
-            '@SP'   + '\n' +                             
-            'M=M+1' + '\n' +
-            
-            '@LCL'  + '\n' +            # push LCL
-            'D=M'   + '\n' +
-            '@SP'   + '\n' +         
-            'A=M'   + '\n' +         
-            'M=D'   + '\n' +                             
-            '@SP'   + '\n' +                           
-            'M=M+1' + '\n' +
-            
-            '@ARG'  + '\n' +            # push ARG
-            'D=M'   + '\n' +
-            '@SP'   + '\n' +         
-            'A=M'   + '\n' +         
-            'M=D'   + '\n' +                           
-            '@SP'   + '\n' +                          
-            'M=M+1' + '\n' +
-            
-            '@THIS' + '\n' +            # push THIS
-            'D=M'   + '\n' +
-            '@SP'   + '\n' +         
-            'A=M'   + '\n' +         
-            'M=D'   + '\n' +                   
-            '@SP'   + '\n' +                       
-            'M=M+1' + '\n' +
-            
-            '@THAT' + '\n' +            # push THAT
-            'D=M'   + '\n' +
-            '@SP'   + '\n' +         
-            'A=M'   + '\n' +         
-            'M=D'   + '\n' +                           
-            '@SP'   + '\n' +                    
-            'M=M+1' + '\n' +
-            
-            '@SP'   + '\n' +            # ARG = SP - [numArgs stored in R15] - 5
-            'D=M'   + '\n' +
-            '@R15'  + '\n' +
-            'D=D-M' + '\n' +
-            '@5'    + '\n' +
-            'D=D-A' + '\n' +
-            '@ARG'  + '\n' +           
-            'M=D'   + '\n' +
-            
-            '@SP'   + '\n' +            # LCL = SP
-            'D=M'   + '\n' +
-            '@LCL'  + '\n' +           
-            'M=D'   + '\n' +
-            
-            end_asm_function() )
-    return asm
-    
-def write_return_assembly():
-    ''''''
-    
-    if('RETURN' not in global_assembly_functions_called):
-        return ''
-        
-    asm = ( start_asm_function('RETURN')   +
-    
-            # FRAME = LCL
-            '@LCL'   + '\n' +
-            'D=M'    + '\n' +
-            '@FRAME' + '\n' +
-            'M=D'    + '\n' +
-            
-            # RET = *(FRAME-5)      (RET is return-address of the caller's code)
-            '@FRAME' + '\n' +       # store the address FRAME-5 in D
-            'D=M'    + '\n' +
-            '@5'     + '\n' +
-            'D=D-A'  + '\n' +
-            'A=D'    + '\n' +
-            'D=M'    + '\n' +
-            '@RET'   + '\n' +       # store the contents of FRAME-5 in the memory location RET
-            'M=D'    + '\n' +
-            
-            #*ARG = pop()
-            '@SP'   + '\n' +
-            'AM=M-1' + '\n' + 
-            'D=M'   + '\n' + 
-            '@ARG'  + '\n' +        # store the contents of D in the memory location argument points to
-            'A=M'   + '\n' + 
-            'M=D'   + '\n' +
-             
-            # SP = ARG+1             
-            '@ARG'  + '\n' +
-            'D=M'   + '\n' +
-            '@SP'   + '\n' +
-            'M=D+1' + '\n' +
-            
-            # THAT = *(FRAME-1)           
-            '@FRAME' + '\n' +
-            'AM=M-1'  + '\n' +
-            'D=M'    + '\n' +
-            '@THAT'  + '\n' +
-            'M=D'    + '\n' +
-            
-            # THIS = *(FRAME-2)            
-            '@FRAME' + '\n' +
-            'AM=M-1'  + '\n' +
-            'D=M'    + '\n' +
-            '@THIS'  + '\n' +
-            'M=D'    + '\n' +
-            
-            # ARG = *(FRAME-3)
-            '@FRAME' + '\n' +
-            'AM=M-1'  + '\n' +
-            'D=M'    + '\n' +
-            '@ARG'   + '\n' +
-            'M=D'    + '\n' +
-            
-            # LCL = *(FRAME-4)
-            '@FRAME' + '\n' +
-            'AM=M-1'  + '\n' +
-            'D=M'    + '\n' +
-            '@LCL'   + '\n' +
-            'M=D'    + '\n' +
-            
-            # goto RET
-            '@RET' + '\n' +
-            'A=M'  + '\n' +
-            '0;JMP'  + '\n' +
-            
-            end_asm_function() )
-    return asm
-
 # functions to write assembly    
 def write_init():
     '''Writes bootstrap assembly code'''
@@ -898,6 +726,179 @@ def write_function(functionName, numLocals):
 def write_return():
     '''Translates return vm command to assembly code'''
     return call_asm_function('RETURN')
+    
+# functions to implement writing and calling of assembly functions
+def write_assembly_functions():
+    '''Writes functions for assembly code that occurs frequently'''
+    asm = ( write_call_assembly() +
+            write_return_assembly() )
+    return asm
+
+def start_asm_function(name):
+    asm = ( '(AsmFunction_' + name + ')' +'\n'+
+            '@TemporaryStorageAddress'  +'\n'+
+            'M=D'               +'\n')
+    return asm
+
+def end_asm_function():
+    asm = ( '@TemporaryStorageAddress'  +'\n'+
+            'A=M'               +'\n'+
+            '0;JMP'             +'\n')
+    return asm
+    
+def call_asm_function(name):
+    if "counter" not in call_asm_function.__dict__:
+        call_asm_function.counter = 0
+        
+    global_assembly_functions_called.add(name)
+        
+    asm = ( '@AsmReturnAddress' + str(call_asm_function.counter) +'\n'+
+            'D=A'                  +'\n'+
+            '@AsmFunction_' + name +'\n'+
+            '0;JMP'                +'\n'+
+            '(AsmReturnAddress' + str(call_asm_function.counter) +')')
+    call_asm_function.counter += 1
+    return asm
+    
+def write_call_assembly():
+    ''''''
+    
+    if('CALLSETUP' not in global_assembly_functions_called):
+        return ''
+    
+    # R14 and R15 are used to store return address and number of arguments.  May need to change later.
+    asm = ( start_asm_function('CALLSETUP')   +
+    
+            '@R14'  + '\n' +            # push [return address stored in R14]
+            'D=M'   + '\n' +
+            '@SP'   + '\n' +         
+            'A=M'   + '\n' +         
+            'M=D'   + '\n' +                            
+            '@SP'   + '\n' +                             
+            'M=M+1' + '\n' +
+            
+            '@LCL'  + '\n' +            # push LCL
+            'D=M'   + '\n' +
+            '@SP'   + '\n' +         
+            'A=M'   + '\n' +         
+            'M=D'   + '\n' +                             
+            '@SP'   + '\n' +                           
+            'M=M+1' + '\n' +
+            
+            '@ARG'  + '\n' +            # push ARG
+            'D=M'   + '\n' +
+            '@SP'   + '\n' +         
+            'A=M'   + '\n' +         
+            'M=D'   + '\n' +                           
+            '@SP'   + '\n' +                          
+            'M=M+1' + '\n' +
+            
+            '@THIS' + '\n' +            # push THIS
+            'D=M'   + '\n' +
+            '@SP'   + '\n' +         
+            'A=M'   + '\n' +         
+            'M=D'   + '\n' +                   
+            '@SP'   + '\n' +                       
+            'M=M+1' + '\n' +
+            
+            '@THAT' + '\n' +            # push THAT
+            'D=M'   + '\n' +
+            '@SP'   + '\n' +         
+            'A=M'   + '\n' +         
+            'M=D'   + '\n' +                           
+            '@SP'   + '\n' +                    
+            'M=M+1' + '\n' +
+            
+            '@SP'   + '\n' +            # ARG = SP - [numArgs stored in R15] - 5
+            'D=M'   + '\n' +
+            '@R15'  + '\n' +
+            'D=D-M' + '\n' +
+            '@5'    + '\n' +
+            'D=D-A' + '\n' +
+            '@ARG'  + '\n' +           
+            'M=D'   + '\n' +
+            
+            '@SP'   + '\n' +            # LCL = SP
+            'D=M'   + '\n' +
+            '@LCL'  + '\n' +           
+            'M=D'   + '\n' +
+            
+            end_asm_function() )
+    return asm
+    
+def write_return_assembly():
+    ''''''
+    
+    if('RETURN' not in global_assembly_functions_called):
+        return ''
+        
+    asm = ( start_asm_function('RETURN')   +
+    
+            # FRAME = LCL
+            '@LCL'   + '\n' +
+            'D=M'    + '\n' +
+            '@FRAME' + '\n' +
+            'M=D'    + '\n' +
+            
+            # RET = *(FRAME-5)      (RET is return-address of the caller's code)
+            '@FRAME' + '\n' +       # store the address FRAME-5 in D
+            'D=M'    + '\n' +
+            '@5'     + '\n' +
+            'D=D-A'  + '\n' +
+            'A=D'    + '\n' +
+            'D=M'    + '\n' +
+            '@RET'   + '\n' +       # store the contents of FRAME-5 in the memory location RET
+            'M=D'    + '\n' +
+            
+            #*ARG = pop()
+            '@SP'   + '\n' +
+            'AM=M-1' + '\n' + 
+            'D=M'   + '\n' + 
+            '@ARG'  + '\n' +        # store the contents of D in the memory location argument points to
+            'A=M'   + '\n' + 
+            'M=D'   + '\n' +
+             
+            # SP = ARG+1             
+            '@ARG'  + '\n' +
+            'D=M'   + '\n' +
+            '@SP'   + '\n' +
+            'M=D+1' + '\n' +
+            
+            # THAT = *(FRAME-1)           
+            '@FRAME' + '\n' +
+            'AM=M-1'  + '\n' +
+            'D=M'    + '\n' +
+            '@THAT'  + '\n' +
+            'M=D'    + '\n' +
+            
+            # THIS = *(FRAME-2)            
+            '@FRAME' + '\n' +
+            'AM=M-1'  + '\n' +
+            'D=M'    + '\n' +
+            '@THIS'  + '\n' +
+            'M=D'    + '\n' +
+            
+            # ARG = *(FRAME-3)
+            '@FRAME' + '\n' +
+            'AM=M-1'  + '\n' +
+            'D=M'    + '\n' +
+            '@ARG'   + '\n' +
+            'M=D'    + '\n' +
+            
+            # LCL = *(FRAME-4)
+            '@FRAME' + '\n' +
+            'AM=M-1'  + '\n' +
+            'D=M'    + '\n' +
+            '@LCL'   + '\n' +
+            'M=D'    + '\n' +
+            
+            # goto RET
+            '@RET' + '\n' +
+            'A=M'  + '\n' +
+            '0;JMP'  + '\n' +
+            
+            end_asm_function() )
+    return asm
 
 if __name__ == '__main__':
     sys.exit(main())
