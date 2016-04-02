@@ -128,10 +128,14 @@ class VMCommandTranslator:
         
     def _translate(self):
         # if(self.buffer[0].command_type == 'C_PUSH'):
-            # vm_command = self.buffer.popleft()
-            # translation = translate_command(vm_command.command_type, vm_command.arguments)
-            # if translation:
-                # asm = '// ****VM***: ' + vm_command.vm_text + '\n' + translation
+            # if(self.buffer[1].command_type == 'C_POP'):
+                # push_command = self.buffer.popleft()
+                # pop_command = self.buffer.popleft()
+                # translation = _write_pushpop(push_command.arguments, pop_command.arguments)
+                # if translation:
+                    # asm = ( '// ****VM***: ' + push_command.vm_text + '&AND&' + '\n' +
+                            # '// ****VM***: ' + pop_command.vm_text  + '\n' +
+                            # translation )
         # elif(self.buffer[0].command_type == 'C_ARITHMETIC'):
             # vm_command = self.buffer.popleft()
             # translation = translate_command(vm_command.command_type, vm_command.arguments)
@@ -142,17 +146,20 @@ class VMCommandTranslator:
             # translation = translate_command(vm_command.command_type, vm_command.arguments)
             # if translation:
                 # asm = '// ****VM***: ' + vm_command.vm_text + '\n' + translation
+                
         vm_command = self.buffer.popleft()
         translation = translate_command(vm_command.command_type, vm_command.arguments)
         if translation:
             asm = '// ****VM***: ' + vm_command.vm_text + '\n' + translation
 
         return asm
+        
+    # def _write_pushpop(self, push_arguments, pop_arguments):
+        
     
     
 
 class GraphVertice:
-    
     def __init__(self, name):
         self.name = name
         self.adjacent_vertices = set()
@@ -447,96 +454,72 @@ def write_arithmetic(command):
                'M=!M'  ) # bit-wise NOT the contents of the address that SP points to
     return asm
 
-def write_push_constant(index):
-    if (index in ['0','1','-1']):
+    
+
+def write_push_constant(index, should_push_d_to_sp):
+    if (index in ['0','1','-1']) and should_push_d_to_sp:
         asm = ( '@SP' + '\n' +         
                 'AM=M+1' + '\n' +
                 'A=A-1' + '\n' +          
                 'M='+index)
         return asm
-        
-    asm = ( '@'+index + '\n' +
-            'D=A' + '\n' +
-            write_push_D() )
-    return asm
     
-def write_push_static(index):
-    asm = ( '@' + static_base + '.' + index + '\n' +
-            'D=M' + '\n' + 
-            write_push_D() )
-    return asm
+    return write_push_dry(index, index, 'A', should_push_d_to_sp)
+       
+def write_push_dry(index, label, store_in_d_method, should_push_d_to_sp):
+    asm_label = '@' + label + '\n'
     
-def write_push_pointer(index):
-    asm = ( '@R3' + '\n' +
-            write_push_store_in_D_1(index) +
-            write_push_D() )
-    return asm
+    if(store_in_d_method == 'A'):
+        asm_store = 'D=A'
+    elif(store_in_d_method == 'M'):
+        asm_store = 'D=M'
+    elif(store_in_d_method == '1'):
+        asm_store = write_push_store_in_D_1(index)
+    elif(store_in_d_method == '2'):
+        asm_store = write_push_store_in_D_2(index)
     
-def write_push_temp(index):
-    asm = ( '@R5' + '\n' +
-            write_push_store_in_D_1(index) +
-            write_push_D() )
-    return asm
+    asm = asm_label + asm_store
     
-def write_push_local(index):
-    asm = ( '@LCL' + '\n' +
-            write_push_store_in_D_2(index) +
-            write_push_D() )
-    return asm
-    
-def write_push_argument(index):
-    asm = ( '@ARG' + '\n' +
-            write_push_store_in_D_2(index) +
-            write_push_D() )
-    return asm
-
-def write_push_this(index):
-    asm = ( '@THIS' + '\n' +
-            write_push_store_in_D_2(index) +
-            write_push_D() )
-    return asm
-
-def write_push_that(index):
-    asm = ( '@THAT' + '\n' +
-            write_push_store_in_D_2(index) +
-            write_push_D() )
+    if should_push_d_to_sp:
+        asm += '\n' + write_push_D()
+            
     return asm
 
 def write_push_store_in_D_1(index):
     '''Store, in D, the contents of the cell referenced by A+index '''
     if (index in ['0']):
-        asm = 'D=M'  + '\n'
+        asm = 'D=M'
     elif (index in ['1']):
         asm = ( 'A=A+1'  + '\n' +
-                'D=M' + '\n')
+                'D=M')
     elif (index in ['2']):
         asm = ( 'A=A+1'  + '\n' +
                 'A=A+1'  + '\n' +
-                'D=M' + '\n')
+                'D=M')
     else:
         asm = ( 'D=A'  + '\n' + 
                 '@'+index + '\n' +
                 'A=D+A' + '\n' +
-                'D=M' + '\n')
+                'D=M')
     return asm
     
 def write_push_store_in_D_2(index):
     '''Store, in D, the contents of the cell referenced by ( (the contents of the cell referenced by A) + index ) '''
     if (index in ['0']):
         asm = ( 'A=M'  + '\n' +
-                'D=M'  + '\n')
+                'D=M')
     elif (index in ['1']):
         asm = ( 'A=M+1'   + '\n' +
-                'D=M' + '\n')
+                'D=M')
     elif (index in ['2']):
         asm = ( 'A=M+1'  + '\n' +
                 'A=A+1'  + '\n' +
-                'D=M' + '\n')
+                'D=M')
     else:
         asm = ( 'D=M'  + '\n' + 
                 '@'+index + '\n' +
                 'A=D+A' + '\n' +
-                'D=M' + '\n')
+                'D=M')
     return asm
     
 def write_push_D():
@@ -551,21 +534,21 @@ def write_push(segment, index):
     
     # put segment[index] onto stack
     if segment == 'constant':
-        asm = write_push_constant(index)
+        asm = write_push_constant(index, True)
     elif segment == 'local':
-        asm = write_push_local(index)
+        asm = write_push_dry(index, 'LCL', '2', True)
     elif segment == 'argument':
-        asm = write_push_argument(index)
+        asm = write_push_dry(index, 'ARG', '2', True)
     elif segment == 'this':
-        asm = write_push_this(index)
+        asm = write_push_dry(index, 'THIS', '2', True)
     elif segment == 'that':
-        asm = write_push_that(index)
+        asm = write_push_dry(index, 'THAT', '2', True)
     elif segment == 'pointer':
-        asm = write_push_pointer(index)
+        asm = write_push_dry(index, 'R3', '1', True)
     elif segment == 'temp':
-        asm = write_push_temp(index)
+        asm = write_push_dry(index, 'R5', '1', True)
     elif segment == 'static':
-        asm = write_push_static(index)
+        asm = write_push_dry(index, static_base + '.' + index, 'M', True)
     return asm
     
 def write_pop_local(index):
@@ -632,8 +615,14 @@ def write_pop_temp(index):
         asm = ( '@R5'  + '\n' +
                 'D=A'   + '\n' +
                 write_pop_large_index(index) )
-    return asm  
+    return asm
     
+
+    
+# def write_pop_magic(label, index):
+    
+
+
 def write_pop_large_index(index):
     # using R13 as temporary storage.  may want to change later.
     asm = ( '@'     + str(index) + '\n' +
@@ -772,7 +761,7 @@ def write_function(functionName, numLocals):
            '@' + functionName + '-LoopExit' + '\n' +
            'D;JLE' + '\n' +
             
-            write_push_constant('0') + '\n' + 
+            write_push_constant('0', True) + '\n' + 
            
            '@' + functionName + '-LoopCounter' + '\n' +    # decrement counter f-LoopCounter
            'M=M-1' + '\n' +
