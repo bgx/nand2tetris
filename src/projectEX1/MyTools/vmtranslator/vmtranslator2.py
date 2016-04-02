@@ -54,6 +54,9 @@ def main():
             output.write('// ********Bootstrap***\n')
             output.write(write_init())
                 
+                
+        vm_command_translator = VMCommandTranslator()
+        
         for file in vm_filenames:
             
             filename_no_extension = os.path.splitext(os.path.basename(file))[0]
@@ -67,6 +70,10 @@ def main():
                 is_write_enabled = True
                 for line in vm:
                     line = clean_line(line, ['//'])
+                    
+                    if not line:
+                        continue
+                    
                     ct = get_command_type(line)
                     args = get_arguments(line, ct)
                     
@@ -76,21 +83,73 @@ def main():
                         is_write_enabled = False
                     
                     if is_write_enabled:
-                        asm = translate_command(ct, args)
+                        asm = vm_command_translator.add_vm_command( VMCommand(line, ct, args) )
                     else:
                         asm = ''
                         if ct == 'C_RETURN':
                             is_write_enabled = True
                     
-                    if not asm:
-                        oline = ''
-                    else:
-                        oline = asm + '\n'
-                        output.write('// ****VM***: ' + line + '\n')
-                    output.write(oline)
+                    if asm:
+                        output.write(asm + '\n')
+                                
+            asm = vm_command_translator.flush()
+            if asm:
+                output.write(asm + '\n')
 
         output.write('// ********Assembly Functions***\n')
         output.write(write_assembly_functions())
+        
+class VMCommand:
+    def __init__(self, line, ct, args):
+        self.vm_text = line
+        self.command_type = ct
+        self.arguments = args
+        
+        
+class VMCommandTranslator:
+    def __init__(self):
+        self.buffer = deque((),3)
+    
+    def add_vm_command(self, command):
+        self.buffer.append(command)
+        return self._translate()
+        
+    def flush(self):
+        #while buffer has items, translate
+        asm = ''
+        while self.buffer:
+            if asm:
+                asm += '\n'
+            asm += self._translate()
+        return asm
+        
+    # def _flush_vm_command():
+        # self.buffer.popleft
+        
+    def _translate(self):
+        # if(self.buffer[0].command_type == 'C_PUSH'):
+            # vm_command = self.buffer.popleft()
+            # translation = translate_command(vm_command.command_type, vm_command.arguments)
+            # if translation:
+                # asm = '// ****VM***: ' + vm_command.vm_text + '\n' + translation
+        # elif(self.buffer[0].command_type == 'C_ARITHMETIC'):
+            # vm_command = self.buffer.popleft()
+            # translation = translate_command(vm_command.command_type, vm_command.arguments)
+            # if translation:
+                # asm = '// ****VM***: ' + vm_command.vm_text + '\n' + translation
+        # else:
+            # vm_command = self.buffer.popleft()
+            # translation = translate_command(vm_command.command_type, vm_command.arguments)
+            # if translation:
+                # asm = '// ****VM***: ' + vm_command.vm_text + '\n' + translation
+        vm_command = self.buffer.popleft()
+        translation = translate_command(vm_command.command_type, vm_command.arguments)
+        if translation:
+            asm = '// ****VM***: ' + vm_command.vm_text + '\n' + translation
+
+        return asm
+    
+    
 
 class GraphVertice:
     
