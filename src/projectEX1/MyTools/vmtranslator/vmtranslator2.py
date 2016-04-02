@@ -551,77 +551,52 @@ def write_push(segment, index):
         asm = write_push_dry(index, static_base + '.' + index, 'M', True)
     return asm
     
-def write_pop_local(index):
-    if (index < 8):
-        asm = ( write_pop_D() +
-                '@LCL'  + '\n' +
-                write_pop_store_from_D_2(index) )
-    else:
-        asm = ( '@LCL'  + '\n' +
-                'D=M'   + '\n' +
-                write_pop_large_index(index) )
-    return asm
+def write_pop_constant(should_decrement_sp):
+    if should_decrement_sp:
+        asm = ('@SP' + '\n' +             # decrement contents of SP
+               'M=M-1')
+        return asm
+    return ''
     
-def write_pop_argument(index):
-    if (index < 8):
-        asm = ( write_pop_D() +
-                '@ARG'  + '\n' +
-                write_pop_store_from_D_2(index) )
-    else:
-        asm = ( '@ARG'  + '\n' +
-                'D=M'   + '\n' +
-                write_pop_large_index(index) )
-    return asm
+def write_pop_dry(index, label, store_from_d_method, should_pop_sp_to_d):
+    asm = ''
+    if should_pop_sp_to_d:
+        asm += write_pop_D()
     
-def write_pop_this(index):
-    if (index < 8):
-        asm = ( write_pop_D() +
-                '@THIS'  + '\n' +
-                write_pop_store_from_D_2(index) )
-    else:
-        asm = ( '@THIS'  + '\n' +
-                'D=M'   + '\n' +
-                write_pop_large_index(index) )
-    return asm
+    asm_label = '@' + label + '\n'
 
-def write_pop_that(index):
-    if (index < 8):
-        asm = ( write_pop_D() +
-                '@THAT'  + '\n' +
-                write_pop_store_from_D_2(index) )
-    else:
-        asm = ( '@THAT'  + '\n' +
-                'D=M'   + '\n' +
-                write_pop_large_index(index) )
-    return asm 
+    if(store_from_d_method == '1'):
+        asm_store = write_pop_store_from_D_1(index)
+    elif(store_from_d_method == '2'):
+        asm_store = write_pop_store_from_D_2(index)
+    elif(store_from_d_method == 'M'):
+        asm_store = 'M=D'
     
-def write_pop_pointer(index):
-    if (index < 8):
-        asm = ( write_pop_D() +
-                '@R3'  + '\n' +
-                write_pop_store_from_D_1(index) )
-    else:
-        asm = ( '@R3'  + '\n' +
-                'D=A'   + '\n' +
-                write_pop_large_index(index) )
+    asm += asm_label + asm_store
+            
     return asm
     
-def write_pop_temp(index):
-    if (index < 8):
-        asm = ( write_pop_D() +
-                '@R5'  + '\n' +
-                write_pop_store_from_D_1(index) )
-    else:
-        asm = ( '@R5'  + '\n' +
-                'D=A'   + '\n' +
-                write_pop_large_index(index) )
-    return asm
+# def write_pop_local(index):
+    # if (index < 8):
+        # asm = ( write_pop_D() +
+                # '@LCL'  + '\n' +
+                # write_pop_store_from_D_2(index) )
+    # else:
+        # asm = ( '@LCL'  + '\n' +
+                # 'D=M'   + '\n' +
+                # write_pop_large_index(index) )
+    # return asm
     
-
-    
-# def write_pop_magic(label, index):
-    
-
+# def write_pop_pointer(index):
+    # if (index < 8):
+        # asm = ( write_pop_D() +
+                # '@R3'  + '\n' +
+                # write_pop_store_from_D_1(index) )
+    # else:
+        # asm = ( '@R3'  + '\n' +
+                # 'D=A'   + '\n' +
+                # write_pop_large_index(index) )
+    # return asm
 
 def write_pop_large_index(index):
     # using R13 as temporary storage.  may want to change later.
@@ -672,24 +647,21 @@ def write_pop(segment, index):
     index = int(index, 10)
     # pull from stack and store in segment[index]
     if segment == 'constant':
-        asm = ('@SP' + '\n' +             # decrement contents of SP
-               'M=M-1')
+        asm = write_pop_constant(True)
     elif segment == 'local':
-        asm = write_pop_local(index)
+        asm = write_pop_dry(index, 'LCL', '2', True)
     elif segment == 'argument':
-        asm = write_pop_argument(index)
+        asm = write_pop_dry(index, 'ARG', '2', True)
     elif segment == 'this':
-        asm = write_pop_this(index)
+        asm = write_pop_dry(index, 'THIS', '2', True)
     elif segment == 'that':
-        asm = write_pop_that(index)
+        asm = write_pop_dry(index, 'THAT', '2', True)
     elif segment == 'pointer':
-        asm = write_pop_pointer(index)
+        asm = write_pop_dry(index, 'R3', '1', True)
     elif segment == 'temp':
-        asm = write_pop_temp(index)          
+        asm = write_pop_dry(index, 'R5', '1', True)         
     elif segment == 'static':
-        asm = ( write_pop_D() + 
-                '@' + static_base + '.' + str(index) + '\n' +           # store the contents of D in the memory location of static variable
-                'M=D')
+        asm = write_pop_dry(index, static_base + '.' + str(index), 'M', True)
     return asm
                
 def write_label(label):
