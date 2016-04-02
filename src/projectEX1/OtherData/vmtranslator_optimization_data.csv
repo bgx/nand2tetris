@@ -15,6 +15,8 @@ Date,Time,OS,Program,Compiler,Lines - No Labels; No Comments; No Blank Lines,VM 
 3/27/2016,12:56 AM,Brian,Pong,Brian,29073,8,reduced arithmetic commands,,,0.544428007
 3/27/2016,11:48 PM,Brian,Pong,Brian,26613,10,dead vm code removal,,,0.498361454
 3/30/2016,11:42 PM,Brian,Pong,Brian,26430,11,quick cleanup of function command,,,0.494934552
+4/2/2016,1:02 PM,Brian,Pong,Brian,26533,12,refactor write_pop,,,0.496863355
+4/2/2016,1:29 PM,Brian,Pong,Brian,25557,13,implemented optimized write_pushpop,,,0.478586543
 ,,,,,,,,,,
 3/20/2016,10:21 PM,Brian,Breakaway,Brian,75989,0,Initial,,,
 3/27/2016,11:46 PM,Brian,Breakaway,Brian,38623,9,,,,

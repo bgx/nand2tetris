@@ -112,7 +112,9 @@ class VMCommandTranslator:
     
     def add_vm_command(self, command):
         self.buffer.append(command)
-        return self._translate()
+        if len(self.buffer) == 3:
+            return self._translate()
+        return ''
         
     def flush(self):
         #while buffer has items, translate
@@ -126,26 +128,18 @@ class VMCommandTranslator:
     # def _flush_vm_command():
         # self.buffer.popleft
         
+    # as of right now, may be called with 1,2, or 3 commands in the buffer
     def _translate(self):
-        # if(self.buffer[0].command_type == 'C_PUSH'):
-            # if(self.buffer[1].command_type == 'C_POP'):
-                # push_command = self.buffer.popleft()
-                # pop_command = self.buffer.popleft()
-                # translation = _write_pushpop(push_command.arguments, pop_command.arguments)
-                # if translation:
-                    # asm = ( '// ****VM***: ' + push_command.vm_text + '&AND&' + '\n' +
-                            # '// ****VM***: ' + pop_command.vm_text  + '\n' +
-                            # translation )
-        # elif(self.buffer[0].command_type == 'C_ARITHMETIC'):
-            # vm_command = self.buffer.popleft()
-            # translation = translate_command(vm_command.command_type, vm_command.arguments)
-            # if translation:
-                # asm = '// ****VM***: ' + vm_command.vm_text + '\n' + translation
-        # else:
-            # vm_command = self.buffer.popleft()
-            # translation = translate_command(vm_command.command_type, vm_command.arguments)
-            # if translation:
-                # asm = '// ****VM***: ' + vm_command.vm_text + '\n' + translation
+        if(self.buffer[0].command_type == 'C_PUSH'):
+            if(len(self.buffer) > 1 and self.buffer[1].command_type == 'C_POP'):
+                push_command = self.buffer.popleft()
+                pop_command = self.buffer.popleft()
+                translation = self._write_pushpop(push_command.arguments, pop_command.arguments)
+                if translation:
+                    asm = ( '// ****VM***: ' + push_command.vm_text + '&AND&' + '\n' +
+                            '// ****VM***: ' + pop_command.vm_text  + '\n' +
+                            translation )
+                return asm
                 
         vm_command = self.buffer.popleft()
         translation = translate_command(vm_command.command_type, vm_command.arguments)
@@ -154,8 +148,8 @@ class VMCommandTranslator:
 
         return asm
         
-    # def _write_pushpop(self, push_arguments, pop_arguments):
-        
+    def _write_pushpop(self, push_arguments, pop_arguments):
+        return write_push(*push_arguments, use_sp=False) + '\n' + write_pop(*pop_arguments, use_sp=False)
     
     
 
@@ -326,9 +320,9 @@ def translate_command(ct, args):
     elif ct == 'C_ARITHMETIC':
         asm = write_arithmetic(args)
     elif ct == 'C_PUSH':
-        asm = write_push(*args)
+        asm = write_push(*args, use_sp=True)
     elif ct == 'C_POP':
-        asm = write_pop(*args)
+        asm = write_pop(*args, use_sp=True)
     elif ct == 'C_LABEL':
         asm = write_label(args)
     elif ct == 'C_GOTO':
@@ -529,26 +523,26 @@ def write_push_D():
             'M=D')             # set (the register being pointed to by SP_i) to the constant value stored in D
     return asm
     
-def write_push(segment, index):
+def write_push(segment, index, use_sp):
     '''Translates push vm command to assembly code'''
     
     # put segment[index] onto stack
     if segment == 'constant':
-        asm = write_push_constant(index, True)
+        asm = write_push_constant(index, use_sp)
     elif segment == 'local':
-        asm = write_push_dry(index, 'LCL', '2', True)
+        asm = write_push_dry(index, 'LCL', '2', use_sp)
     elif segment == 'argument':
-        asm = write_push_dry(index, 'ARG', '2', True)
+        asm = write_push_dry(index, 'ARG', '2', use_sp)
     elif segment == 'this':
-        asm = write_push_dry(index, 'THIS', '2', True)
+        asm = write_push_dry(index, 'THIS', '2', use_sp)
     elif segment == 'that':
-        asm = write_push_dry(index, 'THAT', '2', True)
+        asm = write_push_dry(index, 'THAT', '2', use_sp)
     elif segment == 'pointer':
-        asm = write_push_dry(index, 'R3', '1', True)
+        asm = write_push_dry(index, 'R3', '1', use_sp)
     elif segment == 'temp':
-        asm = write_push_dry(index, 'R5', '1', True)
+        asm = write_push_dry(index, 'R5', '1', use_sp)
     elif segment == 'static':
-        asm = write_push_dry(index, static_base + '.' + index, 'M', True)
+        asm = write_push_dry(index, static_base + '.' + index, 'M', use_sp)
     return asm
     
 def write_pop_constant(should_decrement_sp):
@@ -641,27 +635,27 @@ def write_pop_D():
             'D=M'    + '\n' )
     return asm
 
-def write_pop(segment, index):
+def write_pop(segment, index, use_sp):
     '''Translates pop vm command to assembly code'''
 
     index = int(index, 10)
     # pull from stack and store in segment[index]
     if segment == 'constant':
-        asm = write_pop_constant(True)
+        asm = write_pop_constant(use_sp)
     elif segment == 'local':
-        asm = write_pop_dry(index, 'LCL', '2', True)
+        asm = write_pop_dry(index, 'LCL', '2', use_sp)
     elif segment == 'argument':
-        asm = write_pop_dry(index, 'ARG', '2', True)
+        asm = write_pop_dry(index, 'ARG', '2', use_sp)
     elif segment == 'this':
-        asm = write_pop_dry(index, 'THIS', '2', True)
+        asm = write_pop_dry(index, 'THIS', '2', use_sp)
     elif segment == 'that':
-        asm = write_pop_dry(index, 'THAT', '2', True)
+        asm = write_pop_dry(index, 'THAT', '2', use_sp)
     elif segment == 'pointer':
-        asm = write_pop_dry(index, 'R3', '1', True)
+        asm = write_pop_dry(index, 'R3', '1', use_sp)
     elif segment == 'temp':
-        asm = write_pop_dry(index, 'R5', '1', True)         
+        asm = write_pop_dry(index, 'R5', '1', use_sp)         
     elif segment == 'static':
-        asm = write_pop_dry(index, static_base + '.' + str(index), 'M', True)
+        asm = write_pop_dry(index, static_base + '.' + str(index), 'M', use_sp)
     return asm
                
 def write_label(label):
