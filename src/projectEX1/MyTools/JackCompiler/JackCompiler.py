@@ -589,18 +589,19 @@ class CompilationEngine:
             # remember, the symbol table segments store references to objects allocated on the heap
             self.vm_writer.writePush(self.symbol_table.kindOf(holdName),self.symbol_table.indexOf(holdName))
             self.vm_writer.writeArithmetic('add')
-            # put address into a temp variable, to use after compiling the expression
-            # use temp 1 since temp 0 is used to pop off the return value from void functions and methods
-            self.vm_writer.writePop('temp',1)
-        
+            # the address that will be written to is sitting on the stack
+                    
         self.processTokenExpectingValue('=')        
         self.compileExpression()        
         self.processTokenExpectingValue(';')  
 
         if(isArray):
-            # restore pointer 1 to the address that will be written to
-            self.vm_writer.writePush('temp',1)
+            # pop the result of the expression into a temp variable
+            self.vm_writer.writePop('temp',0)
+            # set pointer 1 to the address that will be written to
             self.vm_writer.writePop('pointer',1)
+            # place the result of the expression back onto the stack
+            self.vm_writer.writePush('temp',0)
             # pop the result of the expression into the correct address
             self.vm_writer.writePop('that',0)
         else:
