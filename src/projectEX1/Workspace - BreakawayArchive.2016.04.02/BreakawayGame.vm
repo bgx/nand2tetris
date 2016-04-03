@@ -1,0 +1,772 @@
+function BreakawayGame.new 0
+push constant 8
+call Memory.alloc 1
+pop pointer 0
+push constant 0
+pop this 7
+push pointer 0
+return
+function BreakawayGame.dispose 0
+push argument 0
+pop pointer 0
+push this 0
+call PlayArea.dispose 1
+pop temp 0
+push this 1
+call Ball.dispose 1
+pop temp 0
+push this 2
+call Paddle.dispose 1
+pop temp 0
+push this 3
+call Wall.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function BreakawayGame.run 0
+push argument 0
+pop pointer 0
+label BreakawayGamerun0
+push constant 1
+neg
+not
+if-goto BreakawayGamerun1
+push this 7
+push constant 0
+eq
+not
+if-goto BreakawayGamerun2
+push pointer 0
+call BreakawayGame.printStartScreen 1
+pop temp 0
+push pointer 0
+call BreakawayGame.waitSpacePressed 1
+pop temp 0
+push pointer 0
+call BreakawayGame.initializeGameLoop 1
+pop temp 0
+goto BreakawayGamerun3
+label BreakawayGamerun2
+push this 7
+push constant 1
+eq
+not
+if-goto BreakawayGamerun4
+call Screen.clearScreen 0
+pop temp 0
+push pointer 0
+call BreakawayGame.initializeComponents 1
+pop temp 0
+label BreakawayGamerun6
+push this 7
+push constant 1
+eq
+not
+if-goto BreakawayGamerun7
+push pointer 0
+call BreakawayGame.processInput 1
+pop temp 0
+push pointer 0
+call BreakawayGame.update 1
+pop temp 0
+push pointer 0
+call BreakawayGame.render 1
+pop temp 0
+goto BreakawayGamerun6
+label BreakawayGamerun7
+push pointer 0
+call BreakawayGame.disposeComponents 1
+pop temp 0
+goto BreakawayGamerun5
+label BreakawayGamerun4
+push this 7
+push constant 2
+eq
+not
+if-goto BreakawayGamerun8
+push pointer 0
+call BreakawayGame.printLives 1
+pop temp 0
+push pointer 0
+call BreakawayGame.printLostLife 1
+pop temp 0
+push pointer 0
+call BreakawayGame.waitSpacePressed 1
+pop temp 0
+goto BreakawayGamerun9
+label BreakawayGamerun8
+push this 7
+push constant 3
+eq
+not
+if-goto BreakawayGamerun10
+push pointer 0
+call BreakawayGame.printGameOver 1
+pop temp 0
+push pointer 0
+call BreakawayGame.waitSpacePressed 1
+pop temp 0
+goto BreakawayGamerun11
+label BreakawayGamerun10
+push this 7
+push constant 4
+eq
+not
+if-goto BreakawayGamerun12
+push pointer 0
+call BreakawayGame.printYouWin 1
+pop temp 0
+push pointer 0
+call BreakawayGame.waitSpacePressed 1
+pop temp 0
+goto BreakawayGamerun13
+label BreakawayGamerun12
+label BreakawayGamerun13
+label BreakawayGamerun11
+label BreakawayGamerun9
+label BreakawayGamerun5
+label BreakawayGamerun3
+goto BreakawayGamerun0
+label BreakawayGamerun1
+push constant 0
+return
+function BreakawayGame.waitSpacePressed 0
+push argument 0
+pop pointer 0
+label BreakawayGamewaitSpacePressed0
+call Keyboard.keyPressed 0
+push constant 32
+eq
+not
+not
+if-goto BreakawayGamewaitSpacePressed1
+goto BreakawayGamewaitSpacePressed0
+label BreakawayGamewaitSpacePressed1
+push this 7
+push constant 0
+eq
+push this 7
+push constant 2
+eq
+or
+not
+if-goto BreakawayGamewaitSpacePressed2
+push constant 1
+pop this 7
+goto BreakawayGamewaitSpacePressed3
+label BreakawayGamewaitSpacePressed2
+push constant 0
+pop this 7
+label BreakawayGamewaitSpacePressed3
+label BreakawayGamewaitSpacePressed4
+call Keyboard.keyPressed 0
+push constant 32
+eq
+not
+if-goto BreakawayGamewaitSpacePressed5
+goto BreakawayGamewaitSpacePressed4
+label BreakawayGamewaitSpacePressed5
+push constant 0
+return
+function BreakawayGame.initializeGameLoop 0
+push argument 0
+pop pointer 0
+push constant 2
+pop this 4
+call Wall.new 0
+pop this 3
+push this 3
+push constant 176
+push constant 50
+push constant 30
+push constant 10
+push constant 32
+push constant 12
+push constant 1
+push constant 6
+call Wall.newBrickGroup 9
+pop temp 0
+push constant 0
+return
+function BreakawayGame.initializeComponents 0
+push argument 0
+pop pointer 0
+push constant 216
+push constant 252
+call PlayArea.new 2
+pop this 0
+push constant 250
+push constant 100
+push constant 2
+push constant 3
+push constant 6
+call Ball.new 5
+pop this 1
+push constant 255
+push constant 220
+push constant 25
+push constant 7
+call Paddle.new 4
+pop this 2
+push pointer 0
+call BreakawayGame.printLives 1
+pop temp 0
+push constant 0
+return
+function BreakawayGame.disposeComponents 0
+push argument 0
+pop pointer 0
+push this 0
+call PlayArea.dispose 1
+pop temp 0
+push this 1
+call Ball.dispose 1
+pop temp 0
+push this 2
+call Paddle.dispose 1
+pop temp 0
+push constant 0
+return
+function BreakawayGame.printMessage 0
+push argument 0
+pop pointer 0
+push constant 8
+push constant 27
+call Output.moveCursor 2
+pop temp 0
+push argument 1
+call Output.printString 1
+pop temp 0
+push constant 22
+call String.new 1
+push constant 80
+call String.appendChar 2
+push constant 114
+call String.appendChar 2
+push constant 101
+call String.appendChar 2
+push constant 115
+call String.appendChar 2
+push constant 115
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+push constant 83
+call String.appendChar 2
+push constant 112
+call String.appendChar 2
+push constant 97
+call String.appendChar 2
+push constant 99
+call String.appendChar 2
+push constant 101
+call String.appendChar 2
+push constant 98
+call String.appendChar 2
+push constant 97
+call String.appendChar 2
+push constant 114
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+push constant 116
+call String.appendChar 2
+push constant 111
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+push constant 80
+call String.appendChar 2
+push constant 108
+call String.appendChar 2
+push constant 97
+call String.appendChar 2
+push constant 121
+call String.appendChar 2
+pop argument 1
+push constant 14
+push constant 21
+call Output.moveCursor 2
+pop temp 0
+push argument 1
+call Output.printString 1
+pop temp 0
+push constant 0
+return
+function BreakawayGame.printStartScreen 1
+push argument 0
+pop pointer 0
+call Screen.clearScreen 0
+pop temp 0
+push constant 10
+call String.new 1
+push constant 32
+call String.appendChar 2
+push constant 66
+call String.appendChar 2
+push constant 114
+call String.appendChar 2
+push constant 101
+call String.appendChar 2
+push constant 97
+call String.appendChar 2
+push constant 107
+call String.appendChar 2
+push constant 97
+call String.appendChar 2
+push constant 119
+call String.appendChar 2
+push constant 97
+call String.appendChar 2
+push constant 121
+call String.appendChar 2
+pop local 0
+push pointer 0
+push local 0
+call BreakawayGame.printMessage 2
+pop temp 0
+push constant 0
+return
+function BreakawayGame.printYouWin 1
+push argument 0
+pop pointer 0
+push constant 10
+call String.new 1
+push constant 32
+call String.appendChar 2
+push constant 89
+call String.appendChar 2
+push constant 111
+call String.appendChar 2
+push constant 117
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+push constant 87
+call String.appendChar 2
+push constant 105
+call String.appendChar 2
+push constant 110
+call String.appendChar 2
+push constant 33
+call String.appendChar 2
+push constant 33
+call String.appendChar 2
+pop local 0
+push pointer 0
+push local 0
+call BreakawayGame.printMessage 2
+pop temp 0
+push constant 0
+return
+function BreakawayGame.printLostLife 1
+push argument 0
+pop pointer 0
+push constant 11
+call String.new 1
+push constant 76
+call String.appendChar 2
+push constant 111
+call String.appendChar 2
+push constant 115
+call String.appendChar 2
+push constant 116
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+push constant 97
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+push constant 108
+call String.appendChar 2
+push constant 105
+call String.appendChar 2
+push constant 102
+call String.appendChar 2
+push constant 101
+call String.appendChar 2
+pop local 0
+push pointer 0
+push local 0
+call BreakawayGame.printMessage 2
+pop temp 0
+push constant 0
+return
+function BreakawayGame.printGameOver 1
+push argument 0
+pop pointer 0
+push constant 10
+call String.new 1
+push constant 32
+call String.appendChar 2
+push constant 71
+call String.appendChar 2
+push constant 97
+call String.appendChar 2
+push constant 109
+call String.appendChar 2
+push constant 101
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+push constant 79
+call String.appendChar 2
+push constant 118
+call String.appendChar 2
+push constant 101
+call String.appendChar 2
+push constant 114
+call String.appendChar 2
+pop local 0
+push pointer 0
+push local 0
+call BreakawayGame.printMessage 2
+pop temp 0
+push constant 0
+return
+function BreakawayGame.printLives 1
+push argument 0
+pop pointer 0
+push constant 7
+call String.new 1
+push constant 76
+call String.appendChar 2
+push constant 105
+call String.appendChar 2
+push constant 118
+call String.appendChar 2
+push constant 101
+call String.appendChar 2
+push constant 115
+call String.appendChar 2
+push constant 58
+call String.appendChar 2
+push constant 32
+call String.appendChar 2
+pop local 0
+push constant 1
+push constant 0
+call Output.moveCursor 2
+pop temp 0
+push local 0
+call Output.printString 1
+pop temp 0
+push this 4
+call Output.printInt 1
+pop temp 0
+push constant 0
+return
+function BreakawayGame.processInput 0
+push argument 0
+pop pointer 0
+call Keyboard.keyPressed 0
+pop this 6
+push constant 0
+return
+function BreakawayGame.update 8
+push argument 0
+pop pointer 0
+push this 3
+call Wall.moveRight 1
+pop temp 0
+push this 0
+call PlayArea.getHitbox 1
+pop local 1
+push this 6
+push constant 81
+eq
+not
+if-goto BreakawayGameupdate0
+push constant 0
+pop this 7
+goto BreakawayGameupdate1
+label BreakawayGameupdate0
+label BreakawayGameupdate1
+push this 6
+push constant 130
+eq
+not
+if-goto BreakawayGameupdate2
+push this 2
+call Paddle.moveLeftSim 1
+pop temp 0
+push this 2
+call Paddle.getHitbox 1
+pop local 2
+push local 2
+call Hitbox.getXmin 1
+push local 1
+call Hitbox.getXmin 1
+lt
+not
+not
+if-goto BreakawayGameupdate4
+push this 2
+call Paddle.moveLeft 1
+pop temp 0
+goto BreakawayGameupdate5
+label BreakawayGameupdate4
+label BreakawayGameupdate5
+goto BreakawayGameupdate3
+label BreakawayGameupdate2
+push this 6
+push constant 132
+eq
+not
+if-goto BreakawayGameupdate6
+push this 2
+call Paddle.moveRightSim 1
+pop temp 0
+push this 2
+call Paddle.getHitbox 1
+pop local 2
+push local 2
+call Hitbox.getXmax 1
+push local 1
+call Hitbox.getXmax 1
+gt
+not
+not
+if-goto BreakawayGameupdate8
+push this 2
+call Paddle.moveRight 1
+pop temp 0
+goto BreakawayGameupdate9
+label BreakawayGameupdate8
+label BreakawayGameupdate9
+goto BreakawayGameupdate7
+label BreakawayGameupdate6
+label BreakawayGameupdate7
+label BreakawayGameupdate3
+push this 1
+call Ball.moveBallSim 1
+pop temp 0
+push this 1
+call Ball.getHitbox 1
+pop local 0
+push this 2
+call Paddle.getHitbox 1
+pop local 2
+push local 0
+call Hitbox.getXmin 1
+push local 1
+call Hitbox.getXmin 1
+lt
+push local 0
+call Hitbox.getXmax 1
+push local 1
+call Hitbox.getXmax 1
+gt
+or
+not
+if-goto BreakawayGameupdate10
+push this 1
+call Ball.flipDeltaX 1
+pop temp 0
+goto BreakawayGameupdate11
+label BreakawayGameupdate10
+label BreakawayGameupdate11
+push local 0
+call Hitbox.getYmin 1
+push local 1
+call Hitbox.getYmin 1
+lt
+not
+if-goto BreakawayGameupdate12
+push this 1
+call Ball.flipDeltaY 1
+pop temp 0
+goto BreakawayGameupdate13
+label BreakawayGameupdate12
+label BreakawayGameupdate13
+push local 0
+call Hitbox.getYmax 1
+push local 1
+call Hitbox.getYmax 1
+gt
+not
+if-goto BreakawayGameupdate14
+push this 1
+call Ball.flipDeltaY 1
+pop temp 0
+push this 4
+push constant 1
+sub
+pop this 4
+push this 4
+push constant 0
+lt
+not
+if-goto BreakawayGameupdate16
+push constant 3
+pop this 7
+goto BreakawayGameupdate17
+label BreakawayGameupdate16
+push constant 2
+pop this 7
+label BreakawayGameupdate17
+goto BreakawayGameupdate15
+label BreakawayGameupdate14
+label BreakawayGameupdate15
+push local 0
+call Hitbox.getYmax 1
+push local 2
+call Hitbox.getYmin 1
+gt
+push local 0
+call Hitbox.getYmin 1
+push local 2
+call Hitbox.getYmax 1
+lt
+and
+push local 0
+call Hitbox.getXmax 1
+push local 2
+call Hitbox.getXmin 1
+gt
+and
+push local 0
+call Hitbox.getXmin 1
+push local 2
+call Hitbox.getXmax 1
+lt
+and
+not
+if-goto BreakawayGameupdate18
+push local 2
+call Hitbox.getXmax 1
+push local 2
+call Hitbox.getXmin 1
+add
+push constant 2
+call Math.divide 2
+pop local 6
+push local 0
+call Hitbox.getXmax 1
+push local 0
+call Hitbox.getXmin 1
+add
+push constant 2
+call Math.divide 2
+pop local 7
+push this 1
+push local 7
+push local 6
+sub
+call Ball.setDelta 2
+pop temp 0
+goto BreakawayGameupdate19
+label BreakawayGameupdate18
+label BreakawayGameupdate19
+push this 3
+call Wall.getCount 1
+pop local 4
+push constant 0
+pop local 5
+label BreakawayGameupdate20
+push local 5
+push local 4
+lt
+not
+if-goto BreakawayGameupdate21
+push this 3
+push local 5
+call Wall.getHitbox 2
+pop local 3
+push local 0
+call Hitbox.getXmax 1
+push local 3
+call Hitbox.getXmin 1
+gt
+push local 0
+call Hitbox.getXmin 1
+push local 3
+call Hitbox.getXmax 1
+lt
+and
+push local 0
+call Hitbox.getYmax 1
+push local 3
+call Hitbox.getYmin 1
+gt
+push local 0
+call Hitbox.getYmax 1
+push local 3
+call Hitbox.getYmax 1
+lt
+and
+push local 0
+call Hitbox.getYmin 1
+push local 3
+call Hitbox.getYmax 1
+lt
+push local 0
+call Hitbox.getYmin 1
+push local 3
+call Hitbox.getYmin 1
+gt
+and
+or
+and
+not
+if-goto BreakawayGameupdate22
+push this 1
+call Ball.flipDeltaY 1
+pop temp 0
+push this 3
+push local 5
+call Wall.destroyBrick 2
+pop temp 0
+goto BreakawayGameupdate23
+label BreakawayGameupdate22
+label BreakawayGameupdate23
+push local 5
+push constant 1
+add
+pop local 5
+goto BreakawayGameupdate20
+label BreakawayGameupdate21
+push this 3
+call Wall.isDestroyed 1
+not
+if-goto BreakawayGameupdate24
+push constant 4
+pop this 7
+goto BreakawayGameupdate25
+label BreakawayGameupdate24
+label BreakawayGameupdate25
+push this 1
+call Ball.moveBall 1
+pop temp 0
+push local 0
+call Hitbox.dispose 1
+pop temp 0
+push local 1
+call Hitbox.dispose 1
+pop temp 0
+push local 2
+call Hitbox.dispose 1
+pop temp 0
+push constant 0
+return
+function BreakawayGame.render 0
+push argument 0
+pop pointer 0
+push this 0
+call PlayArea.clear 1
+pop temp 0
+push this 2
+call Paddle.draw 1
+pop temp 0
+push this 1
+call Ball.draw 1
+pop temp 0
+push this 3
+call Wall.draw 1
+pop temp 0
+push constant 0
+return

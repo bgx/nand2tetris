@@ -1,0 +1,632 @@
+<class>
+	<keyword> class </keyword>
+	<identifier> Memory </identifier>
+	class : defined
+	<symbol> { </symbol>
+	<classVarDec>
+		<keyword> static </keyword>
+		<identifier> Array </identifier>
+		class : used
+		<identifier> memory </identifier>
+		static : defined : static 0
+		<symbol> ; </symbol>
+	</classVarDec>
+	<classVarDec>
+		<keyword> static </keyword>
+		<identifier> Array </identifier>
+		class : used
+		<identifier> list </identifier>
+		static : defined : static 1
+		<symbol> ; </symbol>
+	</classVarDec>
+	<classVarDec>
+		<keyword> static </keyword>
+		<identifier> Array </identifier>
+		class : used
+		<identifier> node </identifier>
+		static : defined : static 2
+		<symbol> ; </symbol>
+	</classVarDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> void </keyword>
+		<identifier> init </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> heapStart </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> heapEnd </identifier>
+				var : defined : var 1
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> memory </identifier>
+					static : used : static 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> heapStart </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 2048 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> heapEnd </identifier>
+					var : used : var 1
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 16383 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> list </identifier>
+					static : used : static 1
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> heapStart </identifier>
+							var : used : var 0
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> node </identifier>
+					static : used : static 2
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> list </identifier>
+							static : used : static 1
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> node </identifier>
+					static : used : static 2
+					<symbol> [ </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ] </symbol>
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> heapEnd </identifier>
+							var : used : var 1
+						</term>
+						<symbol> - </symbol>
+						<term>
+							<identifier> heapStart </identifier>
+							var : used : var 0
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> node </identifier>
+					static : used : static 2
+					<symbol> [ </symbol>
+					<expression>
+						<term>
+							<integerConstant> 1 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ] </symbol>
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<keyword> null </keyword>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> int </keyword>
+		<identifier> peek </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> address </identifier>
+			argument : defined : argument 0
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> memory </identifier>
+							static : used : static 0
+							<symbol> [ </symbol>
+							<expression>
+								<term>
+									<identifier> address </identifier>
+									argument : used : argument 0
+								</term>
+							</expression>
+							<symbol> ] </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> void </keyword>
+		<identifier> poke </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> address </identifier>
+			argument : defined : argument 0
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> value </identifier>
+			argument : defined : argument 1
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> memory </identifier>
+					static : used : static 0
+					<symbol> [ </symbol>
+					<expression>
+						<term>
+							<identifier> address </identifier>
+							argument : used : argument 0
+						</term>
+					</expression>
+					<symbol> ] </symbol>
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> value </identifier>
+							argument : used : argument 1
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> int </keyword>
+		<identifier> alloc </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> size </identifier>
+			argument : defined : argument 0
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<identifier> Array </identifier>
+				class : used
+				<identifier> block </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> node </identifier>
+					static : used : static 2
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> list </identifier>
+							static : used : static 1
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> node </identifier>
+							static : used : static 2
+							<symbol> [ </symbol>
+							<expression>
+								<term>
+									<integerConstant> 0 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ] </symbol>
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<identifier> size </identifier>
+							argument : used : argument 0
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<ifStatement>
+							<keyword> if </keyword>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<identifier> node </identifier>
+									static : used : static 2
+									<symbol> [ </symbol>
+									<expression>
+										<term>
+											<integerConstant> 1 </integerConstant>
+										</term>
+									</expression>
+									<symbol> ] </symbol>
+								</term>
+								<symbol> = </symbol>
+								<term>
+									<keyword> null </keyword>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+							<symbol> { </symbol>
+							<statements>
+								<returnStatement>
+									<keyword> return </keyword>
+									<expression>
+										<term>
+											<keyword> null </keyword>
+										</term>
+									</expression>
+									<symbol> ; </symbol>
+								</returnStatement>
+							</statements>
+							<symbol> } </symbol>
+							<keyword> else </keyword>
+							<symbol> { </symbol>
+							<statements>
+								<letStatement>
+									<keyword> let </keyword>
+									<identifier> node </identifier>
+									static : used : static 2
+									<symbol> = </symbol>
+									<expression>
+										<term>
+											<identifier> node </identifier>
+											static : used : static 2
+											<symbol> [ </symbol>
+											<expression>
+												<term>
+													<integerConstant> 1 </integerConstant>
+												</term>
+											</expression>
+											<symbol> ] </symbol>
+										</term>
+									</expression>
+									<symbol> ; </symbol>
+								</letStatement>
+							</statements>
+							<symbol> } </symbol>
+						</ifStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> block </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> node </identifier>
+							static : used : static 2
+						</term>
+						<symbol> + </symbol>
+						<term>
+							<integerConstant> 2 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> node </identifier>
+							static : used : static 2
+							<symbol> [ </symbol>
+							<expression>
+								<term>
+									<integerConstant> 0 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ] </symbol>
+						</term>
+						<symbol> &gt; </symbol>
+						<term>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<identifier> size </identifier>
+									argument : used : argument 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 2 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> block </identifier>
+							var : used : var 0
+							<symbol> [ </symbol>
+							<expression>
+								<term>
+									<identifier> size </identifier>
+									argument : used : argument 0
+								</term>
+							</expression>
+							<symbol> ] </symbol>
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> node </identifier>
+									static : used : static 2
+									<symbol> [ </symbol>
+									<expression>
+										<term>
+											<integerConstant> 0 </integerConstant>
+										</term>
+									</expression>
+									<symbol> ] </symbol>
+								</term>
+								<symbol> - </symbol>
+								<term>
+									<identifier> size </identifier>
+									argument : used : argument 0
+								</term>
+								<symbol> - </symbol>
+								<term>
+									<integerConstant> 2 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> block </identifier>
+							var : used : var 0
+							<symbol> [ </symbol>
+							<expression>
+								<term>
+									<identifier> size </identifier>
+									argument : used : argument 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ] </symbol>
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> node </identifier>
+									static : used : static 2
+									<symbol> [ </symbol>
+									<expression>
+										<term>
+											<integerConstant> 1 </integerConstant>
+										</term>
+									</expression>
+									<symbol> ] </symbol>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> node </identifier>
+							static : used : static 2
+							<symbol> [ </symbol>
+							<expression>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ] </symbol>
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> block </identifier>
+									var : used : var 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<identifier> size </identifier>
+									argument : used : argument 0
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> node </identifier>
+					static : used : static 2
+					<symbol> [ </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ] </symbol>
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> block </identifier>
+							var : used : var 0
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> void </keyword>
+		<identifier> deAlloc </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> object </identifier>
+			argument : defined : argument 0
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> node </identifier>
+					static : used : static 2
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> object </identifier>
+							argument : used : argument 0
+						</term>
+						<symbol> - </symbol>
+						<term>
+							<integerConstant> 2 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> node </identifier>
+					static : used : static 2
+					<symbol> [ </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ] </symbol>
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> node </identifier>
+							static : used : static 2
+							<symbol> [ </symbol>
+							<expression>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ] </symbol>
+						</term>
+						<symbol> - </symbol>
+						<term>
+							<identifier> object </identifier>
+							argument : used : argument 0
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<symbol> } </symbol>
+</class>

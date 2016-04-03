@@ -1,0 +1,313 @@
+function String.new 0
+push constant 3
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+pop this 0
+push constant 0
+pop this 2
+push this 0
+push constant 0
+gt
+not
+if-goto Stringnew0
+push this 0
+call Array.new 1
+pop this 1
+goto Stringnew1
+label Stringnew0
+label Stringnew1
+push pointer 0
+return
+function String.dispose 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function String.length 0
+push argument 0
+pop pointer 0
+push this 2
+return
+function String.charAt 0
+push argument 0
+pop pointer 0
+push argument 1
+push constant 0
+lt
+push argument 1
+push this 2
+push constant 1
+sub
+gt
+or
+not
+if-goto StringcharAt0
+push constant 0
+return
+goto StringcharAt1
+label StringcharAt0
+label StringcharAt1
+push argument 1
+push this 1
+add
+pop pointer 1
+push that 0
+return
+function String.setCharAt 0
+push argument 0
+pop pointer 0
+push argument 1
+push constant 0
+lt
+push argument 1
+push this 2
+push constant 1
+sub
+gt
+or
+not
+if-goto StringsetCharAt0
+push constant 0
+return
+goto StringsetCharAt1
+label StringsetCharAt0
+label StringsetCharAt1
+push argument 1
+push this 1
+add
+push argument 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+return
+function String.appendChar 0
+push argument 0
+pop pointer 0
+push this 2
+push this 0
+lt
+not
+if-goto StringappendChar0
+push this 2
+push this 1
+add
+push argument 1
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push this 2
+push constant 1
+add
+pop this 2
+goto StringappendChar1
+label StringappendChar0
+label StringappendChar1
+push pointer 0
+return
+function String.eraseLastChar 0
+push argument 0
+pop pointer 0
+push this 2
+push constant 1
+sub
+pop this 2
+push constant 0
+return
+function String.intValue 4
+push argument 0
+pop pointer 0
+push constant 0
+pop local 3
+push constant 0
+pop local 0
+push constant 0
+pop local 1
+push pointer 0
+push local 1
+call String.charAt 2
+pop local 2
+push local 2
+push constant 45
+eq
+not
+if-goto StringintValue0
+push constant 1
+neg
+pop local 0
+push local 1
+push constant 1
+add
+pop local 1
+push pointer 0
+push local 1
+call String.charAt 2
+pop local 2
+goto StringintValue1
+label StringintValue0
+label StringintValue1
+label StringintValue2
+push local 2
+push constant 47
+gt
+push local 2
+push constant 58
+lt
+and
+not
+if-goto StringintValue3
+push constant 10
+push local 3
+call Math.multiply 2
+push local 2
+push constant 48
+sub
+add
+pop local 3
+push local 1
+push constant 1
+add
+pop local 1
+push pointer 0
+push local 1
+call String.charAt 2
+pop local 2
+goto StringintValue2
+label StringintValue3
+push local 0
+not
+if-goto StringintValue4
+push local 3
+neg
+pop local 3
+goto StringintValue5
+label StringintValue4
+label StringintValue5
+push local 3
+return
+function String.setInt 3
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+push argument 1
+push constant 0
+lt
+not
+if-goto StringsetInt0
+push argument 1
+push constant 32767
+push constant 1
+add
+eq
+not
+if-goto StringsetInt2
+push constant 0
+return
+goto StringsetInt3
+label StringsetInt2
+label StringsetInt3
+push argument 1
+neg
+pop argument 1
+push constant 1
+neg
+pop local 0
+goto StringsetInt1
+label StringsetInt0
+label StringsetInt1
+push constant 5
+call Array.new 1
+pop local 1
+push constant 0
+pop local 2
+label StringsetInt4
+push argument 1
+push constant 0
+gt
+push local 2
+push constant 5
+lt
+and
+not
+if-goto StringsetInt5
+push local 2
+push local 1
+add
+push argument 1
+push argument 1
+push constant 10
+call Math.divide 2
+push constant 10
+call Math.multiply 2
+sub
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push argument 1
+push constant 10
+call Math.divide 2
+pop argument 1
+push local 2
+push constant 1
+add
+pop local 2
+goto StringsetInt4
+label StringsetInt5
+push constant 0
+pop this 2
+push local 0
+not
+if-goto StringsetInt6
+push pointer 0
+push constant 45
+call String.appendChar 2
+pop temp 0
+goto StringsetInt7
+label StringsetInt6
+label StringsetInt7
+push local 2
+push constant 1
+sub
+pop local 2
+label StringsetInt8
+push local 2
+push constant 1
+neg
+gt
+not
+if-goto StringsetInt9
+push pointer 0
+push local 2
+push local 1
+add
+pop pointer 1
+push that 0
+push constant 48
+add
+call String.appendChar 2
+pop temp 0
+push local 2
+push constant 1
+sub
+pop local 2
+goto StringsetInt8
+label StringsetInt9
+push constant 0
+return
+function String.newLine 0
+push constant 128
+return
+function String.backSpace 0
+push constant 129
+return
+function String.doubleQuote 0
+push constant 34
+return

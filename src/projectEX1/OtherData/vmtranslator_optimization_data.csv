@@ -19,8 +19,9 @@ Date,Time,OS,Program,Compiler,Lines - No Labels; No Comments; No Blank Lines,VM 
 4/2/2016,1:29 PM,Brian,Pong,Brian,25557,13,implemented optimized write_pushpop,,,0.478586543
 ,,,,,,,,,,
 3/20/2016,10:21 PM,Brian,Breakaway,Brian,75989,0,Initial,,,
-3/27/2016,11:46 PM,Brian,Breakaway,Brian,38623,9,,,,
-3/27/2016,11:51 PM,Brian,Breakaway,Brian,34222,10,dead vm code removal,,,
+3/27/2016,11:46 PM,Brian,Breakaway,Brian,38623,9,,,,0.508270934
+3/27/2016,11:51 PM,Brian,Breakaway,Brian,34222,10,dead vm code removal,,,0.450354657
+4/2/2016,10:06 PM,Brian,Breakaway,Brian,32305,14,13 + maybe something else? & bug fixes to JackCompiler and removing one statement from Breakaway,,,0.425127321
 ,,,,,,,,,,
 ,,,,,,,,,,
 3/20/2016,10:23 PM,Supplied,None,Supplied,48241,0,Initial,,,

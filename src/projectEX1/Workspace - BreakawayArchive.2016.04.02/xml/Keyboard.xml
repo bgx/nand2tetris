@@ -1,0 +1,588 @@
+<class>
+	<keyword> class </keyword>
+	<identifier> Keyboard </identifier>
+	class : defined
+	<symbol> { </symbol>
+	<classVarDec>
+		<keyword> static </keyword>
+		<identifier> Array </identifier>
+		class : used
+		<identifier> keyboard </identifier>
+		static : defined : static 0
+		<symbol> ; </symbol>
+	</classVarDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> void </keyword>
+		<identifier> init </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> keyboard </identifier>
+					static : used : static 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 24576 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> char </keyword>
+		<identifier> keyPressed </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> keyboard </identifier>
+							static : used : static 0
+							<symbol> [ </symbol>
+							<expression>
+								<term>
+									<integerConstant> 0 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ] </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> char </keyword>
+		<identifier> readChar </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> char </keyword>
+				<identifier> c </identifier>
+				var : defined : var 0
+				<symbol> , </symbol>
+				<identifier> key </identifier>
+				var : defined : var 1
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> key </identifier>
+							var : used : var 1
+						</term>
+						<symbol> = </symbol>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> key </identifier>
+							var : used : var 1
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> Keyboard </identifier>
+									class : used
+									<symbol> . </symbol>
+									<identifier> keyPressed </identifier>
+									subroutine : used
+									<symbol> ( </symbol>
+									<expressionList>
+									</expressionList>
+									<symbol> ) </symbol>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> c </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> key </identifier>
+							var : used : var 1
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<symbol> ~ </symbol>
+							<term>
+								<symbol> ( </symbol>
+								<expression>
+									<term>
+										<identifier> Keyboard </identifier>
+										class : used
+										<symbol> . </symbol>
+										<identifier> keyPressed </identifier>
+										subroutine : used
+										<symbol> ( </symbol>
+										<expressionList>
+										</expressionList>
+										<symbol> ) </symbol>
+									</term>
+									<symbol> = </symbol>
+									<term>
+										<integerConstant> 0 </integerConstant>
+									</term>
+								</expression>
+								<symbol> ) </symbol>
+							</term>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> c </identifier>
+							var : used : var 0
+						</term>
+						<symbol> = </symbol>
+						<term>
+							<integerConstant> 128 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Output </identifier>
+							class : used
+							<symbol> . </symbol>
+							<identifier> println </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+							</expressionList>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+					</statements>
+					<symbol> } </symbol>
+					<keyword> else </keyword>
+					<symbol> { </symbol>
+					<statements>
+						<ifStatement>
+							<keyword> if </keyword>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<identifier> c </identifier>
+									var : used : var 0
+								</term>
+								<symbol> = </symbol>
+								<term>
+									<integerConstant> 129 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+							<symbol> { </symbol>
+							<statements>
+								<doStatement>
+									<keyword> do </keyword>
+									<identifier> Output </identifier>
+									class : used
+									<symbol> . </symbol>
+									<identifier> backSpace </identifier>
+									subroutine : used
+									<symbol> ( </symbol>
+									<expressionList>
+									</expressionList>
+									<symbol> ) </symbol>
+									<symbol> ; </symbol>
+								</doStatement>
+							</statements>
+							<symbol> } </symbol>
+							<keyword> else </keyword>
+							<symbol> { </symbol>
+							<statements>
+								<doStatement>
+									<keyword> do </keyword>
+									<identifier> Output </identifier>
+									class : used
+									<symbol> . </symbol>
+									<identifier> printChar </identifier>
+									subroutine : used
+									<symbol> ( </symbol>
+									<expressionList>
+										<expression>
+											<term>
+												<identifier> c </identifier>
+												var : used : var 0
+											</term>
+										</expression>
+									</expressionList>
+									<symbol> ) </symbol>
+									<symbol> ; </symbol>
+								</doStatement>
+							</statements>
+							<symbol> } </symbol>
+						</ifStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> c </identifier>
+							var : used : var 0
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<identifier> String </identifier>
+		class : used
+		<identifier> readLine </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<identifier> String </identifier>
+			class : used
+			<identifier> message </identifier>
+			argument : defined : argument 0
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> char </keyword>
+				<identifier> c </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<identifier> String </identifier>
+				class : used
+				<identifier> s </identifier>
+				var : defined : var 1
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Output </identifier>
+					class : used
+					<symbol> . </symbol>
+					<identifier> printString </identifier>
+					subroutine : used
+					<symbol> ( </symbol>
+					<expressionList>
+						<expression>
+							<term>
+								<identifier> message </identifier>
+								argument : used : argument 0
+							</term>
+						</expression>
+					</expressionList>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> s </identifier>
+					var : used : var 1
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> String </identifier>
+							class : used
+							<symbol> . </symbol>
+							<identifier> new </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+								<expression>
+									<term>
+										<integerConstant> 60 </integerConstant>
+									</term>
+								</expression>
+							</expressionList>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> c </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> Keyboard </identifier>
+							class : used
+							<symbol> . </symbol>
+							<identifier> readChar </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+							</expressionList>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<symbol> ~ </symbol>
+							<term>
+								<symbol> ( </symbol>
+								<expression>
+									<term>
+										<identifier> c </identifier>
+										var : used : var 0
+									</term>
+									<symbol> = </symbol>
+									<term>
+										<integerConstant> 128 </integerConstant>
+									</term>
+								</expression>
+								<symbol> ) </symbol>
+							</term>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<ifStatement>
+							<keyword> if </keyword>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<identifier> c </identifier>
+									var : used : var 0
+								</term>
+								<symbol> = </symbol>
+								<term>
+									<integerConstant> 129 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+							<symbol> { </symbol>
+							<statements>
+								<doStatement>
+									<keyword> do </keyword>
+									<identifier> s </identifier>
+									var : used : var 1
+									<symbol> . </symbol>
+									<identifier> eraseLastChar </identifier>
+									subroutine : used
+									<symbol> ( </symbol>
+									<expressionList>
+									</expressionList>
+									<symbol> ) </symbol>
+									<symbol> ; </symbol>
+								</doStatement>
+							</statements>
+							<symbol> } </symbol>
+							<keyword> else </keyword>
+							<symbol> { </symbol>
+							<statements>
+								<letStatement>
+									<keyword> let </keyword>
+									<identifier> s </identifier>
+									var : used : var 1
+									<symbol> = </symbol>
+									<expression>
+										<term>
+											<identifier> s </identifier>
+											var : used : var 1
+											<symbol> . </symbol>
+											<identifier> appendChar </identifier>
+											subroutine : used
+											<symbol> ( </symbol>
+											<expressionList>
+												<expression>
+													<term>
+														<identifier> c </identifier>
+														var : used : var 0
+													</term>
+												</expression>
+											</expressionList>
+											<symbol> ) </symbol>
+										</term>
+									</expression>
+									<symbol> ; </symbol>
+								</letStatement>
+							</statements>
+							<symbol> } </symbol>
+						</ifStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> c </identifier>
+							var : used : var 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> Keyboard </identifier>
+									class : used
+									<symbol> . </symbol>
+									<identifier> readChar </identifier>
+									subroutine : used
+									<symbol> ( </symbol>
+									<expressionList>
+									</expressionList>
+									<symbol> ) </symbol>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> s </identifier>
+							var : used : var 1
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> int </keyword>
+		<identifier> readInt </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<identifier> String </identifier>
+			class : used
+			<identifier> message </identifier>
+			argument : defined : argument 0
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<identifier> String </identifier>
+				class : used
+				<identifier> s </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> s </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> Keyboard </identifier>
+							class : used
+							<symbol> . </symbol>
+							<identifier> readLine </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+								<expression>
+									<term>
+										<identifier> message </identifier>
+										argument : used : argument 0
+									</term>
+								</expression>
+							</expressionList>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> s </identifier>
+							var : used : var 0
+							<symbol> . </symbol>
+							<identifier> intValue </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+							</expressionList>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<symbol> } </symbol>
+</class>

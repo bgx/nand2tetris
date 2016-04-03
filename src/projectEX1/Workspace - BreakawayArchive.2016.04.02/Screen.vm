@@ -1,0 +1,694 @@
+function Screen.init 2
+push constant 0
+pop local 0
+push constant 1
+pop local 1
+push constant 16
+call Array.new 1
+pop static 1
+label Screeninit0
+push local 0
+push constant 16
+lt
+not
+if-goto Screeninit1
+push local 0
+push static 1
+add
+push local 1
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 1
+push local 1
+add
+pop local 1
+push local 0
+push constant 1
+add
+pop local 0
+goto Screeninit0
+label Screeninit1
+push constant 1
+neg
+pop static 0
+push constant 0
+return
+function Screen.clearScreen 1
+push constant 16384
+pop local 0
+label ScreenclearScreen0
+push local 0
+push constant 24576
+lt
+not
+if-goto ScreenclearScreen1
+push local 0
+push constant 0
+call Memory.poke 2
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto ScreenclearScreen0
+label ScreenclearScreen1
+push constant 0
+return
+function Screen.setColor 0
+push argument 0
+pop static 0
+push constant 0
+return
+function Screen.drawPixel 2
+push constant 16384
+push argument 1
+push constant 32
+call Math.multiply 2
+add
+push argument 0
+push constant 16
+call Math.divide 2
+add
+pop local 0
+push local 0
+call Memory.peek 1
+pop local 1
+push static 0
+not
+if-goto ScreendrawPixel0
+push local 1
+push argument 0
+push constant 15
+and
+push static 1
+add
+pop pointer 1
+push that 0
+or
+pop local 1
+goto ScreendrawPixel1
+label ScreendrawPixel0
+push local 1
+push argument 0
+push constant 15
+and
+push static 1
+add
+pop pointer 1
+push that 0
+not
+and
+pop local 1
+label ScreendrawPixel1
+push local 0
+push local 1
+call Memory.poke 2
+pop temp 0
+push constant 0
+return
+function Screen.drawLine 12
+push argument 0
+push argument 2
+gt
+not
+if-goto ScreendrawLine0
+push argument 0
+pop local 0
+push argument 2
+pop argument 0
+push local 0
+pop argument 2
+push argument 1
+pop local 0
+push argument 3
+pop argument 1
+push local 0
+pop argument 3
+goto ScreendrawLine1
+label ScreendrawLine0
+label ScreendrawLine1
+push argument 2
+push argument 0
+sub
+pop local 1
+push argument 3
+push argument 1
+sub
+pop local 2
+push local 2
+push constant 0
+eq
+not
+if-goto ScreendrawLine2
+push constant 16384
+push argument 1
+push constant 32
+call Math.multiply 2
+add
+push argument 0
+push constant 16
+call Math.divide 2
+add
+pop local 3
+push constant 16384
+push argument 1
+push constant 32
+call Math.multiply 2
+add
+push argument 2
+push constant 16
+call Math.divide 2
+add
+pop local 4
+push argument 0
+push constant 15
+and
+pop local 5
+push argument 2
+push constant 15
+and
+pop local 6
+push local 3
+push local 4
+eq
+not
+if-goto ScreendrawLine4
+push local 5
+push constant 0
+eq
+not
+if-goto ScreendrawLine6
+push local 6
+push constant 15
+eq
+not
+if-goto ScreendrawLine8
+push local 3
+push static 0
+call Memory.poke 2
+pop temp 0
+push constant 0
+return
+goto ScreendrawLine9
+label ScreendrawLine8
+push local 6
+push constant 1
+add
+push static 1
+add
+pop pointer 1
+push that 0
+push constant 1
+sub
+pop local 7
+label ScreendrawLine9
+goto ScreendrawLine7
+label ScreendrawLine6
+push local 6
+push constant 15
+eq
+not
+if-goto ScreendrawLine10
+push local 5
+push static 1
+add
+pop pointer 1
+push that 0
+neg
+pop local 7
+goto ScreendrawLine11
+label ScreendrawLine10
+push local 6
+push constant 1
+add
+push static 1
+add
+pop pointer 1
+push that 0
+push constant 1
+sub
+push local 5
+push static 1
+add
+pop pointer 1
+push that 0
+neg
+and
+pop local 7
+label ScreendrawLine11
+label ScreendrawLine7
+push local 3
+call Memory.peek 1
+pop local 8
+push static 0
+not
+if-goto ScreendrawLine12
+push local 8
+push local 7
+or
+pop local 8
+goto ScreendrawLine13
+label ScreendrawLine12
+push local 8
+push local 7
+not
+and
+pop local 8
+label ScreendrawLine13
+push local 3
+push local 8
+call Memory.poke 2
+pop temp 0
+goto ScreendrawLine5
+label ScreendrawLine4
+push local 5
+push constant 0
+eq
+not
+if-goto ScreendrawLine14
+push local 3
+push static 0
+call Memory.poke 2
+pop temp 0
+goto ScreendrawLine15
+label ScreendrawLine14
+push local 5
+push static 1
+add
+pop pointer 1
+push that 0
+neg
+pop local 7
+push local 3
+call Memory.peek 1
+pop local 8
+push static 0
+not
+if-goto ScreendrawLine16
+push local 8
+push local 7
+or
+pop local 8
+goto ScreendrawLine17
+label ScreendrawLine16
+push local 8
+push local 7
+not
+and
+pop local 8
+label ScreendrawLine17
+push local 3
+push local 8
+call Memory.poke 2
+pop temp 0
+label ScreendrawLine15
+push local 3
+push constant 1
+add
+pop local 3
+label ScreendrawLine18
+push local 3
+push local 4
+lt
+not
+if-goto ScreendrawLine19
+push local 3
+push static 0
+call Memory.poke 2
+pop temp 0
+push local 3
+push constant 1
+add
+pop local 3
+goto ScreendrawLine18
+label ScreendrawLine19
+push local 6
+push constant 15
+eq
+not
+if-goto ScreendrawLine20
+push local 4
+push static 0
+call Memory.poke 2
+pop temp 0
+goto ScreendrawLine21
+label ScreendrawLine20
+push local 6
+push constant 1
+add
+push static 1
+add
+pop pointer 1
+push that 0
+push constant 1
+sub
+pop local 7
+push local 4
+call Memory.peek 1
+pop local 8
+push static 0
+not
+if-goto ScreendrawLine22
+push local 8
+push local 7
+or
+pop local 8
+goto ScreendrawLine23
+label ScreendrawLine22
+push local 8
+push local 7
+not
+and
+pop local 8
+label ScreendrawLine23
+push local 4
+push local 8
+call Memory.poke 2
+pop temp 0
+label ScreendrawLine21
+label ScreendrawLine5
+push constant 0
+return
+goto ScreendrawLine3
+label ScreendrawLine2
+label ScreendrawLine3
+push local 1
+push constant 0
+eq
+not
+if-goto ScreendrawLine24
+push local 2
+push constant 0
+lt
+not
+if-goto ScreendrawLine26
+push argument 1
+pop local 0
+push argument 3
+pop argument 1
+push local 0
+pop argument 3
+goto ScreendrawLine27
+label ScreendrawLine26
+label ScreendrawLine27
+label ScreendrawLine28
+push argument 1
+push argument 3
+lt
+not
+if-goto ScreendrawLine29
+push argument 0
+push argument 1
+call Screen.drawPixel 2
+pop temp 0
+push argument 1
+push constant 1
+add
+pop argument 1
+goto ScreendrawLine28
+label ScreendrawLine29
+push constant 0
+return
+goto ScreendrawLine25
+label ScreendrawLine24
+label ScreendrawLine25
+push constant 0
+pop local 9
+push constant 0
+pop local 10
+push constant 0
+pop local 11
+push local 2
+push constant 0
+gt
+not
+if-goto ScreendrawLine30
+label ScreendrawLine32
+push local 9
+push local 1
+gt
+push local 10
+push local 2
+gt
+or
+not
+not
+if-goto ScreendrawLine33
+push argument 0
+push local 9
+add
+push argument 1
+push local 10
+add
+call Screen.drawPixel 2
+pop temp 0
+push local 11
+push constant 0
+lt
+not
+if-goto ScreendrawLine34
+push local 9
+push constant 1
+add
+pop local 9
+push local 11
+push local 2
+add
+pop local 11
+goto ScreendrawLine35
+label ScreendrawLine34
+push local 10
+push constant 1
+add
+pop local 10
+push local 11
+push local 1
+sub
+pop local 11
+label ScreendrawLine35
+goto ScreendrawLine32
+label ScreendrawLine33
+goto ScreendrawLine31
+label ScreendrawLine30
+label ScreendrawLine36
+push local 9
+push local 1
+gt
+push local 10
+push local 2
+lt
+or
+not
+not
+if-goto ScreendrawLine37
+push argument 0
+push local 9
+add
+push argument 1
+push local 10
+add
+call Screen.drawPixel 2
+pop temp 0
+push local 11
+push constant 0
+lt
+not
+if-goto ScreendrawLine38
+push local 9
+push constant 1
+add
+pop local 9
+push local 11
+push local 2
+sub
+pop local 11
+goto ScreendrawLine39
+label ScreendrawLine38
+push local 10
+push constant 1
+sub
+pop local 10
+push local 11
+push local 1
+sub
+pop local 11
+label ScreendrawLine39
+goto ScreendrawLine36
+label ScreendrawLine37
+label ScreendrawLine31
+push constant 0
+return
+function Screen.drawRectangle 0
+push argument 1
+push argument 3
+gt
+not
+if-goto ScreendrawRectangle0
+push constant 0
+return
+goto ScreendrawRectangle1
+label ScreendrawRectangle0
+label ScreendrawRectangle1
+push argument 0
+push argument 2
+gt
+not
+if-goto ScreendrawRectangle2
+push constant 0
+return
+goto ScreendrawRectangle3
+label ScreendrawRectangle2
+label ScreendrawRectangle3
+label ScreendrawRectangle4
+push argument 1
+push argument 3
+gt
+not
+not
+if-goto ScreendrawRectangle5
+push argument 0
+push argument 1
+push argument 2
+push argument 1
+call Screen.drawLine 4
+pop temp 0
+push argument 1
+push constant 1
+add
+pop argument 1
+goto ScreendrawRectangle4
+label ScreendrawRectangle5
+push constant 0
+return
+function Screen.drawCircle 7
+push argument 2
+push constant 181
+gt
+not
+if-goto ScreendrawCircle0
+push constant 0
+return
+goto ScreendrawCircle1
+label ScreendrawCircle0
+label ScreendrawCircle1
+push argument 2
+push argument 2
+call Math.multiply 2
+pop local 0
+push argument 2
+pop local 1
+push local 0
+pop local 3
+push argument 2
+push argument 2
+add
+push constant 1
+sub
+pop local 5
+push constant 0
+pop local 2
+push constant 0
+pop local 4
+push constant 1
+pop local 6
+push argument 2
+push constant 181
+lt
+not
+if-goto ScreendrawCircle2
+push local 0
+push argument 2
+add
+pop local 0
+goto ScreendrawCircle3
+label ScreendrawCircle2
+push constant 32767
+pop local 0
+label ScreendrawCircle3
+push argument 0
+push local 1
+sub
+push argument 1
+push argument 0
+push local 1
+add
+push argument 1
+call Screen.drawLine 4
+pop temp 0
+label ScreendrawCircle4
+push local 2
+push argument 2
+gt
+not
+not
+if-goto ScreendrawCircle5
+label ScreendrawCircle6
+push local 0
+push local 3
+sub
+push local 4
+sub
+push constant 0
+lt
+not
+if-goto ScreendrawCircle7
+push local 1
+push constant 1
+sub
+pop local 1
+push local 3
+push local 5
+sub
+pop local 3
+push local 5
+push constant 2
+sub
+pop local 5
+goto ScreendrawCircle6
+label ScreendrawCircle7
+push argument 0
+push local 1
+sub
+push argument 1
+push local 2
+sub
+push argument 0
+push local 1
+add
+push argument 1
+push local 2
+sub
+call Screen.drawLine 4
+pop temp 0
+push argument 0
+push local 1
+sub
+push argument 1
+push local 2
+add
+push argument 0
+push local 1
+add
+push argument 1
+push local 2
+add
+call Screen.drawLine 4
+pop temp 0
+push local 2
+push constant 1
+add
+pop local 2
+push local 4
+push local 6
+add
+pop local 4
+push local 6
+push constant 2
+add
+pop local 6
+goto ScreendrawCircle4
+label ScreendrawCircle5
+push constant 0
+return

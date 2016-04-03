@@ -1,0 +1,1942 @@
+<class>
+	<keyword> class </keyword>
+	<identifier> Brick </identifier>
+	class : defined
+	<symbol> { </symbol>
+	<classVarDec>
+		<keyword> field </keyword>
+		<keyword> int </keyword>
+		<identifier> x </identifier>
+		field : defined : field 0
+		<symbol> , </symbol>
+		<identifier> y </identifier>
+		field : defined : field 1
+		<symbol> ; </symbol>
+	</classVarDec>
+	<classVarDec>
+		<keyword> field </keyword>
+		<keyword> int </keyword>
+		<identifier> width </identifier>
+		field : defined : field 2
+		<symbol> , </symbol>
+		<identifier> height </identifier>
+		field : defined : field 3
+		<symbol> ; </symbol>
+	</classVarDec>
+	<classVarDec>
+		<keyword> field </keyword>
+		<identifier> Hitbox </identifier>
+		class : used
+		<identifier> hitbox </identifier>
+		field : defined : field 4
+		<symbol> ; </symbol>
+	</classVarDec>
+	<classVarDec>
+		<keyword> field </keyword>
+		<keyword> int </keyword>
+		<identifier> paw </identifier>
+		field : defined : field 5
+		<symbol> , </symbol>
+		<identifier> paxmin </identifier>
+		field : defined : field 6
+		<symbol> , </symbol>
+		<identifier> paxmax </identifier>
+		field : defined : field 7
+		<symbol> ; </symbol>
+	</classVarDec>
+	<subroutineDec>
+		<keyword> constructor </keyword>
+		<identifier> Brick </identifier>
+		class : used
+		<identifier> new </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> Ax </identifier>
+			argument : defined : argument 0
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> Ay </identifier>
+			argument : defined : argument 1
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> Awidth </identifier>
+			argument : defined : argument 2
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> Aheight </identifier>
+			argument : defined : argument 3
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> x </identifier>
+					field : used : field 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> Ax </identifier>
+							argument : used : argument 0
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> y </identifier>
+					field : used : field 1
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> Ay </identifier>
+							argument : used : argument 1
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> width </identifier>
+					field : used : field 2
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> Awidth </identifier>
+							argument : used : argument 2
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> height </identifier>
+					field : used : field 3
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> Aheight </identifier>
+							argument : used : argument 3
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> paw </identifier>
+					field : used : field 5
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 216 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> paxmin </identifier>
+					field : used : field 6
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 255 </integerConstant>
+						</term>
+						<symbol> - </symbol>
+						<term>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<identifier> paw </identifier>
+									field : used : field 5
+								</term>
+								<symbol> / </symbol>
+								<term>
+									<integerConstant> 2 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+						</term>
+						<symbol> + </symbol>
+						<term>
+							<integerConstant> 1 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> paxmax </identifier>
+					field : used : field 7
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 256 </integerConstant>
+						</term>
+						<symbol> + </symbol>
+						<term>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<identifier> paw </identifier>
+									field : used : field 5
+								</term>
+								<symbol> / </symbol>
+								<term>
+									<integerConstant> 2 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+						</term>
+						<symbol> - </symbol>
+						<term>
+							<integerConstant> 1 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> hitbox </identifier>
+					field : used : field 4
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> Hitbox </identifier>
+							class : used
+							<symbol> . </symbol>
+							<identifier> new </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+								<expression>
+									<term>
+										<identifier> x </identifier>
+										field : used : field 0
+									</term>
+									<symbol> - </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> width </identifier>
+												field : used : field 2
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> x </identifier>
+										field : used : field 0
+									</term>
+									<symbol> + </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> width </identifier>
+												field : used : field 2
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> y </identifier>
+										field : used : field 1
+									</term>
+									<symbol> - </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> height </identifier>
+												field : used : field 3
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> y </identifier>
+										field : used : field 1
+									</term>
+									<symbol> + </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> height </identifier>
+												field : used : field 3
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+							</expressionList>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<keyword> this </keyword>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> dispose </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> hitbox </identifier>
+					field : used : field 4
+					<symbol> . </symbol>
+					<identifier> dispose </identifier>
+					subroutine : used
+					<symbol> ( </symbol>
+					<expressionList>
+					</expressionList>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Memory </identifier>
+					class : used
+					<symbol> . </symbol>
+					<identifier> deAlloc </identifier>
+					subroutine : used
+					<symbol> ( </symbol>
+					<expressionList>
+						<expression>
+							<term>
+								<keyword> this </keyword>
+							</term>
+						</expression>
+					</expressionList>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> draw </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Screen </identifier>
+					class : used
+					<symbol> . </symbol>
+					<identifier> setColor </identifier>
+					subroutine : used
+					<symbol> ( </symbol>
+					<expressionList>
+						<expression>
+							<term>
+								<keyword> true </keyword>
+							</term>
+						</expression>
+					</expressionList>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<symbol> ( </symbol>
+									<expression>
+										<term>
+											<identifier> x </identifier>
+											field : used : field 0
+										</term>
+										<symbol> + </symbol>
+										<term>
+											<symbol> ( </symbol>
+											<expression>
+												<term>
+													<identifier> width </identifier>
+													field : used : field 2
+												</term>
+												<symbol> / </symbol>
+												<term>
+													<integerConstant> 2 </integerConstant>
+												</term>
+											</expression>
+											<symbol> ) </symbol>
+										</term>
+									</expression>
+									<symbol> ) </symbol>
+								</term>
+								<symbol> &gt; </symbol>
+								<term>
+									<identifier> paxmax </identifier>
+									field : used : field 7
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							class : used
+							<symbol> . </symbol>
+							<identifier> drawRectangle </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+								<expression>
+									<term>
+										<identifier> x </identifier>
+										field : used : field 0
+									</term>
+									<symbol> - </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> width </identifier>
+												field : used : field 2
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> y </identifier>
+										field : used : field 1
+									</term>
+									<symbol> - </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> height </identifier>
+												field : used : field 3
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> paxmax </identifier>
+										field : used : field 7
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> y </identifier>
+										field : used : field 1
+									</term>
+									<symbol> + </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> height </identifier>
+												field : used : field 3
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+							</expressionList>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							class : used
+							<symbol> . </symbol>
+							<identifier> drawRectangle </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+								<expression>
+									<term>
+										<identifier> paxmin </identifier>
+										field : used : field 6
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> y </identifier>
+										field : used : field 1
+									</term>
+									<symbol> - </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> height </identifier>
+												field : used : field 3
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> x </identifier>
+												field : used : field 0
+											</term>
+											<symbol> - </symbol>
+											<term>
+												<identifier> paw </identifier>
+												field : used : field 5
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+									<symbol> + </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> width </identifier>
+												field : used : field 2
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> y </identifier>
+										field : used : field 1
+									</term>
+									<symbol> + </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> height </identifier>
+												field : used : field 3
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+							</expressionList>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+					</statements>
+					<symbol> } </symbol>
+					<keyword> else </keyword>
+					<symbol> { </symbol>
+					<statements>
+						<ifStatement>
+							<keyword> if </keyword>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<symbol> ( </symbol>
+									<expression>
+										<term>
+											<symbol> ( </symbol>
+											<expression>
+												<term>
+													<identifier> x </identifier>
+													field : used : field 0
+												</term>
+												<symbol> - </symbol>
+												<term>
+													<symbol> ( </symbol>
+													<expression>
+														<term>
+															<identifier> width </identifier>
+															field : used : field 2
+														</term>
+														<symbol> / </symbol>
+														<term>
+															<integerConstant> 2 </integerConstant>
+														</term>
+													</expression>
+													<symbol> ) </symbol>
+												</term>
+											</expression>
+											<symbol> ) </symbol>
+										</term>
+										<symbol> &lt; </symbol>
+										<term>
+											<identifier> paxmin </identifier>
+											field : used : field 6
+										</term>
+									</expression>
+									<symbol> ) </symbol>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+							<symbol> { </symbol>
+							<statements>
+								<doStatement>
+									<keyword> do </keyword>
+									<identifier> Screen </identifier>
+									class : used
+									<symbol> . </symbol>
+									<identifier> drawRectangle </identifier>
+									subroutine : used
+									<symbol> ( </symbol>
+									<expressionList>
+										<expression>
+											<term>
+												<identifier> x </identifier>
+												field : used : field 0
+											</term>
+											<symbol> - </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> width </identifier>
+														field : used : field 2
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<identifier> paw </identifier>
+												field : used : field 5
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> y </identifier>
+												field : used : field 1
+											</term>
+											<symbol> - </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> height </identifier>
+														field : used : field 3
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> paxmax </identifier>
+												field : used : field 7
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> y </identifier>
+												field : used : field 1
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> height </identifier>
+														field : used : field 3
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+									</expressionList>
+									<symbol> ) </symbol>
+									<symbol> ; </symbol>
+								</doStatement>
+								<doStatement>
+									<keyword> do </keyword>
+									<identifier> Screen </identifier>
+									class : used
+									<symbol> . </symbol>
+									<identifier> drawRectangle </identifier>
+									subroutine : used
+									<symbol> ( </symbol>
+									<expressionList>
+										<expression>
+											<term>
+												<identifier> paxmin </identifier>
+												field : used : field 6
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> y </identifier>
+												field : used : field 1
+											</term>
+											<symbol> - </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> height </identifier>
+														field : used : field 3
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> x </identifier>
+												field : used : field 0
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> width </identifier>
+														field : used : field 2
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> y </identifier>
+												field : used : field 1
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> height </identifier>
+														field : used : field 3
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+									</expressionList>
+									<symbol> ) </symbol>
+									<symbol> ; </symbol>
+								</doStatement>
+							</statements>
+							<symbol> } </symbol>
+							<keyword> else </keyword>
+							<symbol> { </symbol>
+							<statements>
+								<doStatement>
+									<keyword> do </keyword>
+									<identifier> Screen </identifier>
+									class : used
+									<symbol> . </symbol>
+									<identifier> drawRectangle </identifier>
+									subroutine : used
+									<symbol> ( </symbol>
+									<expressionList>
+										<expression>
+											<term>
+												<identifier> x </identifier>
+												field : used : field 0
+											</term>
+											<symbol> - </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> width </identifier>
+														field : used : field 2
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> y </identifier>
+												field : used : field 1
+											</term>
+											<symbol> - </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> height </identifier>
+														field : used : field 3
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> x </identifier>
+												field : used : field 0
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> width </identifier>
+														field : used : field 2
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> y </identifier>
+												field : used : field 1
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> height </identifier>
+														field : used : field 3
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+									</expressionList>
+									<symbol> ) </symbol>
+									<symbol> ; </symbol>
+								</doStatement>
+							</statements>
+							<symbol> } </symbol>
+						</ifStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> erase </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Screen </identifier>
+					class : used
+					<symbol> . </symbol>
+					<identifier> setColor </identifier>
+					subroutine : used
+					<symbol> ( </symbol>
+					<expressionList>
+						<expression>
+							<term>
+								<keyword> false </keyword>
+							</term>
+						</expression>
+					</expressionList>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<symbol> ( </symbol>
+									<expression>
+										<term>
+											<identifier> x </identifier>
+											field : used : field 0
+										</term>
+										<symbol> + </symbol>
+										<term>
+											<symbol> ( </symbol>
+											<expression>
+												<term>
+													<identifier> width </identifier>
+													field : used : field 2
+												</term>
+												<symbol> / </symbol>
+												<term>
+													<integerConstant> 2 </integerConstant>
+												</term>
+											</expression>
+											<symbol> ) </symbol>
+										</term>
+									</expression>
+									<symbol> ) </symbol>
+								</term>
+								<symbol> &gt; </symbol>
+								<term>
+									<identifier> paxmax </identifier>
+									field : used : field 7
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							class : used
+							<symbol> . </symbol>
+							<identifier> drawRectangle </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+								<expression>
+									<term>
+										<identifier> x </identifier>
+										field : used : field 0
+									</term>
+									<symbol> - </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> width </identifier>
+												field : used : field 2
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> y </identifier>
+										field : used : field 1
+									</term>
+									<symbol> - </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> height </identifier>
+												field : used : field 3
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> paxmax </identifier>
+										field : used : field 7
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> y </identifier>
+										field : used : field 1
+									</term>
+									<symbol> + </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> height </identifier>
+												field : used : field 3
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+							</expressionList>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> Screen </identifier>
+							class : used
+							<symbol> . </symbol>
+							<identifier> drawRectangle </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+								<expression>
+									<term>
+										<identifier> paxmin </identifier>
+										field : used : field 6
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> y </identifier>
+										field : used : field 1
+									</term>
+									<symbol> - </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> height </identifier>
+												field : used : field 3
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> x </identifier>
+												field : used : field 0
+											</term>
+											<symbol> - </symbol>
+											<term>
+												<identifier> paw </identifier>
+												field : used : field 5
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+									<symbol> + </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> width </identifier>
+												field : used : field 2
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> y </identifier>
+										field : used : field 1
+									</term>
+									<symbol> + </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> height </identifier>
+												field : used : field 3
+											</term>
+											<symbol> / </symbol>
+											<term>
+												<integerConstant> 2 </integerConstant>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</expression>
+							</expressionList>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+					</statements>
+					<symbol> } </symbol>
+					<keyword> else </keyword>
+					<symbol> { </symbol>
+					<statements>
+						<ifStatement>
+							<keyword> if </keyword>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<symbol> ( </symbol>
+									<expression>
+										<term>
+											<symbol> ( </symbol>
+											<expression>
+												<term>
+													<identifier> x </identifier>
+													field : used : field 0
+												</term>
+												<symbol> - </symbol>
+												<term>
+													<symbol> ( </symbol>
+													<expression>
+														<term>
+															<identifier> width </identifier>
+															field : used : field 2
+														</term>
+														<symbol> / </symbol>
+														<term>
+															<integerConstant> 2 </integerConstant>
+														</term>
+													</expression>
+													<symbol> ) </symbol>
+												</term>
+											</expression>
+											<symbol> ) </symbol>
+										</term>
+										<symbol> &lt; </symbol>
+										<term>
+											<identifier> paxmin </identifier>
+											field : used : field 6
+										</term>
+									</expression>
+									<symbol> ) </symbol>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+							<symbol> { </symbol>
+							<statements>
+								<doStatement>
+									<keyword> do </keyword>
+									<identifier> Screen </identifier>
+									class : used
+									<symbol> . </symbol>
+									<identifier> drawRectangle </identifier>
+									subroutine : used
+									<symbol> ( </symbol>
+									<expressionList>
+										<expression>
+											<term>
+												<identifier> x </identifier>
+												field : used : field 0
+											</term>
+											<symbol> - </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> width </identifier>
+														field : used : field 2
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<identifier> paw </identifier>
+												field : used : field 5
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> y </identifier>
+												field : used : field 1
+											</term>
+											<symbol> - </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> height </identifier>
+														field : used : field 3
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> paxmax </identifier>
+												field : used : field 7
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> y </identifier>
+												field : used : field 1
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> height </identifier>
+														field : used : field 3
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+									</expressionList>
+									<symbol> ) </symbol>
+									<symbol> ; </symbol>
+								</doStatement>
+								<doStatement>
+									<keyword> do </keyword>
+									<identifier> Screen </identifier>
+									class : used
+									<symbol> . </symbol>
+									<identifier> drawRectangle </identifier>
+									subroutine : used
+									<symbol> ( </symbol>
+									<expressionList>
+										<expression>
+											<term>
+												<identifier> paxmin </identifier>
+												field : used : field 6
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> y </identifier>
+												field : used : field 1
+											</term>
+											<symbol> - </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> height </identifier>
+														field : used : field 3
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> x </identifier>
+												field : used : field 0
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> width </identifier>
+														field : used : field 2
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> y </identifier>
+												field : used : field 1
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> height </identifier>
+														field : used : field 3
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+									</expressionList>
+									<symbol> ) </symbol>
+									<symbol> ; </symbol>
+								</doStatement>
+							</statements>
+							<symbol> } </symbol>
+							<keyword> else </keyword>
+							<symbol> { </symbol>
+							<statements>
+								<doStatement>
+									<keyword> do </keyword>
+									<identifier> Screen </identifier>
+									class : used
+									<symbol> . </symbol>
+									<identifier> drawRectangle </identifier>
+									subroutine : used
+									<symbol> ( </symbol>
+									<expressionList>
+										<expression>
+											<term>
+												<identifier> x </identifier>
+												field : used : field 0
+											</term>
+											<symbol> - </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> width </identifier>
+														field : used : field 2
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> y </identifier>
+												field : used : field 1
+											</term>
+											<symbol> - </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> height </identifier>
+														field : used : field 3
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> x </identifier>
+												field : used : field 0
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> width </identifier>
+														field : used : field 2
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> y </identifier>
+												field : used : field 1
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> height </identifier>
+														field : used : field 3
+													</term>
+													<symbol> / </symbol>
+													<term>
+														<integerConstant> 2 </integerConstant>
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+									</expressionList>
+									<symbol> ) </symbol>
+									<symbol> ; </symbol>
+								</doStatement>
+							</statements>
+							<symbol> } </symbol>
+						</ifStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<identifier> Hitbox </identifier>
+		class : used
+		<identifier> getHitbox </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> hitbox </identifier>
+							field : used : field 4
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> moveRight </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> x </identifier>
+					field : used : field 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> x </identifier>
+							field : used : field 0
+						</term>
+						<symbol> + </symbol>
+						<term>
+							<integerConstant> 4 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> x </identifier>
+							field : used : field 0
+						</term>
+						<symbol> &gt; </symbol>
+						<term>
+							<integerConstant> 363 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> x </identifier>
+							field : used : field 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> x </identifier>
+									field : used : field 0
+								</term>
+								<symbol> - </symbol>
+								<term>
+									<integerConstant> 216 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> hitbox </identifier>
+					field : used : field 4
+					<symbol> . </symbol>
+					<identifier> update </identifier>
+					subroutine : used
+					<symbol> ( </symbol>
+					<expressionList>
+						<expression>
+							<term>
+								<identifier> x </identifier>
+								field : used : field 0
+							</term>
+							<symbol> - </symbol>
+							<term>
+								<symbol> ( </symbol>
+								<expression>
+									<term>
+										<identifier> width </identifier>
+										field : used : field 2
+									</term>
+									<symbol> / </symbol>
+									<term>
+										<integerConstant> 2 </integerConstant>
+									</term>
+								</expression>
+								<symbol> ) </symbol>
+							</term>
+						</expression>
+						<symbol> , </symbol>
+						<expression>
+							<term>
+								<identifier> x </identifier>
+								field : used : field 0
+							</term>
+							<symbol> + </symbol>
+							<term>
+								<symbol> ( </symbol>
+								<expression>
+									<term>
+										<identifier> width </identifier>
+										field : used : field 2
+									</term>
+									<symbol> / </symbol>
+									<term>
+										<integerConstant> 2 </integerConstant>
+									</term>
+								</expression>
+								<symbol> ) </symbol>
+							</term>
+						</expression>
+						<symbol> , </symbol>
+						<expression>
+							<term>
+								<identifier> y </identifier>
+								field : used : field 1
+							</term>
+							<symbol> - </symbol>
+							<term>
+								<symbol> ( </symbol>
+								<expression>
+									<term>
+										<identifier> height </identifier>
+										field : used : field 3
+									</term>
+									<symbol> / </symbol>
+									<term>
+										<integerConstant> 2 </integerConstant>
+									</term>
+								</expression>
+								<symbol> ) </symbol>
+							</term>
+						</expression>
+						<symbol> , </symbol>
+						<expression>
+							<term>
+								<identifier> y </identifier>
+								field : used : field 1
+							</term>
+							<symbol> + </symbol>
+							<term>
+								<symbol> ( </symbol>
+								<expression>
+									<term>
+										<identifier> height </identifier>
+										field : used : field 3
+									</term>
+									<symbol> / </symbol>
+									<term>
+										<integerConstant> 2 </integerConstant>
+									</term>
+								</expression>
+								<symbol> ) </symbol>
+							</term>
+						</expression>
+					</expressionList>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> moveLeft </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> x </identifier>
+					field : used : field 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> x </identifier>
+							field : used : field 0
+						</term>
+						<symbol> - </symbol>
+						<term>
+							<integerConstant> 4 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> x </identifier>
+							field : used : field 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<integerConstant> 148 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> x </identifier>
+							field : used : field 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> x </identifier>
+									field : used : field 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 216 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> hitbox </identifier>
+					field : used : field 4
+					<symbol> . </symbol>
+					<identifier> update </identifier>
+					subroutine : used
+					<symbol> ( </symbol>
+					<expressionList>
+						<expression>
+							<term>
+								<identifier> x </identifier>
+								field : used : field 0
+							</term>
+							<symbol> - </symbol>
+							<term>
+								<symbol> ( </symbol>
+								<expression>
+									<term>
+										<identifier> width </identifier>
+										field : used : field 2
+									</term>
+									<symbol> / </symbol>
+									<term>
+										<integerConstant> 2 </integerConstant>
+									</term>
+								</expression>
+								<symbol> ) </symbol>
+							</term>
+						</expression>
+						<symbol> , </symbol>
+						<expression>
+							<term>
+								<identifier> x </identifier>
+								field : used : field 0
+							</term>
+							<symbol> + </symbol>
+							<term>
+								<symbol> ( </symbol>
+								<expression>
+									<term>
+										<identifier> width </identifier>
+										field : used : field 2
+									</term>
+									<symbol> / </symbol>
+									<term>
+										<integerConstant> 2 </integerConstant>
+									</term>
+								</expression>
+								<symbol> ) </symbol>
+							</term>
+						</expression>
+						<symbol> , </symbol>
+						<expression>
+							<term>
+								<identifier> y </identifier>
+								field : used : field 1
+							</term>
+							<symbol> - </symbol>
+							<term>
+								<symbol> ( </symbol>
+								<expression>
+									<term>
+										<identifier> height </identifier>
+										field : used : field 3
+									</term>
+									<symbol> / </symbol>
+									<term>
+										<integerConstant> 2 </integerConstant>
+									</term>
+								</expression>
+								<symbol> ) </symbol>
+							</term>
+						</expression>
+						<symbol> , </symbol>
+						<expression>
+							<term>
+								<identifier> y </identifier>
+								field : used : field 1
+							</term>
+							<symbol> + </symbol>
+							<term>
+								<symbol> ( </symbol>
+								<expression>
+									<term>
+										<identifier> height </identifier>
+										field : used : field 3
+									</term>
+									<symbol> / </symbol>
+									<term>
+										<integerConstant> 2 </integerConstant>
+									</term>
+								</expression>
+								<symbol> ) </symbol>
+							</term>
+						</expression>
+					</expressionList>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<symbol> } </symbol>
+</class>

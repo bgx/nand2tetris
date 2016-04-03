@@ -1,0 +1,291 @@
+function Wall.new 0
+push constant 3
+call Memory.alloc 1
+pop pointer 0
+push constant 0
+pop this 0
+push constant 20
+call Array.new 1
+pop this 1
+push pointer 0
+return
+function Wall.dispose 0
+push argument 0
+pop pointer 0
+push this 1
+call Array.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return
+function Wall.newBrick 0
+push argument 0
+pop pointer 0
+push this 0
+push this 1
+add
+push argument 1
+push argument 2
+push argument 3
+push argument 4
+call Brick.new 4
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push this 0
+push constant 1
+add
+pop this 0
+push constant 0
+return
+function Wall.destroyBrick 1
+push argument 0
+pop pointer 0
+push argument 1
+pop local 0
+label WalldestroyBrick0
+push local 0
+push this 0
+push constant 1
+sub
+lt
+not
+if-goto WalldestroyBrick1
+push local 0
+push this 1
+add
+push local 0
+push constant 1
+add
+push this 1
+add
+pop pointer 1
+push that 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WalldestroyBrick0
+label WalldestroyBrick1
+push this 0
+push constant 1
+sub
+pop this 0
+push constant 0
+return
+function Wall.newBrickGroup 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+label WallnewBrickGroup0
+push local 0
+push argument 7
+lt
+not
+if-goto WallnewBrickGroup1
+push constant 0
+pop local 1
+label WallnewBrickGroup2
+push local 1
+push argument 8
+lt
+not
+if-goto WallnewBrickGroup3
+push pointer 0
+push argument 1
+push local 1
+push argument 5
+call Math.multiply 2
+add
+push argument 2
+push local 0
+push argument 6
+call Math.multiply 2
+add
+push argument 3
+push argument 4
+call Wall.newBrick 5
+pop temp 0
+push local 1
+push constant 1
+add
+pop local 1
+goto WallnewBrickGroup2
+label WallnewBrickGroup3
+push local 0
+push constant 1
+add
+pop local 0
+goto WallnewBrickGroup0
+label WallnewBrickGroup1
+push constant 0
+return
+function Wall.draw 1
+push argument 0
+pop pointer 0
+push constant 1
+neg
+call Screen.setColor 1
+pop temp 0
+push constant 0
+pop local 0
+label Walldraw0
+push local 0
+push this 0
+lt
+not
+if-goto Walldraw1
+push local 0
+push this 1
+add
+pop pointer 1
+push that 0
+pop this 2
+push this 2
+call Brick.draw 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto Walldraw0
+label Walldraw1
+push constant 0
+return
+function Wall.erase 1
+push argument 0
+pop pointer 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push constant 0
+pop local 0
+label Wallerase0
+push local 0
+push this 0
+lt
+not
+if-goto Wallerase1
+push local 0
+push this 1
+add
+pop pointer 1
+push that 0
+pop this 2
+push this 2
+call Brick.erase 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto Wallerase0
+label Wallerase1
+push constant 0
+return
+function Wall.moveRight 1
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+label WallmoveRight0
+push local 0
+push this 0
+lt
+not
+if-goto WallmoveRight1
+push local 0
+push this 1
+add
+pop pointer 1
+push that 0
+pop this 2
+push this 2
+call Brick.moveRight 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WallmoveRight0
+label WallmoveRight1
+push constant 0
+return
+function Wall.moveLeft 1
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+label WallmoveLeft0
+push local 0
+push this 0
+lt
+not
+if-goto WallmoveLeft1
+push local 0
+push this 1
+add
+pop pointer 1
+push that 0
+pop this 2
+push this 2
+call Brick.moveLeft 1
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WallmoveLeft0
+label WallmoveLeft1
+push constant 0
+return
+function Wall.getBrick 0
+push argument 0
+pop pointer 0
+push argument 1
+push this 1
+add
+pop pointer 1
+push that 0
+return
+function Wall.getCount 0
+push argument 0
+pop pointer 0
+push this 0
+return
+function Wall.getHitbox 0
+push argument 0
+pop pointer 0
+push argument 1
+push this 1
+add
+pop pointer 1
+push that 0
+pop this 2
+push this 2
+call Brick.getHitbox 1
+return
+function Wall.isDestroyed 1
+push argument 0
+pop pointer 0
+push this 0
+push constant 0
+eq
+not
+if-goto WallisDestroyed0
+push constant 1
+neg
+pop local 0
+goto WallisDestroyed1
+label WallisDestroyed0
+label WallisDestroyed1
+push local 0
+return

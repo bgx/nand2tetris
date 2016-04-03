@@ -1,0 +1,1815 @@
+<class>
+	<keyword> class </keyword>
+	<identifier> Math </identifier>
+	class : defined
+	<symbol> { </symbol>
+	<classVarDec>
+		<keyword> static </keyword>
+		<identifier> Array </identifier>
+		class : used
+		<identifier> twoToThe </identifier>
+		static : defined : static 0
+		<symbol> ; </symbol>
+	</classVarDec>
+	<classVarDec>
+		<keyword> static </keyword>
+		<identifier> Array </identifier>
+		class : used
+		<identifier> shiftedY </identifier>
+		static : defined : static 1
+		<symbol> ; </symbol>
+	</classVarDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> void </keyword>
+		<identifier> init </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> i </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> n </identifier>
+				var : defined : var 1
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> i </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> n </identifier>
+					var : used : var 1
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 1 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> twoToThe </identifier>
+					static : used : static 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> Array </identifier>
+							class : used
+							<symbol> . </symbol>
+							<identifier> new </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+								<expression>
+									<term>
+										<integerConstant> 16 </integerConstant>
+									</term>
+								</expression>
+							</expressionList>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> i </identifier>
+							var : used : var 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<integerConstant> 16 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> twoToThe </identifier>
+							static : used : static 0
+							<symbol> [ </symbol>
+							<expression>
+								<term>
+									<identifier> i </identifier>
+									var : used : var 0
+								</term>
+							</expression>
+							<symbol> ] </symbol>
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> n </identifier>
+									var : used : var 1
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> n </identifier>
+							var : used : var 1
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> n </identifier>
+									var : used : var 1
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<identifier> n </identifier>
+									var : used : var 1
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> i </identifier>
+							var : used : var 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> i </identifier>
+									var : used : var 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> shiftedY </identifier>
+					static : used : static 1
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> Array </identifier>
+							class : used
+							<symbol> . </symbol>
+							<identifier> new </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+								<expression>
+									<term>
+										<integerConstant> 16 </integerConstant>
+									</term>
+								</expression>
+							</expressionList>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> int </keyword>
+		<identifier> abs </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> x </identifier>
+			argument : defined : argument 0
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> x </identifier>
+							argument : used : argument 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<ifStatement>
+							<keyword> if </keyword>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<identifier> x </identifier>
+									argument : used : argument 0
+								</term>
+								<symbol> = </symbol>
+								<term>
+									<symbol> ( </symbol>
+									<expression>
+										<term>
+											<integerConstant> 32767 </integerConstant>
+										</term>
+										<symbol> + </symbol>
+										<term>
+											<integerConstant> 1 </integerConstant>
+										</term>
+									</expression>
+									<symbol> ) </symbol>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+							<symbol> { </symbol>
+							<statements>
+								<returnStatement>
+									<keyword> return </keyword>
+									<expression>
+										<term>
+											<keyword> null </keyword>
+										</term>
+									</expression>
+									<symbol> ; </symbol>
+								</returnStatement>
+							</statements>
+							<symbol> } </symbol>
+						</ifStatement>
+						<returnStatement>
+							<keyword> return </keyword>
+							<expression>
+								<term>
+									<symbol> - </symbol>
+									<term>
+										<identifier> x </identifier>
+										argument : used : argument 0
+									</term>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</returnStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> x </identifier>
+							argument : used : argument 0
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> int </keyword>
+		<identifier> multiply </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> x </identifier>
+			argument : defined : argument 0
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> y </identifier>
+			argument : defined : argument 1
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> flipSign </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> sum </identifier>
+				var : defined : var 1
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> shiftedX </identifier>
+				var : defined : var 2
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> j </identifier>
+				var : defined : var 3
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> flipSign </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> x </identifier>
+							argument : used : argument 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> x </identifier>
+							argument : used : argument 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<symbol> - </symbol>
+									<term>
+										<identifier> x </identifier>
+										argument : used : argument 0
+									</term>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> flipSign </identifier>
+							var : used : var 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> flipSign </identifier>
+									var : used : var 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> y </identifier>
+							argument : used : argument 1
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> y </identifier>
+							argument : used : argument 1
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<symbol> - </symbol>
+									<term>
+										<identifier> y </identifier>
+										argument : used : argument 1
+									</term>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> flipSign </identifier>
+							var : used : var 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> flipSign </identifier>
+									var : used : var 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> sum </identifier>
+					var : used : var 1
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> shiftedX </identifier>
+					var : used : var 2
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> x </identifier>
+							argument : used : argument 0
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> j </identifier>
+					var : used : var 3
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 1 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> y </identifier>
+							argument : used : argument 1
+						</term>
+						<symbol> &gt; </symbol>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<ifStatement>
+							<keyword> if </keyword>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<symbol> ( </symbol>
+									<expression>
+										<term>
+											<identifier> y </identifier>
+											argument : used : argument 1
+										</term>
+										<symbol> &amp; </symbol>
+										<term>
+											<identifier> j </identifier>
+											var : used : var 3
+										</term>
+									</expression>
+									<symbol> ) </symbol>
+								</term>
+								<symbol> = </symbol>
+								<term>
+									<identifier> j </identifier>
+									var : used : var 3
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+							<symbol> { </symbol>
+							<statements>
+								<letStatement>
+									<keyword> let </keyword>
+									<identifier> sum </identifier>
+									var : used : var 1
+									<symbol> = </symbol>
+									<expression>
+										<term>
+											<identifier> sum </identifier>
+											var : used : var 1
+										</term>
+										<symbol> + </symbol>
+										<term>
+											<identifier> shiftedX </identifier>
+											var : used : var 2
+										</term>
+									</expression>
+									<symbol> ; </symbol>
+								</letStatement>
+								<letStatement>
+									<keyword> let </keyword>
+									<identifier> y </identifier>
+									argument : used : argument 1
+									<symbol> = </symbol>
+									<expression>
+										<term>
+											<identifier> y </identifier>
+											argument : used : argument 1
+										</term>
+										<symbol> - </symbol>
+										<term>
+											<identifier> j </identifier>
+											var : used : var 3
+										</term>
+									</expression>
+									<symbol> ; </symbol>
+								</letStatement>
+							</statements>
+							<symbol> } </symbol>
+						</ifStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> shiftedX </identifier>
+							var : used : var 2
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> shiftedX </identifier>
+									var : used : var 2
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<identifier> shiftedX </identifier>
+									var : used : var 2
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> j </identifier>
+							var : used : var 3
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> j </identifier>
+									var : used : var 3
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<identifier> j </identifier>
+									var : used : var 3
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> flipSign </identifier>
+							var : used : var 0
+						</term>
+						<symbol> = </symbol>
+						<term>
+							<integerConstant> 1 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> sum </identifier>
+							var : used : var 1
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<symbol> - </symbol>
+									<term>
+										<identifier> sum </identifier>
+										var : used : var 1
+									</term>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> sum </identifier>
+							var : used : var 1
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> int </keyword>
+		<identifier> divide </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> x </identifier>
+			argument : defined : argument 0
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> y </identifier>
+			argument : defined : argument 1
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> flipSign </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> j </identifier>
+				var : defined : var 1
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> result </identifier>
+				var : defined : var 2
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> advanceY </identifier>
+				var : defined : var 3
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> y </identifier>
+							argument : used : argument 1
+						</term>
+						<symbol> = </symbol>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<returnStatement>
+							<keyword> return </keyword>
+							<expression>
+								<term>
+									<keyword> null </keyword>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</returnStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> x </identifier>
+							argument : used : argument 0
+						</term>
+						<symbol> = </symbol>
+						<term>
+							<identifier> y </identifier>
+							argument : used : argument 1
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<returnStatement>
+							<keyword> return </keyword>
+							<expression>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</returnStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> flipSign </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> x </identifier>
+							argument : used : argument 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> x </identifier>
+							argument : used : argument 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<symbol> - </symbol>
+									<term>
+										<identifier> x </identifier>
+										argument : used : argument 0
+									</term>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> flipSign </identifier>
+							var : used : var 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> flipSign </identifier>
+									var : used : var 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> y </identifier>
+							argument : used : argument 1
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> y </identifier>
+							argument : used : argument 1
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<symbol> - </symbol>
+									<term>
+										<identifier> y </identifier>
+										argument : used : argument 1
+									</term>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> flipSign </identifier>
+							var : used : var 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> flipSign </identifier>
+									var : used : var 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> x </identifier>
+							argument : used : argument 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<identifier> y </identifier>
+							argument : used : argument 1
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<returnStatement>
+							<keyword> return </keyword>
+							<expression>
+								<term>
+									<integerConstant> 0 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</returnStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> result </identifier>
+					var : used : var 2
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> j </identifier>
+					var : used : var 1
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> shiftedY </identifier>
+					static : used : static 1
+					<symbol> [ </symbol>
+					<expression>
+						<term>
+							<identifier> j </identifier>
+							var : used : var 1
+						</term>
+					</expression>
+					<symbol> ] </symbol>
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> y </identifier>
+							argument : used : argument 1
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> advanceY </identifier>
+					var : used : var 3
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> y </identifier>
+							argument : used : argument 1
+						</term>
+						<symbol> + </symbol>
+						<term>
+							<identifier> y </identifier>
+							argument : used : argument 1
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<symbol> ~ </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> advanceY </identifier>
+												var : used : var 3
+											</term>
+											<symbol> &gt; </symbol>
+											<term>
+												<identifier> x </identifier>
+												argument : used : argument 0
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+						</term>
+						<symbol> &amp; </symbol>
+						<term>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<identifier> advanceY </identifier>
+									var : used : var 3
+								</term>
+								<symbol> &gt; </symbol>
+								<term>
+									<integerConstant> 0 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> j </identifier>
+							var : used : var 1
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> j </identifier>
+									var : used : var 1
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> shiftedY </identifier>
+							static : used : static 1
+							<symbol> [ </symbol>
+							<expression>
+								<term>
+									<identifier> j </identifier>
+									var : used : var 1
+								</term>
+							</expression>
+							<symbol> ] </symbol>
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> advanceY </identifier>
+									var : used : var 3
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> advanceY </identifier>
+							var : used : var 3
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> advanceY </identifier>
+									var : used : var 3
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<identifier> advanceY </identifier>
+									var : used : var 3
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<symbol> ~ </symbol>
+							<term>
+								<symbol> ( </symbol>
+								<expression>
+									<term>
+										<identifier> x </identifier>
+										argument : used : argument 0
+									</term>
+									<symbol> &lt; </symbol>
+									<term>
+										<identifier> y </identifier>
+										argument : used : argument 1
+									</term>
+								</expression>
+								<symbol> ) </symbol>
+							</term>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<ifStatement>
+							<keyword> if </keyword>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<symbol> ~ </symbol>
+									<term>
+										<symbol> ( </symbol>
+										<expression>
+											<term>
+												<identifier> x </identifier>
+												argument : used : argument 0
+											</term>
+											<symbol> &lt; </symbol>
+											<term>
+												<identifier> shiftedY </identifier>
+												static : used : static 1
+												<symbol> [ </symbol>
+												<expression>
+													<term>
+														<identifier> j </identifier>
+														var : used : var 1
+													</term>
+												</expression>
+												<symbol> ] </symbol>
+											</term>
+										</expression>
+										<symbol> ) </symbol>
+									</term>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+							<symbol> { </symbol>
+							<statements>
+								<letStatement>
+									<keyword> let </keyword>
+									<identifier> x </identifier>
+									argument : used : argument 0
+									<symbol> = </symbol>
+									<expression>
+										<term>
+											<identifier> x </identifier>
+											argument : used : argument 0
+										</term>
+										<symbol> - </symbol>
+										<term>
+											<identifier> shiftedY </identifier>
+											static : used : static 1
+											<symbol> [ </symbol>
+											<expression>
+												<term>
+													<identifier> j </identifier>
+													var : used : var 1
+												</term>
+											</expression>
+											<symbol> ] </symbol>
+										</term>
+									</expression>
+									<symbol> ; </symbol>
+								</letStatement>
+								<letStatement>
+									<keyword> let </keyword>
+									<identifier> result </identifier>
+									var : used : var 2
+									<symbol> = </symbol>
+									<expression>
+										<term>
+											<identifier> result </identifier>
+											var : used : var 2
+										</term>
+										<symbol> + </symbol>
+										<term>
+											<identifier> twoToThe </identifier>
+											static : used : static 0
+											<symbol> [ </symbol>
+											<expression>
+												<term>
+													<identifier> j </identifier>
+													var : used : var 1
+												</term>
+											</expression>
+											<symbol> ] </symbol>
+										</term>
+									</expression>
+									<symbol> ; </symbol>
+								</letStatement>
+							</statements>
+							<symbol> } </symbol>
+						</ifStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> j </identifier>
+							var : used : var 1
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> j </identifier>
+									var : used : var 1
+								</term>
+								<symbol> - </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> flipSign </identifier>
+							var : used : var 0
+						</term>
+						<symbol> = </symbol>
+						<term>
+							<integerConstant> 1 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> result </identifier>
+							var : used : var 2
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<symbol> - </symbol>
+									<term>
+										<identifier> result </identifier>
+										var : used : var 2
+									</term>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> result </identifier>
+							var : used : var 2
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> int </keyword>
+		<identifier> sqrt </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> x </identifier>
+			argument : defined : argument 0
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> y </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> j </identifier>
+				var : defined : var 1
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> calc0 </identifier>
+				var : defined : var 2
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> calc1 </identifier>
+				var : defined : var 3
+				<symbol> ; </symbol>
+			</varDec>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> t </identifier>
+				var : defined : var 4
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> x </identifier>
+							argument : used : argument 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<returnStatement>
+							<keyword> return </keyword>
+							<expression>
+								<term>
+									<keyword> null </keyword>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</returnStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> j </identifier>
+					var : used : var 1
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> t </identifier>
+					var : used : var 4
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<identifier> t </identifier>
+									var : used : var 4
+								</term>
+								<symbol> &lt; </symbol>
+								<term>
+									<integerConstant> 7 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+						</term>
+						<symbol> &amp; </symbol>
+						<term>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<identifier> j </identifier>
+									var : used : var 1
+								</term>
+								<symbol> = </symbol>
+								<term>
+									<identifier> t </identifier>
+									var : used : var 4
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<ifStatement>
+							<keyword> if </keyword>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<identifier> x </identifier>
+									argument : used : argument 0
+								</term>
+								<symbol> &gt; </symbol>
+								<term>
+									<identifier> twoToThe </identifier>
+									static : used : static 0
+									<symbol> [ </symbol>
+									<expression>
+										<term>
+											<identifier> j </identifier>
+											var : used : var 1
+										</term>
+										<symbol> + </symbol>
+										<term>
+											<identifier> j </identifier>
+											var : used : var 1
+										</term>
+										<symbol> + </symbol>
+										<term>
+											<integerConstant> 2 </integerConstant>
+										</term>
+									</expression>
+									<symbol> ] </symbol>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+							<symbol> { </symbol>
+							<statements>
+								<letStatement>
+									<keyword> let </keyword>
+									<identifier> j </identifier>
+									var : used : var 1
+									<symbol> = </symbol>
+									<expression>
+										<term>
+											<identifier> j </identifier>
+											var : used : var 1
+										</term>
+										<symbol> + </symbol>
+										<term>
+											<integerConstant> 1 </integerConstant>
+										</term>
+									</expression>
+									<symbol> ; </symbol>
+								</letStatement>
+							</statements>
+							<symbol> } </symbol>
+						</ifStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> t </identifier>
+							var : used : var 4
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> t </identifier>
+									var : used : var 4
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> y </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> j </identifier>
+							var : used : var 1
+						</term>
+						<symbol> &gt; </symbol>
+						<term>
+							<symbol> - </symbol>
+							<term>
+								<integerConstant> 1 </integerConstant>
+							</term>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> calc0 </identifier>
+							var : used : var 2
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> y </identifier>
+									var : used : var 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<identifier> twoToThe </identifier>
+									static : used : static 0
+									<symbol> [ </symbol>
+									<expression>
+										<term>
+											<identifier> j </identifier>
+											var : used : var 1
+										</term>
+									</expression>
+									<symbol> ] </symbol>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> calc1 </identifier>
+							var : used : var 3
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> Math </identifier>
+									class : used
+									<symbol> . </symbol>
+									<identifier> multiply </identifier>
+									subroutine : used
+									<symbol> ( </symbol>
+									<expressionList>
+										<expression>
+											<term>
+												<identifier> calc0 </identifier>
+												var : used : var 2
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> calc0 </identifier>
+												var : used : var 2
+											</term>
+										</expression>
+									</expressionList>
+									<symbol> ) </symbol>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<ifStatement>
+							<keyword> if </keyword>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<symbol> ( </symbol>
+									<expression>
+										<term>
+											<symbol> ~ </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> calc1 </identifier>
+														var : used : var 3
+													</term>
+													<symbol> &gt; </symbol>
+													<term>
+														<identifier> x </identifier>
+														argument : used : argument 0
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</term>
+									</expression>
+									<symbol> ) </symbol>
+								</term>
+								<symbol> &amp; </symbol>
+								<term>
+									<symbol> ( </symbol>
+									<expression>
+										<term>
+											<identifier> calc1 </identifier>
+											var : used : var 3
+										</term>
+										<symbol> &gt; </symbol>
+										<term>
+											<integerConstant> 0 </integerConstant>
+										</term>
+									</expression>
+									<symbol> ) </symbol>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+							<symbol> { </symbol>
+							<statements>
+								<letStatement>
+									<keyword> let </keyword>
+									<identifier> y </identifier>
+									var : used : var 0
+									<symbol> = </symbol>
+									<expression>
+										<term>
+											<identifier> calc0 </identifier>
+											var : used : var 2
+										</term>
+									</expression>
+									<symbol> ; </symbol>
+								</letStatement>
+							</statements>
+							<symbol> } </symbol>
+						</ifStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> j </identifier>
+							var : used : var 1
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> j </identifier>
+									var : used : var 1
+								</term>
+								<symbol> - </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> y </identifier>
+							var : used : var 0
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> int </keyword>
+		<identifier> max </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> a </identifier>
+			argument : defined : argument 0
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> b </identifier>
+			argument : defined : argument 1
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> a </identifier>
+							argument : used : argument 0
+						</term>
+						<symbol> &gt; </symbol>
+						<term>
+							<identifier> b </identifier>
+							argument : used : argument 1
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<returnStatement>
+							<keyword> return </keyword>
+							<expression>
+								<term>
+									<identifier> a </identifier>
+									argument : used : argument 0
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</returnStatement>
+					</statements>
+					<symbol> } </symbol>
+					<keyword> else </keyword>
+					<symbol> { </symbol>
+					<statements>
+						<returnStatement>
+							<keyword> return </keyword>
+							<expression>
+								<term>
+									<identifier> b </identifier>
+									argument : used : argument 1
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</returnStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> function </keyword>
+		<keyword> int </keyword>
+		<identifier> min </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> a </identifier>
+			argument : defined : argument 0
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> b </identifier>
+			argument : defined : argument 1
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> a </identifier>
+							argument : used : argument 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<identifier> b </identifier>
+							argument : used : argument 1
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<returnStatement>
+							<keyword> return </keyword>
+							<expression>
+								<term>
+									<identifier> a </identifier>
+									argument : used : argument 0
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</returnStatement>
+					</statements>
+					<symbol> } </symbol>
+					<keyword> else </keyword>
+					<symbol> { </symbol>
+					<statements>
+						<returnStatement>
+							<keyword> return </keyword>
+							<expression>
+								<term>
+									<identifier> b </identifier>
+									argument : used : argument 1
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</returnStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<symbol> } </symbol>
+</class>

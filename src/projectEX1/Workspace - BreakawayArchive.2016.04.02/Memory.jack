@@ -1,0 +1,93 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Memory.jack
+
+/**
+ * Memory operations library.
+ */ 
+class Memory {
+
+    // A Jack-level "proxy" of the RAM
+    static Array memory;
+    
+    // A Jack-level pointer that points to the first node of the linked list of available memory segments
+    static Array list;
+    
+    // A Jack-level pointer that can be used to manipulate nodes in the linked list
+    // node[0] == number of unused memory cells in segment
+    // node[1] == address of next node
+    // node + 2 == start of memory segment
+    static Array node;
+
+    /** Initializes memory parameters. */
+    function void init() {
+        var int heapStart;
+        var int heapEnd;
+        
+        let memory = 0;      
+        let heapStart = 2048;
+        let heapEnd = 16383;
+        
+        let list = heapStart;
+        
+        let node = list;
+        let node[0] = heapEnd - heapStart;
+        let node[1] = null;
+        
+        return;
+    }
+
+    /** Returns the value of the main memory at the given address. */
+    function int peek(int address) {
+        return memory[address];
+    }
+
+    /** Sets the value of the main memory at this address
+     *  to the given value. */
+    function void poke(int address, int value) {
+        let memory[address] = value;
+        return;
+    }
+
+    /** finds and allocates from the heap a memory block of the 
+     *  specified size and returns a reference to its base address. */
+    function int alloc(int size) {
+        var Array block;
+        
+        // Find the first segment in the list that contains at least <size> free memory cells
+        let node = list;
+        while (node[0] < size){
+            if (node[1] = null){
+                // failed to find segment of sufficient size in heap
+                return null;
+            }
+            else{
+                // advance to next node in list
+                let node = node[1];
+            }
+        }
+        
+        // if there are at least 3 cells left in node after allocating block, then insert a new node
+        let block = node + 2;
+        if ( node[0] > (size + 2) ){
+            let block[size] = node[0] - size - 2;
+            let block[size+1] = node[1];
+            
+            let node[1] = block + size;
+        }
+        // no free memory cells remain in this segment
+        let node[0] = 0;
+        
+        return block;
+    }
+
+    /** De-allocates the given object and frees its space. */
+    function void deAlloc(int object) {
+        let node = object - 2;
+        
+        let node[0] = node[1] - object;
+        
+        return;
+    }    
+}

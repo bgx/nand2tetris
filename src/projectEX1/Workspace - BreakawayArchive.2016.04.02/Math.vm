@@ -1,0 +1,433 @@
+function Math.init 2
+push constant 0
+pop local 0
+push constant 1
+pop local 1
+push constant 16
+call Array.new 1
+pop static 0
+label Mathinit0
+push local 0
+push constant 16
+lt
+not
+if-goto Mathinit1
+push local 0
+push static 0
+add
+push local 1
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 1
+push local 1
+add
+pop local 1
+push local 0
+push constant 1
+add
+pop local 0
+goto Mathinit0
+label Mathinit1
+push constant 16
+call Array.new 1
+pop static 1
+push constant 0
+return
+function Math.abs 0
+push argument 0
+push constant 0
+lt
+not
+if-goto Mathabs0
+push argument 0
+push constant 32767
+push constant 1
+add
+eq
+not
+if-goto Mathabs2
+push constant 0
+return
+goto Mathabs3
+label Mathabs2
+label Mathabs3
+push argument 0
+neg
+return
+goto Mathabs1
+label Mathabs0
+label Mathabs1
+push argument 0
+return
+function Math.multiply 4
+push constant 0
+pop local 0
+push argument 0
+push constant 0
+lt
+not
+if-goto Mathmultiply0
+push argument 0
+neg
+pop argument 0
+push local 0
+push constant 1
+add
+pop local 0
+goto Mathmultiply1
+label Mathmultiply0
+label Mathmultiply1
+push argument 1
+push constant 0
+lt
+not
+if-goto Mathmultiply2
+push argument 1
+neg
+pop argument 1
+push local 0
+push constant 1
+add
+pop local 0
+goto Mathmultiply3
+label Mathmultiply2
+label Mathmultiply3
+push constant 0
+pop local 1
+push argument 0
+pop local 2
+push constant 1
+pop local 3
+label Mathmultiply4
+push argument 1
+push constant 0
+gt
+not
+if-goto Mathmultiply5
+push argument 1
+push local 3
+and
+push local 3
+eq
+not
+if-goto Mathmultiply6
+push local 1
+push local 2
+add
+pop local 1
+push argument 1
+push local 3
+sub
+pop argument 1
+goto Mathmultiply7
+label Mathmultiply6
+label Mathmultiply7
+push local 2
+push local 2
+add
+pop local 2
+push local 3
+push local 3
+add
+pop local 3
+goto Mathmultiply4
+label Mathmultiply5
+push local 0
+push constant 1
+eq
+not
+if-goto Mathmultiply8
+push local 1
+neg
+pop local 1
+goto Mathmultiply9
+label Mathmultiply8
+label Mathmultiply9
+push local 1
+return
+function Math.divide 4
+push argument 1
+push constant 0
+eq
+not
+if-goto Mathdivide0
+push constant 0
+return
+goto Mathdivide1
+label Mathdivide0
+label Mathdivide1
+push argument 0
+push argument 1
+eq
+not
+if-goto Mathdivide2
+push constant 1
+return
+goto Mathdivide3
+label Mathdivide2
+label Mathdivide3
+push constant 0
+pop local 0
+push argument 0
+push constant 0
+lt
+not
+if-goto Mathdivide4
+push argument 0
+neg
+pop argument 0
+push local 0
+push constant 1
+add
+pop local 0
+goto Mathdivide5
+label Mathdivide4
+label Mathdivide5
+push argument 1
+push constant 0
+lt
+not
+if-goto Mathdivide6
+push argument 1
+neg
+pop argument 1
+push local 0
+push constant 1
+add
+pop local 0
+goto Mathdivide7
+label Mathdivide6
+label Mathdivide7
+push argument 0
+push argument 1
+lt
+not
+if-goto Mathdivide8
+push constant 0
+return
+goto Mathdivide9
+label Mathdivide8
+label Mathdivide9
+push constant 0
+pop local 2
+push constant 0
+pop local 1
+push local 1
+push static 1
+add
+push argument 1
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push argument 1
+push argument 1
+add
+pop local 3
+label Mathdivide10
+push local 3
+push argument 0
+gt
+not
+push local 3
+push constant 0
+gt
+and
+not
+if-goto Mathdivide11
+push local 1
+push constant 1
+add
+pop local 1
+push local 1
+push static 1
+add
+push local 3
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 3
+push local 3
+add
+pop local 3
+goto Mathdivide10
+label Mathdivide11
+label Mathdivide12
+push argument 0
+push argument 1
+lt
+not
+not
+if-goto Mathdivide13
+push argument 0
+push local 1
+push static 1
+add
+pop pointer 1
+push that 0
+lt
+not
+not
+if-goto Mathdivide14
+push argument 0
+push local 1
+push static 1
+add
+pop pointer 1
+push that 0
+sub
+pop argument 0
+push local 2
+push local 1
+push static 0
+add
+pop pointer 1
+push that 0
+add
+pop local 2
+goto Mathdivide15
+label Mathdivide14
+label Mathdivide15
+push local 1
+push constant 1
+sub
+pop local 1
+goto Mathdivide12
+label Mathdivide13
+push local 0
+push constant 1
+eq
+not
+if-goto Mathdivide16
+push local 2
+neg
+pop local 2
+goto Mathdivide17
+label Mathdivide16
+label Mathdivide17
+push local 2
+return
+function Math.sqrt 5
+push argument 0
+push constant 0
+lt
+not
+if-goto Mathsqrt0
+push constant 0
+return
+goto Mathsqrt1
+label Mathsqrt0
+label Mathsqrt1
+push constant 0
+pop local 1
+push constant 0
+pop local 4
+label Mathsqrt2
+push local 4
+push constant 7
+lt
+push local 1
+push local 4
+eq
+and
+not
+if-goto Mathsqrt3
+push argument 0
+push local 1
+push local 1
+add
+push constant 2
+add
+push static 0
+add
+pop pointer 1
+push that 0
+gt
+not
+if-goto Mathsqrt4
+push local 1
+push constant 1
+add
+pop local 1
+goto Mathsqrt5
+label Mathsqrt4
+label Mathsqrt5
+push local 4
+push constant 1
+add
+pop local 4
+goto Mathsqrt2
+label Mathsqrt3
+push constant 0
+pop local 0
+label Mathsqrt6
+push local 1
+push constant 1
+neg
+gt
+not
+if-goto Mathsqrt7
+push local 0
+push local 1
+push static 0
+add
+pop pointer 1
+push that 0
+add
+pop local 2
+push local 2
+push local 2
+call Math.multiply 2
+pop local 3
+push local 3
+push argument 0
+gt
+not
+push local 3
+push constant 0
+gt
+and
+not
+if-goto Mathsqrt8
+push local 2
+pop local 0
+goto Mathsqrt9
+label Mathsqrt8
+label Mathsqrt9
+push local 1
+push constant 1
+sub
+pop local 1
+goto Mathsqrt6
+label Mathsqrt7
+push local 0
+return
+function Math.max 0
+push argument 0
+push argument 1
+gt
+not
+if-goto Mathmax0
+push argument 0
+return
+goto Mathmax1
+label Mathmax0
+push argument 1
+return
+label Mathmax1
+function Math.min 0
+push argument 0
+push argument 1
+lt
+not
+if-goto Mathmin0
+push argument 0
+return
+goto Mathmin1
+label Mathmin0
+push argument 1
+return
+label Mathmin1

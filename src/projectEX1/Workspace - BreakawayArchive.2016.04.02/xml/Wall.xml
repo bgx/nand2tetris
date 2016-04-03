@@ -1,0 +1,1281 @@
+<class>
+	<keyword> class </keyword>
+	<identifier> Wall </identifier>
+	class : defined
+	<symbol> { </symbol>
+	<classVarDec>
+		<keyword> field </keyword>
+		<keyword> int </keyword>
+		<identifier> count </identifier>
+		field : defined : field 0
+		<symbol> ; </symbol>
+	</classVarDec>
+	<classVarDec>
+		<keyword> field </keyword>
+		<identifier> Array </identifier>
+		class : used
+		<identifier> bricks </identifier>
+		field : defined : field 1
+		<symbol> ; </symbol>
+	</classVarDec>
+	<classVarDec>
+		<keyword> field </keyword>
+		<identifier> Brick </identifier>
+		class : used
+		<identifier> temp </identifier>
+		field : defined : field 2
+		<symbol> ; </symbol>
+	</classVarDec>
+	<subroutineDec>
+		<keyword> constructor </keyword>
+		<identifier> Wall </identifier>
+		class : used
+		<identifier> new </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> count </identifier>
+					field : used : field 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> bricks </identifier>
+					field : used : field 1
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> Array </identifier>
+							class : used
+							<symbol> . </symbol>
+							<identifier> new </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+								<expression>
+									<term>
+										<integerConstant> 20 </integerConstant>
+									</term>
+								</expression>
+							</expressionList>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<keyword> this </keyword>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> dispose </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> bricks </identifier>
+					field : used : field 1
+					<symbol> . </symbol>
+					<identifier> dispose </identifier>
+					subroutine : used
+					<symbol> ( </symbol>
+					<expressionList>
+					</expressionList>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Memory </identifier>
+					class : used
+					<symbol> . </symbol>
+					<identifier> deAlloc </identifier>
+					subroutine : used
+					<symbol> ( </symbol>
+					<expressionList>
+						<expression>
+							<term>
+								<keyword> this </keyword>
+							</term>
+						</expression>
+					</expressionList>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> newBrick </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> Ax </identifier>
+			argument : defined : argument 1
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> Ay </identifier>
+			argument : defined : argument 2
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> Awidth </identifier>
+			argument : defined : argument 3
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> Aheight </identifier>
+			argument : defined : argument 4
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> bricks </identifier>
+					field : used : field 1
+					<symbol> [ </symbol>
+					<expression>
+						<term>
+							<identifier> count </identifier>
+							field : used : field 0
+						</term>
+					</expression>
+					<symbol> ] </symbol>
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> Brick </identifier>
+							class : used
+							<symbol> . </symbol>
+							<identifier> new </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+								<expression>
+									<term>
+										<identifier> Ax </identifier>
+										argument : used : argument 1
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> Ay </identifier>
+										argument : used : argument 2
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> Awidth </identifier>
+										argument : used : argument 3
+									</term>
+								</expression>
+								<symbol> , </symbol>
+								<expression>
+									<term>
+										<identifier> Aheight </identifier>
+										argument : used : argument 4
+									</term>
+								</expression>
+							</expressionList>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> count </identifier>
+					field : used : field 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> count </identifier>
+							field : used : field 0
+						</term>
+						<symbol> + </symbol>
+						<term>
+							<integerConstant> 1 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> destroyBrick </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> brickID </identifier>
+			argument : defined : argument 1
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> i </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> i </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> brickID </identifier>
+							argument : used : argument 1
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> i </identifier>
+							var : used : var 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<identifier> count </identifier>
+									field : used : field 0
+								</term>
+								<symbol> - </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> bricks </identifier>
+							field : used : field 1
+							<symbol> [ </symbol>
+							<expression>
+								<term>
+									<identifier> i </identifier>
+									var : used : var 0
+								</term>
+							</expression>
+							<symbol> ] </symbol>
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> bricks </identifier>
+									field : used : field 1
+									<symbol> [ </symbol>
+									<expression>
+										<term>
+											<identifier> i </identifier>
+											var : used : var 0
+										</term>
+										<symbol> + </symbol>
+										<term>
+											<integerConstant> 1 </integerConstant>
+										</term>
+									</expression>
+									<symbol> ] </symbol>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> i </identifier>
+							var : used : var 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> i </identifier>
+									var : used : var 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> count </identifier>
+					field : used : field 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> count </identifier>
+							field : used : field 0
+						</term>
+						<symbol> - </symbol>
+						<term>
+							<integerConstant> 1 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> newBrickGroup </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> Ax </identifier>
+			argument : defined : argument 1
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> Ay </identifier>
+			argument : defined : argument 2
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> Awidth </identifier>
+			argument : defined : argument 3
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> Aheight </identifier>
+			argument : defined : argument 4
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> Adelta_x </identifier>
+			argument : defined : argument 5
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> Adelta_y </identifier>
+			argument : defined : argument 6
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> Arows </identifier>
+			argument : defined : argument 7
+			<symbol> , </symbol>
+			<keyword> int </keyword>
+			<identifier> Acolumns </identifier>
+			argument : defined : argument 8
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> i </identifier>
+				var : defined : var 0
+				<symbol> , </symbol>
+				<identifier> j </identifier>
+				var : defined : var 1
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> i </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> i </identifier>
+							var : used : var 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<identifier> Arows </identifier>
+							argument : used : argument 7
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> j </identifier>
+							var : used : var 1
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<integerConstant> 0 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<whileStatement>
+							<keyword> while </keyword>
+							<symbol> ( </symbol>
+							<expression>
+								<term>
+									<identifier> j </identifier>
+									var : used : var 1
+								</term>
+								<symbol> &lt; </symbol>
+								<term>
+									<identifier> Acolumns </identifier>
+									argument : used : argument 8
+								</term>
+							</expression>
+							<symbol> ) </symbol>
+							<symbol> { </symbol>
+							<statements>
+								<doStatement>
+									<keyword> do </keyword>
+									<identifier> newBrick </identifier>
+									subroutine : used
+									<symbol> ( </symbol>
+									<expressionList>
+										<expression>
+											<term>
+												<identifier> Ax </identifier>
+												argument : used : argument 1
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> j </identifier>
+														var : used : var 1
+													</term>
+													<symbol> * </symbol>
+													<term>
+														<identifier> Adelta_x </identifier>
+														argument : used : argument 5
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> Ay </identifier>
+												argument : used : argument 2
+											</term>
+											<symbol> + </symbol>
+											<term>
+												<symbol> ( </symbol>
+												<expression>
+													<term>
+														<identifier> i </identifier>
+														var : used : var 0
+													</term>
+													<symbol> * </symbol>
+													<term>
+														<identifier> Adelta_y </identifier>
+														argument : used : argument 6
+													</term>
+												</expression>
+												<symbol> ) </symbol>
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> Awidth </identifier>
+												argument : used : argument 3
+											</term>
+										</expression>
+										<symbol> , </symbol>
+										<expression>
+											<term>
+												<identifier> Aheight </identifier>
+												argument : used : argument 4
+											</term>
+										</expression>
+									</expressionList>
+									<symbol> ) </symbol>
+									<symbol> ; </symbol>
+								</doStatement>
+								<letStatement>
+									<keyword> let </keyword>
+									<identifier> j </identifier>
+									var : used : var 1
+									<symbol> = </symbol>
+									<expression>
+										<term>
+											<identifier> j </identifier>
+											var : used : var 1
+										</term>
+										<symbol> + </symbol>
+										<term>
+											<integerConstant> 1 </integerConstant>
+										</term>
+									</expression>
+									<symbol> ; </symbol>
+								</letStatement>
+							</statements>
+							<symbol> } </symbol>
+						</whileStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> i </identifier>
+							var : used : var 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> i </identifier>
+									var : used : var 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> draw </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> i </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Screen </identifier>
+					class : used
+					<symbol> . </symbol>
+					<identifier> setColor </identifier>
+					subroutine : used
+					<symbol> ( </symbol>
+					<expressionList>
+						<expression>
+							<term>
+								<keyword> true </keyword>
+							</term>
+						</expression>
+					</expressionList>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> i </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> i </identifier>
+							var : used : var 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<identifier> count </identifier>
+							field : used : field 0
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> temp </identifier>
+							field : used : field 2
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> bricks </identifier>
+									field : used : field 1
+									<symbol> [ </symbol>
+									<expression>
+										<term>
+											<identifier> i </identifier>
+											var : used : var 0
+										</term>
+									</expression>
+									<symbol> ] </symbol>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> temp </identifier>
+							field : used : field 2
+							<symbol> . </symbol>
+							<identifier> draw </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+							</expressionList>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> i </identifier>
+							var : used : var 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> i </identifier>
+									var : used : var 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> erase </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> i </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<doStatement>
+					<keyword> do </keyword>
+					<identifier> Screen </identifier>
+					class : used
+					<symbol> . </symbol>
+					<identifier> setColor </identifier>
+					subroutine : used
+					<symbol> ( </symbol>
+					<expressionList>
+						<expression>
+							<term>
+								<keyword> false </keyword>
+							</term>
+						</expression>
+					</expressionList>
+					<symbol> ) </symbol>
+					<symbol> ; </symbol>
+				</doStatement>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> i </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> i </identifier>
+							var : used : var 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<identifier> count </identifier>
+							field : used : field 0
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> temp </identifier>
+							field : used : field 2
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> bricks </identifier>
+									field : used : field 1
+									<symbol> [ </symbol>
+									<expression>
+										<term>
+											<identifier> i </identifier>
+											var : used : var 0
+										</term>
+									</expression>
+									<symbol> ] </symbol>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> temp </identifier>
+							field : used : field 2
+							<symbol> . </symbol>
+							<identifier> erase </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+							</expressionList>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> i </identifier>
+							var : used : var 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> i </identifier>
+									var : used : var 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> moveRight </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> i </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> i </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> i </identifier>
+							var : used : var 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<identifier> count </identifier>
+							field : used : field 0
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> temp </identifier>
+							field : used : field 2
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> bricks </identifier>
+									field : used : field 1
+									<symbol> [ </symbol>
+									<expression>
+										<term>
+											<identifier> i </identifier>
+											var : used : var 0
+										</term>
+									</expression>
+									<symbol> ] </symbol>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> temp </identifier>
+							field : used : field 2
+							<symbol> . </symbol>
+							<identifier> moveRight </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+							</expressionList>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> i </identifier>
+							var : used : var 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> i </identifier>
+									var : used : var 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> void </keyword>
+		<identifier> moveLeft </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> int </keyword>
+				<identifier> i </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> i </identifier>
+					var : used : var 0
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<whileStatement>
+					<keyword> while </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> i </identifier>
+							var : used : var 0
+						</term>
+						<symbol> &lt; </symbol>
+						<term>
+							<identifier> count </identifier>
+							field : used : field 0
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> temp </identifier>
+							field : used : field 2
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> bricks </identifier>
+									field : used : field 1
+									<symbol> [ </symbol>
+									<expression>
+										<term>
+											<identifier> i </identifier>
+											var : used : var 0
+										</term>
+									</expression>
+									<symbol> ] </symbol>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+						<doStatement>
+							<keyword> do </keyword>
+							<identifier> temp </identifier>
+							field : used : field 2
+							<symbol> . </symbol>
+							<identifier> moveLeft </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+							</expressionList>
+							<symbol> ) </symbol>
+							<symbol> ; </symbol>
+						</doStatement>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> i </identifier>
+							var : used : var 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<identifier> i </identifier>
+									var : used : var 0
+								</term>
+								<symbol> + </symbol>
+								<term>
+									<integerConstant> 1 </integerConstant>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</whileStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<identifier> Brick </identifier>
+		class : used
+		<identifier> getBrick </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> brickID </identifier>
+			argument : defined : argument 1
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> bricks </identifier>
+							field : used : field 1
+							<symbol> [ </symbol>
+							<expression>
+								<term>
+									<identifier> brickID </identifier>
+									argument : used : argument 1
+								</term>
+							</expression>
+							<symbol> ] </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> int </keyword>
+		<identifier> getCount </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> count </identifier>
+							field : used : field 0
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<identifier> Hitbox </identifier>
+		class : used
+		<identifier> getHitbox </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+			<keyword> int </keyword>
+			<identifier> brickID </identifier>
+			argument : defined : argument 1
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<statements>
+				<letStatement>
+					<keyword> let </keyword>
+					<identifier> temp </identifier>
+					field : used : field 2
+					<symbol> = </symbol>
+					<expression>
+						<term>
+							<identifier> bricks </identifier>
+							field : used : field 1
+							<symbol> [ </symbol>
+							<expression>
+								<term>
+									<identifier> brickID </identifier>
+									argument : used : argument 1
+								</term>
+							</expression>
+							<symbol> ] </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</letStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> temp </identifier>
+							field : used : field 2
+							<symbol> . </symbol>
+							<identifier> getHitbox </identifier>
+							subroutine : used
+							<symbol> ( </symbol>
+							<expressionList>
+							</expressionList>
+							<symbol> ) </symbol>
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<subroutineDec>
+		<keyword> method </keyword>
+		<keyword> boolean </keyword>
+		<identifier> isDestroyed </identifier>
+		subroutine : defined
+		<symbol> ( </symbol>
+		<parameterList>
+		</parameterList>
+		<symbol> ) </symbol>
+		<subroutineBody>
+			<symbol> { </symbol>
+			<varDec>
+				<keyword> var </keyword>
+				<keyword> boolean </keyword>
+				<identifier> destroyed </identifier>
+				var : defined : var 0
+				<symbol> ; </symbol>
+			</varDec>
+			<statements>
+				<ifStatement>
+					<keyword> if </keyword>
+					<symbol> ( </symbol>
+					<expression>
+						<term>
+							<identifier> count </identifier>
+							field : used : field 0
+						</term>
+						<symbol> = </symbol>
+						<term>
+							<integerConstant> 0 </integerConstant>
+						</term>
+					</expression>
+					<symbol> ) </symbol>
+					<symbol> { </symbol>
+					<statements>
+						<letStatement>
+							<keyword> let </keyword>
+							<identifier> destroyed </identifier>
+							var : used : var 0
+							<symbol> = </symbol>
+							<expression>
+								<term>
+									<keyword> true </keyword>
+								</term>
+							</expression>
+							<symbol> ; </symbol>
+						</letStatement>
+					</statements>
+					<symbol> } </symbol>
+				</ifStatement>
+				<returnStatement>
+					<keyword> return </keyword>
+					<expression>
+						<term>
+							<identifier> destroyed </identifier>
+							var : used : var 0
+						</term>
+					</expression>
+					<symbol> ; </symbol>
+				</returnStatement>
+			</statements>
+			<symbol> } </symbol>
+		</subroutineBody>
+	</subroutineDec>
+	<symbol> } </symbol>
+</class>
