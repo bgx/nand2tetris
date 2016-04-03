@@ -1,0 +1,7 @@
+Notepad++ regex to count lines that aren't comments or (label)s
+^[^(\()(\/\/)(\s*)]
+
+----------------------------------
+Forum discussion that helped me out with the vmtranslator optimization
+
+http://nand2tetris-questions-and-answers-forum.32033.n3.nabble.com/Generated-code-size-td1201814.html

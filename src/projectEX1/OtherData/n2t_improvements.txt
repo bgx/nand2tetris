@@ -1,0 +1,15 @@
+Improvement ideas that I wrote down at some time.  I don't know if they still apply, but I don't want to get rid of them.
+***********************************
+- get rid of getters and setters, they're not pythonic
+
+-decouple processTerminal, updateSymbolTable, and writeIdentifierInfo
+
+-Breakaway from project09 has a slow memory leak...it allocates about 20 new cells per new game.  it looks like I forgot to dispose String objects, but it could be something else
+
+-Change when a character is cleared in Output, and possibly improve how characters are drawn
+
+-Jack variable declarations on single line
+
+-vmtranslator2 is kind of a mess
+
+-complete implementation of VMCommandTranslator._translate() in vmtranslator2 to further reduce # of asm instructions generated

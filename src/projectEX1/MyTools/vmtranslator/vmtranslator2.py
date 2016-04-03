@@ -130,6 +130,7 @@ class VMCommandTranslator:
         
     # as of right now, may be called with 1,2, or 3 commands in the buffer
     def _translate(self):
+        # push-pop-XXX
         if(self.buffer[0].command_type == 'C_PUSH'):
             if(len(self.buffer) > 1 and self.buffer[1].command_type == 'C_POP'):
                 push_command = self.buffer.popleft()
@@ -140,7 +141,13 @@ class VMCommandTranslator:
                             '// ****VM***: ' + pop_command.vm_text  + '\n' +
                             translation )
                 return asm
-                
+        
+        # --- may be implemented to further reduce # of asm instructions:
+        # push-arithmetic-ifgoto
+        # push-arithmetic-XXX
+        # arithmetic-ifgoto-XXX
+        
+        # XXX-XXX-XXX
         vm_command = self.buffer.popleft()
         translation = translate_command(vm_command.command_type, vm_command.arguments)
         if translation:

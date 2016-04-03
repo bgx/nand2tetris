@@ -55,3 +55,8 @@ project12 - Operating System
     Jack language, to (i) encapsulate various hardware-specific
     services in a software-friendly way, and (ii) extend Jack with 
     various functions and abstract data types
+    
+projectEX1 - Extra Project #1
+    Take a program in high-level .jack, convert it to .hack binary 
+    using my tools only (i.e. nothing author-supplied), and run on 
+    the emulated Hack computer platform.

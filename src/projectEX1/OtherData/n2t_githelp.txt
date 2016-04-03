@@ -1,0 +1,25 @@
+git commands
+
+from root of tree: git add -A
+from subdirectory of tree: git add -A .
+
+git commit
+git commit --amend
+
+git diff
+git diff --cached
+git diff HEAD
+git diff --name-only
+git diff --no-index
+
+-U1000
+> diff.txt
+
+git diff --cached -U1000 project11/JackCompiler/JackCompiler.py > project11/diff.txt
+
+// To diff two different files
+git diff --no-index -U1000 <path1> <path2> > diff.txt
+
+git reset -- <file>
+git checkout -- <file>
+
